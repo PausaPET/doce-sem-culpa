@@ -6,38 +6,64 @@
 <meta name="theme-color" content="#16323C">
 
 <title>DOCE SEM CULPA — 50 Receitas Fitness Práticas e Saborosas</title>
-<meta name="description" content="Mate a vontade de comer doce sem abandonar sua rotina saudável. 50 receitas fitness: 25 doces + 25 lanches rápidos. Acesso imediato por R$27,90.">
-<link rel="canonical" href="https://SEU-DOMINIO.com.br/">
+<meta name="description" content="50 receitas fitness práticas: 25 doces para matar a vontade e 25 lanches rápidos para os dias corridos. Ebook digital, acesso imediato por R$27,90.">
+
+<!-- ⚠️ TROQUE AS 3 URLs ABAIXO quando publicar em domínio próprio.
+     Hoje apontam para o endereço realmente no ar (GitHub Pages). -->
+<link rel="canonical" href="https://pausapet.github.io/doce-sem-culpa/">
 
 <!-- Open Graph / compartilhamento e prévia no Facebook Ads -->
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="Doce Sem Culpa">
 <meta property="og:title" content="DOCE SEM CULPA — 50 Receitas Fitness Práticas e Saborosas">
-<meta property="og:description" content="25 doces fitness + 25 lanches rápidos. Comer melhor sem abrir mão do sabor e sem passar horas na cozinha.">
-<meta property="og:url" content="https://SEU-DOMINIO.com.br/">
-<meta property="og:image" content="https://SEU-DOMINIO.com.br/og-image.jpg">
+<meta property="og:description" content="25 doces fitness + 25 lanches rápidos. Opções práticas para quando bater a vontade — sem passar horas na cozinha.">
+<meta property="og:url" content="https://pausapet.github.io/doce-sem-culpa/">
+<meta property="og:image" content="https://pausapet.github.io/doce-sem-culpa/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="robots" content="index, follow">
 
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2312292A'/><path d='M9 20c0-4 3.1-7 7-7s7 3 7 7z' fill='%23E08A4C'/><rect x='7' y='20' width='18' height='3' rx='1.5' fill='%23FBFAF6'/></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2316323C'/><path d='M9 20c0-4 3.1-7 7-7s7 3 7 7z' fill='%23E08A4C'/><rect x='7' y='20' width='18' height='3' rx='1.5' fill='%23FBFAF6'/></svg>">
 
 <!-- ══════════════════════════════════════════════════════════════
-     META PIXEL — substitua SEU_PIXEL_ID pelo ID do seu pixel.
-     Eventos disparados: PageView (carga) • ViewContent (50% da página)
-     • InitiateCheckout (clique em qualquer CTA de compra).
+     ⚙️  CONFIGURAÇÃO — os 3 únicos valores que você precisa preencher.
+     Enquanto estiverem vazios a página funciona normalmente:
+       • sem CHECKOUT_URL  → os botões de compra rolam até a oferta
+       • sem META_PIXEL_ID → o pixel nem carrega (não suja seus dados)
+       • sem LAUNCH_DEADLINE → o contador NÃO aparece (nada de prazo falso)
      ══════════════════════════════════════════════════════════════ -->
 <script>
+window.LP = {
+  /* Link do checkout da Kiwify. Ex: 'https://pay.kiwify.com.br/xxxxxxx' */
+  CHECKOUT_URL: '',
+
+  /* ID numérico do seu pixel da Meta. Ex: '1234567890123456' */
+  META_PIXEL_ID: '',
+
+  /* Fim REAL da condição de lançamento, em ISO-8601 com fuso.
+     Ex: '2026-08-31T23:59:59-03:00'
+     Deixe null enquanto não houver data definida de verdade. */
+  LAUNCH_DEADLINE: null
+};
+</script>
+
+<!-- META PIXEL — só inicializa se houver ID configurado.
+     Eventos: PageView (carga) • ViewContent (50% da página)
+     • InitiateCheckout (clique em CTA de compra)
+     • Purchase (dispare na página de obrigado — ver rodapé do script) -->
+<script>
+if (window.LP && window.LP.META_PIXEL_ID) {
 !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
 n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
 n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
 t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
 document,'script','https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', 'SEU_PIXEL_ID');
+fbq('init', window.LP.META_PIXEL_ID);
 fbq('track', 'PageView');
+}
 </script>
-<noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=SEU_PIXEL_ID&ev=PageView&noscript=1"></noscript>
 
 <!-- Ativa as animações de entrada ANTES da primeira pintura (evita flash).
      Sem este script, .reveal permanece visível — falha segura. -->
@@ -388,8 +414,168 @@ section{padding-block:56px}
 .bene b{display:block;font-size:16px;margin-bottom:2px}
 .bene span{font-size:14px;color:var(--ink-soft);line-height:1.45}
 
-/* ─── 6.7 DEPOIMENTOS (marquee em CSS puro, sem JS) ─────────── */
+/* ─── 6.6b FAIXA DE LANÇAMENTO (hero) ───────────────────────── */
+.launch-band{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:7px 16px;margin-bottom:14px;
+  background:var(--caramel);color:var(--white);
+  border-radius:999px;
+  font-size:11.5px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;
+}
+.launch-band .dot{
+  width:7px;height:7px;border-radius:50%;background:var(--white);
+  animation:blink 2.2s ease-in-out infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+
+/* ─── 6.6c NARRATIVA "AMANHÃ EU COMEÇO" ─────────────────────── */
+.story{
+  display:grid;gap:0;margin:0 auto 26px;max-width:26em;
+  border-left:2px solid var(--whipple-blue);padding-left:20px;
+}
+.story p{
+  position:relative;font-size:16.5px;line-height:1.5;color:var(--ink-soft);
+  padding:9px 0;
+}
+.story p::before{ /* ponto na linha do tempo */
+  content:"";position:absolute;left:-26px;top:19px;
+  width:9px;height:9px;border-radius:50%;
+  background:var(--whipple);border:2px solid var(--whipple-blue);
+}
+.story p.is-strong{color:var(--ink);font-weight:700;font-size:17.5px}
+.story p.is-quote{
+  font-style:italic;color:var(--narragansett);font-weight:600;
+}
+
+/* ─── 6.6d MOMENTO DE VIRADA ────────────────────────────────── */
+.pivot{
+  position:relative;overflow:hidden;
+  background:var(--narragansett);color:var(--white);
+  border-radius:var(--radius-lg);padding:32px 22px;text-align:center;
+  box-shadow:var(--shadow-lg);
+}
+.pivot::before{ /* brilho quente atrás do texto */
+  content:"";position:absolute;top:-45%;left:50%;transform:translateX(-50%);
+  width:280px;height:280px;border-radius:50%;
+  background:radial-gradient(circle,rgba(224,138,76,.30),transparent 68%);
+}
+.pivot > *{position:relative}
+.pivot h2{font-size:clamp(23px,6.4vw,31px);line-height:1.22;margin-bottom:14px}
+.pivot__combo{
+  display:grid;gap:10px;margin:20px auto 16px;max-width:330px;text-align:left;
+}
+.pivot__combo li{
+  display:flex;align-items:center;gap:12px;
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);
+  border-radius:14px;padding:13px 15px;font-size:15px;font-weight:600;
+}
+.pivot__combo .em{font-size:22px;line-height:1;flex:none}
+.pivot__plus{
+  display:block;text-align:center;font-size:20px;font-weight:800;
+  color:var(--caramel-light);margin:-4px 0;
+}
+.pivot p{font-size:15.5px;line-height:1.55;color:#C3D9E5}
+
+/* ─── 6.6e IMAGINE SUA ROTINA ───────────────────────────────── */
+.routine-grid{display:grid;gap:16px}
+.routine{
+  background:var(--white);border:1px solid #E5EDF2;border-radius:var(--radius);
+  padding:20px 18px;box-shadow:var(--shadow-sm);
+}
+.routine__q{
+  display:flex;align-items:center;gap:10px;
+  font-size:17px;font-weight:800;color:var(--narragansett);margin-bottom:14px;
+}
+.routine__q .em{font-size:21px;line-height:1;flex:none}
+.routine ol{display:grid;gap:0;counter-reset:passo;padding:0;list-style:none}
+.routine li{
+  counter-increment:passo;position:relative;
+  padding:8px 0 8px 38px;font-size:15px;color:var(--ink-soft);line-height:1.45;
+}
+.routine li::before{
+  content:counter(passo);position:absolute;left:0;top:7px;
+  width:26px;height:26px;border-radius:50%;
+  background:var(--whipple);color:var(--narragansett);
+  font-size:12.5px;font-weight:800;display:grid;place-items:center;
+}
+.routine li:last-child{color:var(--narragansett);font-weight:700}
+.routine li:last-child::before{background:var(--whipple-blue);color:var(--white)}
+
+/* ─── 6.7 VIDA REAL (reusa o marquee, sem depoimentos) ──────── */
 .depo{--mq-gap:14px}
+.life-card{
+  flex:0 0 auto;width:246px;
+  display:flex;flex-direction:column;gap:10px;
+  background:var(--white);border-radius:16px;padding:17px;
+  box-shadow:var(--shadow-sm);
+}
+.life-card .ico-box{
+  width:40px;height:40px;flex:none;border-radius:12px;display:grid;place-items:center;
+  background:var(--whipple);color:var(--narragansett);
+}
+.life-card b{font-size:15px;line-height:1.3;color:var(--ink);display:block}
+.life-card span{font-size:13.5px;line-height:1.45;color:var(--ink-soft)}
+.depo-note{
+  margin-top:22px;text-align:center;font-size:13px;color:#9DB8C6;line-height:1.5;
+}
+
+/* ─── 6.7b OBJEÇÕES ─────────────────────────────────────────── */
+.obj{display:grid;gap:12px}
+.obj li{
+  background:var(--white);border:1px solid #E5EDF2;border-radius:16px;
+  padding:18px;box-shadow:var(--shadow-sm);
+}
+.obj .q{
+  display:flex;gap:11px;align-items:flex-start;
+  font-size:16px;font-weight:700;color:var(--narragansett);line-height:1.35;
+}
+.obj .q .mark{
+  flex:none;width:24px;height:24px;border-radius:50%;
+  background:var(--whipple);color:var(--yarmouth-dark);
+  font-size:14px;font-weight:800;display:grid;place-items:center;margin-top:-1px;
+}
+.obj .a{
+  display:flex;gap:11px;align-items:flex-start;
+  margin-top:11px;padding-top:11px;border-top:1px dashed #DAE4EC;
+  font-size:14.5px;color:var(--ink-soft);line-height:1.5;
+}
+.obj .a .ico{flex:none;color:var(--whipple-blue);margin-top:2px}
+
+/* ─── 6.7c URGÊNCIA REAL / CONTADOR ─────────────────────────── */
+.urgency{
+  background:var(--whipple);border:1px solid var(--woodlawn);
+  border-radius:var(--radius);padding:18px;margin-bottom:20px;text-align:center;
+}
+.urgency__label{
+  display:inline-flex;align-items:center;gap:7px;
+  font-size:12px;font-weight:800;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--yarmouth-dark);
+}
+.urgency p{margin-top:7px;font-size:14px;color:var(--ink-soft);line-height:1.45}
+/* O contador nasce OCULTO. Só aparece se houver LAUNCH_DEADLINE real
+   configurado — o script remove o hidden. Nunca há prazo inventado. */
+.countdown[hidden]{display:none}
+.countdown{
+  display:flex;justify-content:center;gap:8px;margin-top:14px;
+}
+.countdown div{
+  min-width:58px;background:var(--narragansett);color:var(--white);
+  border-radius:12px;padding:9px 6px;
+}
+.countdown b{display:block;font-size:23px;font-weight:800;line-height:1}
+.countdown span{
+  display:block;margin-top:3px;font-size:9.5px;font-weight:700;
+  letter-spacing:.09em;text-transform:uppercase;color:var(--woodlawn);
+}
+
+/* selo de lançamento no topo do card de oferta */
+.launch-tag{
+  display:inline-block;margin-bottom:10px;padding:6px 14px;
+  background:var(--caramel);color:var(--white);border-radius:999px;
+  font-size:11px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;
+}
+
+/* ─── 6.7d CARROSSEL (motor do "Feito para a vida real") ────── */
 .marquee{
   display:flex;gap:var(--mq-gap);overflow:hidden;padding:5px 0;
   /* Máscara em vez de faixas sobrepostas: o fade das bordas funciona
@@ -412,29 +598,6 @@ section{padding-block:56px}
 .marquee--rev .marquee__track{animation-direction:reverse}
 .marquee:hover .marquee__track,
 .marquee:focus-within .marquee__track{animation-play-state:paused}
-
-.depo-card{
-  flex:0 0 auto;width:256px;
-  display:flex;flex-direction:column;gap:9px;
-  background:var(--white);border-radius:16px;padding:16px;
-  box-shadow:var(--shadow-sm);
-}
-.depo-card__top{display:flex;align-items:center;gap:10px}
-.depo-avatar{
-  width:38px;height:38px;flex:none;border-radius:50%;
-  display:grid;place-items:center;
-  font-size:14px;font-weight:800;letter-spacing:.02em;
-  background:var(--woodlawn);color:var(--narragansett);
-}
-.depo-avatar--b{background:var(--whipple-blue)}
-.depo-avatar--c{background:var(--caramel-soft);color:#8A4A20}
-.depo-card__name{font-size:14.5px;font-weight:700;line-height:1.25;color:var(--ink)}
-.depo-card__meta{font-size:12.5px;color:var(--ink-mute);line-height:1.35}
-.depo-stars{display:block;color:var(--caramel)}
-.depo-card__body{font-size:14px;line-height:1.5;color:var(--ink-soft)}
-.depo-note{
-  margin-top:22px;text-align:center;font-size:13px;color:#9DB8C6;line-height:1.5;
-}
 
 /* Movimento reduzido: vira uma faixa que o usuário arrasta com o dedo,
    em vez de congelar mostrando só os primeiros cards. */
@@ -560,9 +723,13 @@ footer{background:var(--narragansett);color:#9DB8C6;padding:44px 0 34px;font-siz
   transform:translateY(120%);transition:transform .3s cubic-bezier(.22,1,.36,1);
 }
 .sticky-bar.is-visible{transform:none}
-.sticky-bar__price{flex:none;line-height:1.1}
-.sticky-bar__price s{font-size:11.5px;color:var(--ink-mute)}
-.sticky-bar__price b{display:block;font-size:20px;color:var(--narragansett);font-weight:800}
+.sticky-bar__price{flex:none;line-height:1.15}
+.sticky-bar__price s{
+  display:block;font-size:10.5px;color:var(--ink-mute);
+  text-decoration:none;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+}
+.sticky-bar__price b{display:block;font-size:19px;color:var(--narragansett);font-weight:800}
+.sticky-bar__price i{display:block;font-size:10px;font-style:normal;color:var(--ink-mute)}
 .sticky-bar .cta{min-height:52px;padding:14px 18px;font-size:15.5px}
 
 /* ─── 8. ANIMAÇÃO DE ENTRADA ────────────────────────────────── */
@@ -603,8 +770,11 @@ footer{background:var(--narragansett);color:#9DB8C6;padding:44px 0 34px;font-siz
   .dish{width:130px;height:130px}
   .dish--lift{width:150px;height:150px}
   .content-card__photo{height:175px}
-  .depo-card{width:290px}
+  .life-card{width:282px}
   .depo{--mq-gap:18px}
+  .routine-grid{grid-template-columns:repeat(2,1fr)}
+  .obj{grid-template-columns:repeat(2,1fr);align-items:start}
+  .story{max-width:32em}
   /* A trilha (4 cards = 1214px) precisa ser MAIS LARGA que o container,
      senão no ponto de emenda do loop aparece um vão vazio. No celular a
      faixa é full-bleed (375px < 1214px, ok); no desktop limitamos a
@@ -683,7 +853,7 @@ footer{background:var(--narragansett);color:#9DB8C6;padding:44px 0 34px;font-siz
 <header class="hero">
   <div class="wrap">
 
-    <p class="badge"><span class="dot"></span> Ebook digital • Acesso imediato</p>
+    <p class="launch-band"><span class="dot"></span> Condição especial de lançamento</p>
 
     <h1 class="serif">
       Mate a vontade de <span class="hl">comer doce</span><br>
@@ -691,8 +861,8 @@ footer{background:var(--narragansett);color:#9DB8C6;padding:44px 0 34px;font-siz
     </h1>
 
     <p class="lead on-dark">
-      Descubra o <strong>DOCE SEM CULPA</strong>: 50 receitas fitness deliciosas,
-      práticas e fáceis de preparar para comer melhor sem abrir mão do sabor.
+      <strong>50 receitas fitness deliciosas e práticas</strong> para matar a vontade
+      de comer doce e facilitar sua alimentação até nos dias mais corridos.
     </p>
 
     <!-- Mockup 3D do ebook + ilustrações das receitas -->
@@ -713,18 +883,19 @@ footer{background:var(--narragansett);color:#9DB8C6;padding:44px 0 34px;font-siz
     </div>
 
     <a class="cta cta--pulse" href="#oferta">
-      QUERO MEU DOCE SEM CULPA
+      QUERO O DOCE SEM CULPA
       <svg width="20" height="20" viewBox="0 0 24 24"><use href="#i-arrow"/></svg>
     </a>
     <p class="cta-note">
       <svg width="15" height="15" viewBox="0 0 24 24"><use href="#i-lock"/></svg>
-      Compra 100% segura • 7 dias de garantia
+      Acesso digital imediato
     </p>
 
+    <!-- As 3 provas respondem, em 5 segundos: o que é, o que recebe, e quando. -->
     <ul class="hero-checks">
-      <li><svg class="ico" width="20" height="20" viewBox="0 0 24 24"><use href="#i-check"/></svg> 50 receitas fitness</li>
+      <li><svg class="ico" width="20" height="20" viewBox="0 0 24 24"><use href="#i-check"/></svg> Ebook digital com 50 receitas</li>
       <li><svg class="ico" width="20" height="20" viewBox="0 0 24 24"><use href="#i-check"/></svg> 25 doces + 25 lanches rápidos</li>
-      <li><svg class="ico" width="20" height="20" viewBox="0 0 24 24"><use href="#i-check"/></svg> Acesso imediato no celular</li>
+      <li><svg class="ico" width="20" height="20" viewBox="0 0 24 24"><use href="#i-check"/></svg> Para quem tem rotina corrida</li>
     </ul>
 
   </div>
@@ -739,7 +910,17 @@ footer{background:var(--narragansett);color:#9DB8C6;padding:44px 0 34px;font-siz
   <div class="wrap">
     <div class="sec-head center reveal">
       <p class="eyebrow">Talvez você se reconheça</p>
-      <h2 class="serif">A rotina corrida não&nbsp;deveria custar o seu prazer em comer.</h2>
+      <h2 class="serif">Quantas vezes você já pensou: <span class="hl">amanhã eu começo</span>?</h2>
+    </div>
+
+    <!-- Narrativa curta do dia real. Identificação, nunca culpa. -->
+    <div class="story reveal">
+      <p>Você decide comer melhor.</p>
+      <p>Mas o dia começa corrido. Trabalho, estudos, compromissos.</p>
+      <p>Quando chega a hora de comer, você escolhe o que está mais fácil.</p>
+      <p class="is-strong">E quando bate aquela vontade de doce, parece que não existe uma opção prática.</p>
+      <p class="is-quote">“Hoje vai. Amanhã eu compenso.”</p>
+      <p>E o amanhã nunca chega.</p>
     </div>
 
     <ul class="pain">
@@ -762,8 +943,28 @@ footer{background:var(--narragansett);color:#9DB8C6;padding:44px 0 34px;font-siz
     </ul>
 
     <div class="turn reveal">
-      <p class="serif">Você não precisa escolher entre comer saudável e comer algo gostoso.</p>
-      <small>O problema nunca foi a sua força de vontade. Foi a falta de receitas boas, rápidas e possíveis de fazer no seu dia.</small>
+      <p class="serif">O problema não é querer comer melhor. É ter poucas opções práticas quando a rotina aperta.</p>
+      <small>Não é força de vontade que falta. É ter o que fazer decidido antes de a fome e a vontade chegarem.</small>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     3. MOMENTO DE VIRADA
+     ══════════════════════════════════════════════════════════════ -->
+<section id="virada">
+  <div class="wrap">
+    <div class="pivot reveal">
+      <h2 class="serif">Foi para esses momentos que criamos o <span class="hl">DOCE SEM CULPA</span>.</h2>
+
+      <ul class="pivot__combo">
+        <li><span class="em">🍫</span> 25 doces fitness para matar a vontade</li>
+        <li aria-hidden="true" class="pivot__plus">+</li>
+        <li><span class="em">🥪</span> 25 lanches salgados para os dias corridos</li>
+      </ul>
+
+      <p>Em vez de decidir o que comer quando a fome e a vontade aparecem,
+         você passa a ter <strong>opções prontas para consultar</strong>.</p>
     </div>
   </div>
 </section>
@@ -887,14 +1088,54 @@ footer{background:var(--narragansett);color:#9DB8C6;padding:44px 0 34px;font-siz
 </section>
 
 <!-- ══════════════════════════════════════════════════════════════
-     5. BÔNUS
+     6. IMAGINE SUA ROTINA COM ISSO
+     ══════════════════════════════════════════════════════════════ -->
+<section id="rotina" class="sec-soft">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <p class="eyebrow">Como funciona no seu dia</p>
+      <h2 class="serif">Imagine sua rotina com isso</h2>
+      <p class="lead">Deixa de ser “o que eu faço agora?”. Vira consultar e preparar.</p>
+    </div>
+
+    <div class="routine-grid">
+      <div class="routine reveal">
+        <p class="routine__q"><span class="em">🍫</span> Bateu vontade de comer doce?</p>
+        <ol>
+          <li>Você abre o ebook no celular</li>
+          <li>Escolhe uma das 25 receitas doces</li>
+          <li>Confere os ingredientes que já tem</li>
+          <li>Prepara e mata a vontade — sem culpa</li>
+        </ol>
+      </div>
+
+      <div class="routine reveal">
+        <p class="routine__q"><span class="em">🥪</span> Dia corrido e precisa resolver?</p>
+        <ol>
+          <li>Você abre a seção de lanches salgados</li>
+          <li>Filtra pelo que cabe no seu tempo</li>
+          <li>Monta com o que tem em casa</li>
+          <li>Resolve a refeição e segue o dia</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="cta-wrap reveal">
+      <a class="cta" href="#oferta">QUERO ESSA PRATICIDADE
+        <svg width="20" height="20" viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     7. BÔNUS
      ══════════════════════════════════════════════════════════════ -->
 <section id="bonus" class="sec-dark">
   <div class="wrap">
     <div class="sec-head center reveal">
       <p class="eyebrow on-dark">Você leva junto</p>
-      <h2 class="serif">Tudo o que você recebe hoje</h2>
-      <p class="lead on-dark">O ebook completo + 3 materiais de apoio para você começar sem travar no primeiro dia.</p>
+      <h2 class="serif">3 aceleradores de praticidade</h2>
+      <p class="lead on-dark">O ebook completo + 3 materiais que tiram do seu caminho as decisões que mais fazem desistir: o que comprar, o que fazer e o que trocar.</p>
     </div>
 
     <div class="bonus-grid">
@@ -952,196 +1193,186 @@ footer{background:var(--narragansett);color:#9DB8C6;padding:44px 0 34px;font-siz
 
     <ul class="bene">
       <li class="reveal">
-        <span class="ico-box"><svg width="22" height="22" viewBox="0 0 24 24"><use href="#i-bolt"/></svg></span>
-        <div><b>Mais praticidade</b><span>Receitas diretas ao ponto, sem etapa desnecessária.</span></div>
+        <span class="ico-box"><svg width="22" height="22" viewBox="0 0 24 24"><use href="#i-heart"/></svg></span>
+        <div><b>Tenha opção quando bater a vontade de doce</b><span>25 receitas prontas para consultar na hora em que a vontade chega.</span></div>
       </li>
       <li class="reveal">
         <span class="ico-box"><svg width="22" height="22" viewBox="0 0 24 24"><use href="#i-timer"/></svg></span>
-        <div><b>Menos tempo na cozinha</b><span>Preparo rápido para caber mesmo nos dias mais cheios.</span></div>
+        <div><b>Economize tempo com receitas práticas</b><span>Preparo curto, poucos passos, nada de etapa desnecessária.</span></div>
+      </li>
+      <li class="reveal">
+        <span class="ico-box"><svg width="22" height="22" viewBox="0 0 24 24"><use href="#i-swap"/></svg></span>
+        <div><b>Pare de depender sempre das mesmas opções</b><span>Sai do arroz-com-ovo automático e do doce comprado por falta de alternativa.</span></div>
+      </li>
+      <li class="reveal">
+        <span class="ico-box"><svg width="22" height="22" viewBox="0 0 24 24"><use href="#i-bolt"/></svg></span>
+        <div><b>Encontre lanches rápidos para os dias corridos</b><span>25 opções salgadas pensadas para quem tem pouco tempo.</span></div>
+      </li>
+      <li class="reveal">
+        <span class="ico-box"><svg width="22" height="22" viewBox="0 0 24 24"><use href="#i-sparkle"/></svg></span>
+        <div><b>Varie sua alimentação</b><span>50 receitas diferentes para a semana não virar repetição.</span></div>
       </li>
       <li class="reveal">
         <span class="ico-box"><svg width="22" height="22" viewBox="0 0 24 24"><use href="#i-leaf"/></svg></span>
-        <div><b>Mais opções saudáveis</b><span>50 alternativas prontas para quando bater a fome ou a vontade.</span></div>
-      </li>
-      <li class="reveal">
-        <span class="ico-box"><svg width="22" height="22" viewBox="0 0 24 24"><use href="#i-heart"/></svg></span>
-        <div><b>Mais prazer na alimentação</b><span>Comer bem deixa de ser sacrifício e volta a ser gostoso.</span></div>
+        <div><b>Torne mais fácil manter uma rotina saudável</b><span>Quando a opção prática existe, seguir em frente deixa de ser esforço.</span></div>
       </li>
     </ul>
   </div>
 </section>
 
 <!-- ══════════════════════════════════════════════════════════════
-     7. DEPOIMENTOS  (marquee em CSS puro — nenhum JS envolvido)
+     9. FEITO PARA A VIDA REAL
+     Substituiu a antiga seção de depoimentos. Aqui NÃO há nomes,
+     fotos, estrelas nem falas de clientes — só situações concretas
+     de uso. Nada nesta seção afirma resultado de terceiros.
 
-     ⚠️ OS DEPOIMENTOS ABAIXO SÃO EXEMPLOS DE PREENCHIMENTO.
-     Substitua por depoimentos reais de clientes antes de publicar.
-     Depoimento inventado em página de venda é publicidade enganosa
-     (CDC art. 37) e motivo de reprovação de anúncio no Facebook.
-
-     Cada faixa tem DUAS trilhas idênticas. A segunda é a cópia que
-     entra quando a primeira sai — é isso que faz o loop não ter
-     emenda. Se editar os cards, edite nas DUAS trilhas da faixa.
+     Cada faixa tem DUAS trilhas idênticas: a segunda é a cópia que
+     entra quando a primeira sai, e é isso que faz o loop não ter
+     emenda. Se editar os cards, edite nas DUAS trilhas.
      ══════════════════════════════════════════════════════════════ -->
-<section id="depoimentos" class="sec-dark depo">
+<section id="vida-real" class="sec-dark depo">
   <div class="wrap">
     <div class="sec-head center reveal">
-      <p class="eyebrow on-dark">Quem já está usando</p>
-      <h2 class="serif">Elas pararam de escolher entre&nbsp;os dois</h2>
+      <p class="eyebrow on-dark">Sem fórmula mágica</p>
+      <h2 class="serif">Feito para a vida real</h2>
+      <p class="lead on-dark">Não é para a semana perfeita. É para a semana que você tem de verdade.</p>
     </div>
   </div>
 
-  <!-- Faixa 1 -->
-  <div class="marquee" style="--dur:40s">
+  <div class="marquee" style="--dur:42s">
     <div class="marquee__track">
-      <article class="depo-card">
-        <div class="depo-card__top">
-          <span class="depo-avatar" aria-hidden="true">CR</span>
-          <div><p class="depo-card__name">Camila R.</p><p class="depo-card__meta">São Paulo, SP</p></div>
-        </div>
-        <svg class="depo-stars" width="84" height="16" viewBox="0 0 84 16" role="img" aria-label="Nota 5 de 5"><use href="#i-stars5"/></svg>
-        <p class="depo-card__body">“Fiz o mousse de chocolate no primeiro dia. Cinco minutos e matou a vontade que eu tinha toda noite.”</p>
+      <article class="life-card">
+        <span class="ico-box"><svg width="21" height="21" viewBox="0 0 24 24"><use href="#i-timer"/></svg></span>
+        <b>15 minutos entre uma coisa e outra</b>
+        <span>Lanche salgado montado com o que já está na geladeira.</span>
       </article>
-      <article class="depo-card">
-        <div class="depo-card__top">
-          <span class="depo-avatar depo-avatar--b" aria-hidden="true">PM</span>
-          <div><p class="depo-card__name">Patrícia M.</p><p class="depo-card__meta">Belo Horizonte, MG</p></div>
-        </div>
-        <svg class="depo-stars" width="84" height="16" viewBox="0 0 84 16" role="img" aria-label="Nota 5 de 5"><use href="#i-stars5"/></svg>
-        <p class="depo-card__body">“O cardápio de 7 dias salvou minha semana. Não perco mais tempo decidindo o que fazer.”</p>
+      <article class="life-card">
+        <span class="ico-box"><svg width="21" height="21" viewBox="0 0 24 24"><use href="#i-heart"/></svg></span>
+        <b>A vontade de doce que chega à noite</b>
+        <span>Uma sobremesa rápida em vez do que estiver no armário.</span>
       </article>
-      <article class="depo-card">
-        <div class="depo-card__top">
-          <span class="depo-avatar depo-avatar--c" aria-hidden="true">JA</span>
-          <div><p class="depo-card__name">Juliana A.</p><p class="depo-card__meta">Curitiba, PR</p></div>
-        </div>
-        <svg class="depo-stars" width="84" height="16" viewBox="0 0 84 16" role="img" aria-label="Nota 5 de 5"><use href="#i-stars5"/></svg>
-        <p class="depo-card__body">“Trabalho fora o dia todo. Deixo os lanches prontos no domingo e como a semana inteira.”</p>
+      <article class="life-card">
+        <span class="ico-box"><svg width="21" height="21" viewBox="0 0 24 24"><use href="#i-cart"/></svg></span>
+        <b>Mercado no piloto automático</b>
+        <span>Lista pronta por seção: você compra certo e não desperdiça.</span>
       </article>
-      <article class="depo-card">
-        <div class="depo-card__top">
-          <span class="depo-avatar" aria-hidden="true">RL</span>
-          <div><p class="depo-card__name">Renata L.</p><p class="depo-card__meta">Fortaleza, CE</p></div>
-        </div>
-        <svg class="depo-stars" width="84" height="16" viewBox="0 0 84 16" role="img" aria-label="Nota 5 de 5"><use href="#i-stars5"/></svg>
-        <p class="depo-card__body">“Achei que ia pedir ingrediente caro. Comprei tudo no mercado do lado de casa.”</p>
+      <article class="life-card">
+        <span class="ico-box"><svg width="21" height="21" viewBox="0 0 24 24"><use href="#i-cal"/></svg></span>
+        <b>Domingo à noite, semana à frente</b>
+        <span>Cardápio de 7 dias montado — a semana já começa decidida.</span>
       </article>
     </div>
-    <!-- cópia da trilha acima: fecha o loop. aria-hidden evita leitura dupla -->
+    <!-- cópia que fecha o loop; aria-hidden evita leitura dupla -->
     <div class="marquee__track" aria-hidden="true">
-      <article class="depo-card">
-        <div class="depo-card__top">
-          <span class="depo-avatar" aria-hidden="true">CR</span>
-          <div><p class="depo-card__name">Camila R.</p><p class="depo-card__meta">São Paulo, SP</p></div>
-        </div>
-        <svg class="depo-stars" width="84" height="16" viewBox="0 0 84 16"><use href="#i-stars5"/></svg>
-        <p class="depo-card__body">“Fiz o mousse de chocolate no primeiro dia. Cinco minutos e matou a vontade que eu tinha toda noite.”</p>
+      <article class="life-card">
+        <span class="ico-box"><svg width="21" height="21" viewBox="0 0 24 24"><use href="#i-timer"/></svg></span>
+        <b>15 minutos entre uma coisa e outra</b>
+        <span>Lanche salgado montado com o que já está na geladeira.</span>
       </article>
-      <article class="depo-card">
-        <div class="depo-card__top">
-          <span class="depo-avatar depo-avatar--b" aria-hidden="true">PM</span>
-          <div><p class="depo-card__name">Patrícia M.</p><p class="depo-card__meta">Belo Horizonte, MG</p></div>
-        </div>
-        <svg class="depo-stars" width="84" height="16" viewBox="0 0 84 16"><use href="#i-stars5"/></svg>
-        <p class="depo-card__body">“O cardápio de 7 dias salvou minha semana. Não perco mais tempo decidindo o que fazer.”</p>
+      <article class="life-card">
+        <span class="ico-box"><svg width="21" height="21" viewBox="0 0 24 24"><use href="#i-heart"/></svg></span>
+        <b>A vontade de doce que chega à noite</b>
+        <span>Uma sobremesa rápida em vez do que estiver no armário.</span>
       </article>
-      <article class="depo-card">
-        <div class="depo-card__top">
-          <span class="depo-avatar depo-avatar--c" aria-hidden="true">JA</span>
-          <div><p class="depo-card__name">Juliana A.</p><p class="depo-card__meta">Curitiba, PR</p></div>
-        </div>
-        <svg class="depo-stars" width="84" height="16" viewBox="0 0 84 16"><use href="#i-stars5"/></svg>
-        <p class="depo-card__body">“Trabalho fora o dia todo. Deixo os lanches prontos no domingo e como a semana inteira.”</p>
+      <article class="life-card">
+        <span class="ico-box"><svg width="21" height="21" viewBox="0 0 24 24"><use href="#i-cart"/></svg></span>
+        <b>Mercado no piloto automático</b>
+        <span>Lista pronta por seção: você compra certo e não desperdiça.</span>
       </article>
-      <article class="depo-card">
-        <div class="depo-card__top">
-          <span class="depo-avatar" aria-hidden="true">RL</span>
-          <div><p class="depo-card__name">Renata L.</p><p class="depo-card__meta">Fortaleza, CE</p></div>
-        </div>
-        <svg class="depo-stars" width="84" height="16" viewBox="0 0 84 16"><use href="#i-stars5"/></svg>
-        <p class="depo-card__body">“Achei que ia pedir ingrediente caro. Comprei tudo no mercado do lado de casa.”</p>
+      <article class="life-card">
+        <span class="ico-box"><svg width="21" height="21" viewBox="0 0 24 24"><use href="#i-cal"/></svg></span>
+        <b>Domingo à noite, semana à frente</b>
+        <span>Cardápio de 7 dias montado — a semana já começa decidida.</span>
       </article>
     </div>
   </div>
 
-  <!-- Faixa 2 — sentido inverso e duração diferente, para não parecer bloco -->
-  <div class="marquee marquee--rev" style="--dur:46s">
+  <div class="marquee marquee--rev" style="--dur:48s">
     <div class="marquee__track">
-      <article class="depo-card">
-        <div class="depo-card__top">
-          <span class="depo-avatar depo-avatar--b" aria-hidden="true">FS</span>
-          <div><p class="depo-card__name">Fernanda S.</p><p class="depo-card__meta">Porto Alegre, RS</p></div>
-        </div>
-        <svg class="depo-stars" width="84" height="16" viewBox="0 0 84 16" role="img" aria-label="Nota 5 de 5"><use href="#i-stars5"/></svg>
-        <p class="depo-card__body">“Meu marido nem percebeu que o bolo era fitness. Comeu metade sozinho.”</p>
+      <article class="life-card">
+        <span class="ico-box"><svg width="21" height="21" viewBox="0 0 24 24"><use href="#i-swap"/></svg></span>
+        <b>Faltou um ingrediente</b>
+        <span>O guia de substituições indica a troca sem perder o sabor.</span>
       </article>
-      <article class="depo-card">
-        <div class="depo-card__top">
-          <span class="depo-avatar depo-avatar--c" aria-hidden="true">AC</span>
-          <div><p class="depo-card__name">Aline C.</p><p class="depo-card__meta">Recife, PE</p></div>
-        </div>
-        <svg class="depo-stars" width="84" height="16" viewBox="0 0 84 16" role="img" aria-label="Nota 5 de 5"><use href="#i-stars5"/></svg>
-        <p class="depo-card__body">“A lista de compras já separada por seção do mercado foi o que mais me ajudou.”</p>
+      <article class="life-card">
+        <span class="ico-box"><svg width="21" height="21" viewBox="0 0 24 24"><use href="#i-phone"/></svg></span>
+        <b>Receita na mão, dentro da cozinha</b>
+        <span>Abre no celular enquanto você prepara, sem imprimir nada.</span>
       </article>
-      <article class="depo-card">
-        <div class="depo-card__top">
-          <span class="depo-avatar" aria-hidden="true">MT</span>
-          <div><p class="depo-card__name">Mariana T.</p><p class="depo-card__meta">Salvador, BA</p></div>
-        </div>
-        <svg class="depo-stars" width="84" height="16" viewBox="0 0 84 16" role="img" aria-label="Nota 5 de 5"><use href="#i-stars5"/></svg>
-        <p class="depo-card__body">“Nunca consegui seguir dieta. Aqui eu como doce e sigo no meu ritmo, sem culpa.”</p>
+      <article class="life-card">
+        <span class="ico-box"><svg width="21" height="21" viewBox="0 0 24 24"><use href="#i-chef"/></svg></span>
+        <b>Marmita para levar amanhã</b>
+        <span>Preparo curto na véspera, pronto para a correria do dia.</span>
       </article>
-      <article class="depo-card">
-        <div class="depo-card__top">
-          <span class="depo-avatar depo-avatar--b" aria-hidden="true">BF</span>
-          <div><p class="depo-card__name">Bruna F.</p><p class="depo-card__meta">Campinas, SP</p></div>
-        </div>
-        <svg class="depo-stars" width="84" height="16" viewBox="0 0 84 16" role="img" aria-label="Nota 5 de 5"><use href="#i-stars5"/></svg>
-        <p class="depo-card__body">“Faltou um ingrediente, olhei o guia de substituições, troquei e ficou ótimo.”</p>
+      <article class="life-card">
+        <span class="ico-box"><svg width="21" height="21" viewBox="0 0 24 24"><use href="#i-bolt"/></svg></span>
+        <b>O dia em que não sobrou disposição</b>
+        <span>Receitas de poucos passos para quando a energia acabou.</span>
       </article>
     </div>
+    <!-- cópia que fecha o loop; aria-hidden evita leitura dupla -->
     <div class="marquee__track" aria-hidden="true">
-      <article class="depo-card">
-        <div class="depo-card__top">
-          <span class="depo-avatar depo-avatar--b" aria-hidden="true">FS</span>
-          <div><p class="depo-card__name">Fernanda S.</p><p class="depo-card__meta">Porto Alegre, RS</p></div>
-        </div>
-        <svg class="depo-stars" width="84" height="16" viewBox="0 0 84 16"><use href="#i-stars5"/></svg>
-        <p class="depo-card__body">“Meu marido nem percebeu que o bolo era fitness. Comeu metade sozinho.”</p>
+      <article class="life-card">
+        <span class="ico-box"><svg width="21" height="21" viewBox="0 0 24 24"><use href="#i-swap"/></svg></span>
+        <b>Faltou um ingrediente</b>
+        <span>O guia de substituições indica a troca sem perder o sabor.</span>
       </article>
-      <article class="depo-card">
-        <div class="depo-card__top">
-          <span class="depo-avatar depo-avatar--c" aria-hidden="true">AC</span>
-          <div><p class="depo-card__name">Aline C.</p><p class="depo-card__meta">Recife, PE</p></div>
-        </div>
-        <svg class="depo-stars" width="84" height="16" viewBox="0 0 84 16"><use href="#i-stars5"/></svg>
-        <p class="depo-card__body">“A lista de compras já separada por seção do mercado foi o que mais me ajudou.”</p>
+      <article class="life-card">
+        <span class="ico-box"><svg width="21" height="21" viewBox="0 0 24 24"><use href="#i-phone"/></svg></span>
+        <b>Receita na mão, dentro da cozinha</b>
+        <span>Abre no celular enquanto você prepara, sem imprimir nada.</span>
       </article>
-      <article class="depo-card">
-        <div class="depo-card__top">
-          <span class="depo-avatar" aria-hidden="true">MT</span>
-          <div><p class="depo-card__name">Mariana T.</p><p class="depo-card__meta">Salvador, BA</p></div>
-        </div>
-        <svg class="depo-stars" width="84" height="16" viewBox="0 0 84 16"><use href="#i-stars5"/></svg>
-        <p class="depo-card__body">“Nunca consegui seguir dieta. Aqui eu como doce e sigo no meu ritmo, sem culpa.”</p>
+      <article class="life-card">
+        <span class="ico-box"><svg width="21" height="21" viewBox="0 0 24 24"><use href="#i-chef"/></svg></span>
+        <b>Marmita para levar amanhã</b>
+        <span>Preparo curto na véspera, pronto para a correria do dia.</span>
       </article>
-      <article class="depo-card">
-        <div class="depo-card__top">
-          <span class="depo-avatar depo-avatar--b" aria-hidden="true">BF</span>
-          <div><p class="depo-card__name">Bruna F.</p><p class="depo-card__meta">Campinas, SP</p></div>
-        </div>
-        <svg class="depo-stars" width="84" height="16" viewBox="0 0 84 16"><use href="#i-stars5"/></svg>
-        <p class="depo-card__body">“Faltou um ingrediente, olhei o guia de substituições, troquei e ficou ótimo.”</p>
+      <article class="life-card">
+        <span class="ico-box"><svg width="21" height="21" viewBox="0 0 24 24"><use href="#i-bolt"/></svg></span>
+        <b>O dia em que não sobrou disposição</b>
+        <span>Receitas de poucos passos para quando a energia acabou.</span>
       </article>
     </div>
   </div>
 
   <div class="wrap">
-    <p class="depo-note">Depoimentos de clientes. Resultados variam conforme a rotina e os hábitos de cada pessoa.</p>
+    <p class="depo-note">Situações de uso do material. Esta página não exibe
+      depoimentos — vamos publicar apenas relatos reais de clientes.</p>
     <div class="cta-wrap reveal">
-      <a class="cta" href="#oferta">QUERO MEU DOCE SEM CULPA
+      <a class="cta" href="#oferta">QUERO O DOCE SEM CULPA
         <svg width="20" height="20" viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
     </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     10. OBJEÇÕES
+     ══════════════════════════════════════════════════════════════ -->
+<section id="objecoes">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <p class="eyebrow">Antes de decidir</p>
+      <h2 class="serif">Talvez você esteja pensando...</h2>
+    </div>
+
+    <ul class="obj">
+      <li class="reveal">
+        <p class="q"><span class="mark" aria-hidden="true">?</span>Eu não tenho tempo para cozinhar.</p>
+        <p class="a"><svg class="ico" width="18" height="18" viewBox="0 0 24 24"><use href="#i-check"/></svg><span>As receitas foram pensadas justamente para isso: preparo curto, poucos passos e nada de etapa desnecessária.</span></p>
+      </li>
+      <li class="reveal">
+        <p class="q"><span class="mark" aria-hidden="true">?</span>Eu não sei cozinhar muito bem.</p>
+        <p class="a"><svg class="ico" width="18" height="18" viewBox="0 0 24 24"><use href="#i-check"/></svg><span>O material é estruturado para ser simples de acompanhar, com o passo a passo em linguagem direta.</span></p>
+      </li>
+      <li class="reveal">
+        <p class="q"><span class="mark" aria-hidden="true">?</span>Vou conseguir acessar pelo celular?</p>
+        <p class="a"><svg class="ico" width="18" height="18" viewBox="0 0 24 24"><use href="#i-check"/></svg><span>Sim. O ebook é digital e abre no celular, no tablet ou no computador.</span></p>
+      </li>
+      <li class="reveal">
+        <p class="q"><span class="mark" aria-hidden="true">?</span>Preciso comprar ingredientes difíceis?</p>
+        <p class="a"><svg class="ico" width="18" height="18" viewBox="0 0 24 24"><use href="#i-check"/></svg><span>As receitas priorizam ingredientes comuns de mercado. Se faltar algum, o guia de substituições indica a troca.</span></p>
+      </li>
+    </ul>
   </div>
 </section>
 
@@ -1151,19 +1382,37 @@ footer{background:var(--narragansett);color:#9DB8C6;padding:44px 0 34px;font-siz
 <section id="oferta">
   <div class="wrap">
     <div class="sec-head center reveal">
-      <p class="eyebrow">Oferta desta página</p>
-      <h2 class="serif">Comece hoje mesmo</h2>
+      <p class="eyebrow">A decisão é simples</p>
+      <h2 class="serif">Você pode continuar procurando receitas...</h2>
+      <p class="lead">...ou pode começar hoje com <strong>50 opções reunidas em um só lugar</strong>.</p>
     </div>
 
     <div class="offer-card reveal">
       <div class="offer-card__head">
-        <p class="eyebrow on-dark">Ebook digital completo</p>
+        <span class="launch-tag">Oferta de lançamento</span>
         <h2 class="serif">DOCE SEM CULPA</h2>
+        <p class="eyebrow on-dark" style="margin:8px 0 0">50 receitas • 25 doces + 25 lanches</p>
       </div>
 
       <div class="offer-card__body">
+        <!-- Urgência REAL: o contador só aparece se LAUNCH_DEADLINE estiver
+             preenchido lá no topo do arquivo. Sem data, sem contador. -->
+        <div class="urgency">
+          <p class="urgency__label">
+            <svg width="15" height="15" viewBox="0 0 24 24"><use href="#i-timer"/></svg>
+            Condição especial de lançamento
+          </p>
+          <p>Esta condição é válida durante o período de lançamento.</p>
+          <div class="countdown" id="countdown" hidden aria-live="polite">
+            <div><b data-cd="d">--</b><span>dias</span></div>
+            <div><b data-cd="h">--</b><span>horas</span></div>
+            <div><b data-cd="m">--</b><span>min</span></div>
+            <div><b data-cd="s">--</b><span>seg</span></div>
+          </div>
+        </div>
+
         <div class="price">
-          <span class="price__from">De <span class="price__old">R$97,00</span> por apenas</span>
+          <span class="price__from">Por apenas</span>
           <span class="price__now serif">
             <span class="price__cur">R$</span><span class="price__val">27</span><span class="price__cents">,90</span>
           </span>
@@ -1182,10 +1431,14 @@ footer{background:var(--narragansett);color:#9DB8C6;padding:44px 0 34px;font-siz
 
         <div class="cta-wrap">
           <!-- data-checkout: o href é preenchido pela constante CHECKOUT_URL no script -->
-          <a class="cta cta--pulse" data-checkout href="#" rel="nofollow noopener">
-            SIM, QUERO MEU DOCE SEM CULPA
+          <a class="cta cta--pulse" data-checkout href="#oferta" rel="nofollow noopener">
+            QUERO COMEÇAR AGORA
             <svg width="20" height="20" viewBox="0 0 24 24"><use href="#i-arrow"/></svg>
           </a>
+          <p class="cta-note">
+            <svg width="15" height="15" viewBox="0 0 24 24"><use href="#i-lock"/></svg>
+            Acesso digital imediato • 7 dias de garantia
+          </p>
         </div>
 
         <ul class="trust">
@@ -1207,8 +1460,9 @@ footer{background:var(--narragansett);color:#9DB8C6;padding:44px 0 34px;font-siz
       <div class="seal">
         <div class="center"><b>7</b><span>dias</span></div>
       </div>
+      <p class="eyebrow" style="margin-bottom:0">Compre com tranquilidade</p>
       <h2 class="serif">Você tem 7 dias para conhecer o material.</h2>
-      <p>Acesse tudo com calma, teste as receitas e veja se faz sentido para a sua rotina. Se não for para você, é só pedir o reembolso dentro do prazo e devolvemos o valor integral. O risco é todo nosso.</p>
+      <p>Acesse tudo com calma e veja se faz sentido para a sua rotina. Se não for para você, é só pedir o reembolso dentro do prazo e devolvemos o valor integral.</p>
     </div>
   </div>
 </section>
@@ -1243,6 +1497,18 @@ footer{background:var(--narragansett);color:#9DB8C6;padding:44px 0 34px;font-siz
       <details class="reveal">
         <summary>As receitas são mesmo rápidas?<span class="chev"><svg width="16" height="16" viewBox="0 0 24 24"><use href="#i-chev"/></svg></span></summary>
         <div class="faq-a">Sim — esse foi o critério para escolher cada uma. São preparos curtos, com poucos passos e poucos ingredientes, pensados para quem tem rotina corrida.</div>
+      </details>
+      <details class="reveal">
+        <summary>O que exatamente está incluído?<span class="chev"><svg width="16" height="16" viewBox="0 0 24 24"><use href="#i-chev"/></svg></span></summary>
+        <div class="faq-a">O ebook DOCE SEM CULPA com 50 receitas — 25 doces fitness e 25 lanches salgados rápidos — mais os 3 materiais de apoio: lista de compras, cardápio de 7 dias e guia de substituições. Tudo digital, no mesmo acesso.</div>
+      </details>
+      <details class="reveal">
+        <summary>Quais são os bônus?<span class="chev"><svg width="16" height="16" viewBox="0 0 24 24"><use href="#i-chev"/></svg></span></summary>
+        <div class="faq-a">São três, todos inclusos: a <b>lista de compras</b> organizada por seção do mercado, o <b>cardápio de 7 dias</b> já montado e o <b>guia de substituições</b> para quando faltar um ingrediente. Eles existem para tirar do caminho as decisões que mais fazem desistir.</div>
+      </details>
+      <details class="reveal">
+        <summary>Como funciona a garantia?<span class="chev"><svg width="16" height="16" viewBox="0 0 24 24"><use href="#i-chev"/></svg></span></summary>
+        <div class="faq-a">Você tem 7 dias a partir da compra para conhecer o material. Se decidir que não é para você, basta pedir o reembolso dentro do prazo e devolvemos o valor integral.</div>
       </details>
     </div>
 
@@ -1281,10 +1547,11 @@ footer{background:var(--narragansett);color:#9DB8C6;padding:44px 0 34px;font-siz
 <!-- Barra fixa de compra (aparece após o hero) -->
 <aside class="sticky-bar" id="stickyBar" aria-hidden="true">
   <div class="sticky-bar__price">
-    <s>R$97</s>
+    <s>Doce Sem Culpa</s>
     <b>R$27,90</b>
+    <i>🔒 Acesso imediato</i>
   </div>
-  <a class="cta" data-checkout href="#" rel="nofollow noopener">QUERO AGORA</a>
+  <a class="cta" data-checkout href="#oferta" rel="nofollow noopener">QUERO AGORA</a>
 </aside>
 
 
@@ -1295,25 +1562,32 @@ footer{background:var(--narragansett);color:#9DB8C6;padding:44px 0 34px;font-siz
 (function(){
   'use strict';
 
-  /* ⚙️ CONFIGURE AQUI ────────────────────────────────────────────
-     Cole o link do seu checkout (Hotmart, Kiwify, Braip, Eduzz...).
-     Todos os botões de compra passam a apontar para ele. */
-  var CHECKOUT_URL = 'https://SEU-LINK-DE-CHECKOUT-AQUI';
-  /* ────────────────────────────────────────────────────────────── */
+  /* Configuração vem do bloco window.LP, no topo do <head>. */
+  var CFG = window.LP || {};
+  var CHECKOUT_URL = CFG.CHECKOUT_URL || '';
+  var PRODUTO = { content_name:'Doce Sem Culpa', content_type:'product',
+                  value:27.90, currency:'BRL' };
 
   var $  = function(s,c){return (c||document).querySelector(s)},
       $$ = function(s,c){return Array.prototype.slice.call((c||document).querySelectorAll(s))};
 
-  /* 1. Aplica a URL de checkout em todos os botões marcados */
-  $$('[data-checkout]').forEach(function(a){ a.href = CHECKOUT_URL; });
+  /* 1. URL de checkout nos botões de compra.
+        Sem URL configurada, o botão rola até a oferta em vez de virar
+        um link morto — nada de href="#" quebrado em produção. */
+  if (CHECKOUT_URL) {
+    $$('[data-checkout]').forEach(function(a){
+      a.href = CHECKOUT_URL;
+      a.setAttribute('target','_blank');
+    });
+  } else if (window.console) {
+    console.warn('[DOCE SEM CULPA] CHECKOUT_URL vazio: os botões de compra ' +
+                 'estão rolando até a oferta. Preencha window.LP.CHECKOUT_URL.');
+  }
 
   /* 2. Meta Pixel — InitiateCheckout em qualquer clique de CTA de compra */
   $$('[data-checkout]').forEach(function(a){
     a.addEventListener('click', function(){
-      if (window.fbq) fbq('track','InitiateCheckout',{
-        content_name:'Doce Sem Culpa', content_type:'product',
-        value:27.90, currency:'BRL'
-      });
+      if (window.fbq) fbq('track','InitiateCheckout', PRODUTO);
     });
   });
 
@@ -1332,10 +1606,7 @@ footer{background:var(--narragansett);color:#9DB8C6;padding:44px 0 34px;font-siz
       var pct = (window.scrollY + window.innerHeight) / d.scrollHeight;
       if (pct > 0.5) {
         viewFired = true;
-        if (window.fbq) fbq('track','ViewContent',{
-          content_name:'Doce Sem Culpa', content_type:'product',
-          value:27.90, currency:'BRL'
-        });
+        if (window.fbq) fbq('track','ViewContent', PRODUTO);
       }
     }
   }
@@ -1397,6 +1668,55 @@ footer{background:var(--narragansett);color:#9DB8C6;padding:44px 0 34px;font-siz
   /* 6. Ano do copyright sempre atualizado */
   var ano = $('#ano'); if (ano) ano.textContent = new Date().getFullYear();
 
+  /* 7. Contador de lançamento — SÓ existe se houver data real configurada.
+        Sem LAUNCH_DEADLINE, o bloco continua com [hidden] e a página mostra
+        apenas o texto da condição. Nenhum prazo é inventado. */
+  (function(){
+    var el = $('#countdown');
+    if (!el || !CFG.LAUNCH_DEADLINE) return;
+
+    var fim = new Date(CFG.LAUNCH_DEADLINE).getTime();
+    if (isNaN(fim)) {                     // data mal escrita não vira contador
+      if (window.console) console.warn('[DOCE SEM CULPA] LAUNCH_DEADLINE inválida:',
+                                       CFG.LAUNCH_DEADLINE);
+      return;
+    }
+    if (fim <= Date.now()) return;        // prazo já passou: não mostra nada
+
+    var campos = {};
+    ['d','h','m','s'].forEach(function(k){ campos[k] = $('[data-cd="'+k+'"]', el); });
+    var pad = function(n){ return n < 10 ? '0' + n : String(n); };
+
+    function tick(){
+      var resta = fim - Date.now();
+      if (resta <= 0){ el.hidden = true; clearInterval(timer); return; }
+      var s = Math.floor(resta / 1000);
+      campos.d.textContent = pad(Math.floor(s / 86400));
+      campos.h.textContent = pad(Math.floor(s % 86400 / 3600));
+      campos.m.textContent = pad(Math.floor(s % 3600 / 60));
+      campos.s.textContent = pad(s % 60);
+    }
+    tick();
+    el.hidden = false;
+    var timer = setInterval(tick, 1000);
+  })();
+
+  /* 8. Purchase — NÃO dispara aqui: a compra acontece no checkout da Kiwify.
+        Na sua página de obrigado, cole o mesmo bloco do pixel do <head> e
+        adicione a linha abaixo, com o valor real vindo da plataforma:
+
+          fbq('track','Purchase',{ value:27.90, currency:'BRL',
+                                   content_name:'Doce Sem Culpa' });
+
+        Deixamos o helper exposto caso você use uma thank-you page própria
+        neste mesmo domínio. */
+  window.LP.trackPurchase = function(valor){
+    if (window.fbq) fbq('track','Purchase',{
+      content_name:'Doce Sem Culpa', content_type:'product',
+      value: typeof valor === 'number' ? valor : 27.90, currency:'BRL'
+    });
+  };
+
 })();
 </script>
 
@@ -1414,7 +1734,8 @@ footer{background:var(--narragansett);color:#9DB8C6;padding:44px 0 34px;font-siz
     "price":"27.90",
     "priceCurrency":"BRL",
     "availability":"https://schema.org/InStock",
-    "url":"https://SEU-DOMINIO.com.br/"
+    "url":"https://pausapet.github.io/doce-sem-culpa/",
+    "priceValidUntil":"2026-12-31"
   }
 }
 </script>
