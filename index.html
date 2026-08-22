@@ -119,6 +119,9 @@ fbq('track', 'PageView');
   --blush:#F7DCE6;         /* fundo de seção — blush */
   --rose-pale:#FBEAF0;     /* fundo de seção — rosa suave, cards */
   --offwhite:#FBF6F3;      /* respiro, base da página */
+  --hero-pink:#FAD2D3;     /* amostrado do fundo da fotografia do hero —
+                              usado no véu e no fallback, para que foto e
+                              área de texto sejam o mesmo campo de cor */
   --white:#fff;
 
   /* PRODUTO — azul do e-book, identidade original preservada */
@@ -274,25 +277,25 @@ ul{padding:0;list-style:none}
   position:relative;isolation:isolate;overflow:hidden;
   display:grid;align-items:start;
   min-height:calc(100svh - 42px);
-  background:var(--offwhite);color:var(--ink);
+  /* Mesmo rosa do fundo da fotografia: se a imagem falhar, o hero
+     continua sendo o campo rosa em vez de piscar off-white. */
+  background:var(--hero-pink);color:var(--ink);
 }
 .hero__media{position:absolute;inset:0;z-index:-2}
 .hero__media picture{display:block;width:100%;height:100%}
 .hero__media img{display:block;width:100%;height:100%;object-fit:cover}
-/* Lavagem pastel sobre a fotografia real: aproxima o clima rosa da
-   direção de arte sem escurecer a comida (camada CLAREIA, não
-   multiplica — hero escuro é proibido nesta direção). */
-.hero__media::after{
-  content:"";position:absolute;inset:0;
-  background:linear-gradient(180deg,rgba(251,234,240,.52),rgba(226,150,180,.30));
-}
+/* O véu é o PRÓPRIO rosa do fundo da foto (amostrado: #FAD2D3). Sobre a
+   área vazia da arte ele é invisível; sobre a comida, dissolve para o
+   mesmo rosa. Por isso não existe emenda entre foto e área de texto.
+   MOBILE: a comida começa a 63% da altura da imagem, então o véu segura
+   até ~50% e some antes disso. */
 .hero::after{
   content:"";position:absolute;inset:0;z-index:-1;
   background:linear-gradient(180deg,
-    rgba(251,246,243,.98) 0%,
-    rgba(251,246,243,.97) 46%,
-    rgba(251,246,243,.74) 62%,
-    rgba(251,246,243,0)   74%);
+    rgba(250,210,211,.98) 0%,
+    rgba(250,210,211,.96) 50%,
+    rgba(250,210,211,.72) 60%,
+    rgba(250,210,211,0)   68%);
 }
 .hero__content{
   position:relative;z-index:2;
@@ -301,7 +304,9 @@ ul{padding:0;list-style:none}
 .hero__badge{
   display:inline-flex;align-items:center;gap:8px;
   padding:8px 15px;margin-bottom:22px;
-  background:transparent;color:var(--rose-strong);border-radius:999px;
+  /* --rose-strong dava 3,95:1 sobre o rosa do hero (medido por amostragem
+     de pixel); o tom mais escuro passa. A borda pode seguir clara. */
+  background:transparent;color:var(--rose-deep);border-radius:999px;
   border:1.5px solid var(--rose-strong);
   font-size:11px;font-weight:800;
   letter-spacing:.08em;text-transform:uppercase;line-height:1.2;
@@ -339,7 +344,8 @@ ul{padding:0;list-style:none}
 }
 .hero__stats span{
   display:block;margin-top:5px;font-size:11px;font-weight:700;
-  letter-spacing:.04em;color:var(--ink-mute);
+  /* --ink-mute ficava em 4,43:1 sobre o rosa do hero — abaixo de AA. */
+  letter-spacing:.04em;color:var(--ink-soft);
 }
 /* Ícone do trio de números — some no mobile estreito para não
    competir com o próprio número. */
@@ -350,7 +356,7 @@ ul{padding:0;list-style:none}
 .hero__trust{
   display:flex;flex-wrap:wrap;gap:10px 18px;margin-top:26px;
   font-size:10.5px;font-weight:800;letter-spacing:.1em;
-  text-transform:uppercase;color:var(--ink-mute);
+  text-transform:uppercase;color:var(--ink-soft);
 }
 .hero__trust li{display:flex;align-items:center;gap:6px}
 .hero__trust .ico{flex:none;color:var(--rose-strong)}
@@ -1002,18 +1008,21 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
   .hero .btn{min-width:320px}
   .trust li{font-size:12px}
 }
-/* DESKTOP: o texto ocupa a faixa limpa da própria fotografia, à
-   esquerda. Véu horizontal mais curto que antes (some a 54%, não a
-   66%): a comida fica vívida mais cedo, sem a faixa "enevoada" que
-   sobrava no meio da imagem. */
+/* DESKTOP: o texto ocupa a faixa rosa vazia da própria fotografia, à
+   esquerda. O véu segura em 95% até 44% da largura porque é ATÉ AÍ que a
+   coluna de texto chega (~620px de 1425) — a comida da arte começa antes
+   disso, em ~499px, e sem esse alcance a subheadline caía para 2,2:1 em
+   cima dos cookies (medido por amostragem de pixel). A dissolução longa
+   até 66% é o que dá a transição suave entre texto e fotografia, em vez
+   de uma divisória rígida. */
 @media (min-width:900px){
   .hero{align-items:center;min-height:calc(100svh - 46px)}
   .hero::after{
     background:linear-gradient(90deg,
-      rgba(251,246,243,.98) 0%,
-      rgba(251,246,243,.97) 46%,
-      rgba(251,246,243,.55) 56%,
-      rgba(251,246,243,0)   66%);
+      rgba(250,210,211,.98) 0%,
+      rgba(250,210,211,.95) 44%,
+      rgba(250,210,211,.55) 54%,
+      rgba(250,210,211,0)   66%);
   }
   .hero__content{
     width:100%;max-width:1240px;margin-inline:auto;
@@ -1076,10 +1085,10 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
   <div class="hero__media">
     <picture>
       <source media="(min-width:900px)" srcset="img/hero-desktop.webp"
-              width="1560" height="871">
+              width="1560" height="878">
       <img src="img/hero-mobile.webp" width="780" height="1397"
            fetchpriority="high" decoding="async"
-           alt="Variedade de doces e lanches fitness do Doce Sem Culpa sobre uma mesa de madeira">
+           alt="Mesa rosa vista de cima com cheesecake de frutas vermelhas, torta de limão, pudim, picolés, cookies, panquecas e outros doces do Doce Sem Culpa">
     </picture>
   </div>
 
