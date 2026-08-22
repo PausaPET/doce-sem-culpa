@@ -118,6 +118,9 @@ fbq('track', 'PageView');
   --rose-tint:#FADDE8;     /* texto claro sobre --rose-deep (4,51:1) */
   --blush:#F7DCE6;         /* fundo de seção — blush */
   --rose-pale:#FBEAF0;     /* fundo de seção — rosa suave, cards */
+  --baby-blue:#DEEAF4;     /* AZUL BEBÊ — segundo fundo de seção.
+                              Tinta escura nele: --ink 11,5:1,
+                              --rose-deep 5,11:1, --petrol 10,54:1 */
   --offwhite:#FBF6F3;      /* respiro, base da página */
   --hero-pink:#FAD2D3;     /* amostrado do fundo da fotografia do hero —
                               usado no véu e no fallback, para que foto e
@@ -145,6 +148,19 @@ fbq('track', 'PageView');
   --font-sans:"Inter","Helvetica Neue",Helvetica,Arial,sans-serif;
   --pad:22px;             /* respiro lateral no celular */
   --maxw:560px;           /* largura de leitura */
+  /* ── SISTEMA DE CONTAINER ────────────────────────────────────
+     --shell-max é a largura MÁXIMA do conteúdo; --shell aplica a
+     regra "ocupa a tela menos as calhas, até esse teto". Em
+     ultrawide o conteúdo para de crescer e fica centralizado, em
+     vez de escorrer até as bordas. Os degraus por breakpoint estão
+     no bloco 9 (DESKTOP). */
+  --shell-max:1240px;
+  --shell:min(100% - (var(--pad) * 2), var(--shell-max));
+  /* Teto da FAIXA da fotografia do hero. A arte tem 1672px nativos:
+     esticá-la além de ~2000px vira upscale visível, então a faixa
+     trava aí e o resto da tela fica no mesmo rosa do fundo da foto
+     (--hero-pink), sem emenda perceptível. */
+  --hero-band:2000px;
   --gap-sec:clamp(64px,13vw,120px);   /* respiro entre seções */
   --sticky-h:0px;
 }
@@ -184,9 +200,9 @@ ul{padding:0;list-style:none}
   font-size:11.5px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;
   color:var(--rose-deep);
 }
-.kicker--light{color:var(--rose-tint)}
+.kicker--light{color:var(--rose-deep)}
 .lead{font-size:clamp(17px,4.2vw,20px);line-height:1.55;color:var(--ink-soft)}
-.lead--light{color:var(--rose-tint)}
+.lead--light{color:var(--ink-soft)}
 .center{text-align:center}
 .hl{color:var(--rose-strong)}
 .hl-mark{
@@ -219,28 +235,23 @@ ul{padding:0;list-style:none}
 
 /* ─── 5. LAYOUT ─────────────────────────────────────────────── */
 .wrap{width:100%;max-width:var(--maxw);margin-inline:auto;padding-inline:var(--pad)}
-.wrap--wide{max-width:1080px}
+/* O bloco largo respeita o mesmo teto global do hero, então em ultrawide
+   a página inteira para de crescer no mesmo ponto — e não só o hero. */
+.wrap--wide{max-width:min(1080px,var(--shell-max))}
 .sec{padding-block:var(--gap-sec)}
 /* Ritmo de fundo: off-white → rosa suave → blush → rosa forte, com as
    DUAS seções do e-book (produto/dentro) em azul, criando a ilha de
    produto no meio da jornada da marca. */
+/* REGRA 80/20: nenhum fundo de seção usa cor forte. A página inteira
+   alterna entre off-white, rosa pastel e azul bebê; o que "pesa" na tela
+   são só os botões e os pequenos destaques. As classes .sec--rose e
+   .sec--deep (fundos fortes) foram removidas junto com todas as regras
+   que existiam só para inverter texto sobre elas. */
 .sec--soft{background:var(--rose-pale)}
 .sec--blush{background:var(--blush)}
-.sec--rose{background:var(--rose-deep);color:var(--offwhite)}
-.sec--ebook{background:var(--petrol-pale);color:var(--petrol)}
-.sec--deep{background:var(--petrol);color:var(--offwhite)}
-.sec--rose h2,.sec--deep h2,.sec--rose h3{color:var(--white)}
-/* Dentro da ilha do e-book os textos secundários seguem a família AZUL:
-   sem isto o tint rosa de marca vaza para dentro do mundo do produto e
-   as duas identidades se misturam — que é justamente o que o contraste
-   rosa→azul existe para evitar. */
-.sec--deep .kicker--light,
-.sec--deep .lead--light,
-.sec--deep .prova figcaption{color:var(--petrol-light)}
-/* O .kicker padrão é rosa da marca — sobre a seção rosa ele sumiria
-   (1:1). Em fundo escuro ele vira o tint claro da própria família. */
-.sec--rose .kicker,.band .kicker{color:var(--rose-tint)}
-.sec--rose .lead,.band .lead{color:var(--rose-tint)}
+.sec--babyblue{background:var(--baby-blue)}
+/* As duas seções do e-book: mesmo azul, com a tinta do produto. */
+.sec--ebook{background:var(--baby-blue);color:var(--petrol)}
 .sec-head{margin-bottom:clamp(30px,7vw,52px)}
 .sec-head .kicker{margin-bottom:16px}
 .sec-head h2{margin-bottom:0}
@@ -249,14 +260,14 @@ ul{padding:0;list-style:none}
 /* ─── 6.0 BARRA SUPERIOR ────────────────────────────────────── */
 /* Uma linha só no celular: em duas, a barra come altura da primeira dobra. */
 .topbar{
-  background:var(--rose-darker);color:var(--rose-light);
+  background:var(--rose-pale);color:var(--rose-darker);
   padding:11px 12px calc(11px + env(safe-area-inset-top));
   text-align:center;white-space:nowrap;
   font-size:clamp(8.6px,2.45vw,11px);font-weight:800;
   letter-spacing:.1em;text-transform:uppercase;line-height:1.3;
 }
 @media (min-width:520px){ .topbar{letter-spacing:.16em} }
-.topbar b{color:var(--white);font-weight:800}
+.topbar b{color:var(--rose-strong);font-weight:800}
 
 /* ─── 6.1 HERO ──────────────────────────────────────────────────
    Fotografia CLARA com área negativa própria: o texto é escuro e
@@ -281,7 +292,13 @@ ul{padding:0;list-style:none}
      continua sendo o campo rosa em vez de piscar off-white. */
   background:var(--hero-pink);color:var(--ink);
 }
-.hero__media{position:absolute;inset:0;z-index:-2}
+/* A faixa da foto é centralizada e limitada por --hero-band. Fora dela
+   fica o --hero-pink do .hero, que é EXATAMENTE o rosa do fundo da arte,
+   então em ultrawide não se vê onde a foto termina. */
+.hero__media{
+  position:absolute;top:0;bottom:0;left:50%;transform:translateX(-50%);
+  width:min(100%,var(--hero-band));z-index:-2;
+}
 .hero__media picture{display:block;width:100%;height:100%}
 .hero__media img{display:block;width:100%;height:100%;object-fit:cover}
 /* O véu é o PRÓPRIO rosa do fundo da foto (amostrado: #FAD2D3). Sobre a
@@ -289,8 +306,12 @@ ul{padding:0;list-style:none}
    mesmo rosa. Por isso não existe emenda entre foto e área de texto.
    MOBILE: a comida começa a 63% da altura da imagem, então o véu segura
    até ~50% e some antes disso. */
-.hero::after{
-  content:"";position:absolute;inset:0;z-index:-1;
+/* O véu vive DENTRO da faixa da foto (não no .hero) porque suas paradas
+   são percentuais: ancorado à viewport, ele descolaria da fotografia em
+   ultrawide, onde a faixa é mais estreita que a tela. Ancorado à faixa,
+   a mesma regra vale de 320px a 5120px. */
+.hero__media::after{
+  content:"";position:absolute;inset:0;
   background:linear-gradient(180deg,
     rgba(250,210,211,.98) 0%,
     rgba(250,210,211,.96) 50%,
@@ -315,20 +336,24 @@ ul{padding:0;list-style:none}
 .hero__badge svg{flex:none}
 .hero__title{
   font-family:var(--font-head);
-  font-weight:800;letter-spacing:-.025em;
-  line-height:1.1;color:var(--ink);
-  font-size:clamp(30px,8.2vw,42px);
-  text-wrap:balance;
+  font-weight:800;                 /* Poppins ExtraBold */
+  text-transform:uppercase;
+  /* Caixa alta pede tracking menos negativo que caixa baixa: em -.025em
+     as maiúsculas colavam. */
+  letter-spacing:-.005em;
+  line-height:1.06;color:var(--ink);
+  /* Piso baixo porque "SEM ABANDONAR SUA" em 800 caixa alta é a linha
+     mais larga e é ela que decide o limite a 320px. */
+  font-size:clamp(24px,6.9vw,40px);
+  text-wrap:nowrap;
 }
-/* Só os filhos DIRETOS viram linha: sem o ">", os spans de destaque
-   virariam bloco e jogariam o ponto final para uma linha sozinha. */
 .hero__title > span{display:block}
-.hero__title .hl,
-.hero__title .hl-mark{color:var(--rose-strong);background:none;padding:0}
+.hero__title .hl{color:var(--rose-strong);background:none;padding:0}
 .hero__sub{
-  margin-top:18px;
+  margin-top:clamp(14px,2.2vw,20px);
+  font-weight:400;                 /* Inter Regular */
   font-size:clamp(15.5px,3.9vw,18px);line-height:1.6;
-  color:var(--ink-soft);max-width:26em;
+  color:var(--ink-soft);max-width:30ch;
 }
 .hero__sub strong{color:var(--rose-strong);font-weight:600}
 .hero .btn{margin-inline:0;margin-top:30px}
@@ -336,42 +361,45 @@ ul{padding:0;list-style:none}
 /* Trio de números: substitui a antiga legenda de uma linha em
    caixa-alta minúscula — mesma informação (50 · 25 · 25), com peso
    tipográfico de verdade em vez de apagada no rodapé do bloco. */
-.hero__stats{display:flex;margin-top:28px}
-.hero__stats li{padding-inline:18px;border-left:1px solid rgba(61,36,48,.15)}
+.hero__stats{display:flex;margin-top:clamp(22px,3.4vw,32px)}
+.hero__stats li{
+  padding-inline:clamp(12px,1.4vw,20px);
+  border-left:1px solid rgba(61,36,48,.15);
+}
 .hero__stats li:first-child{padding-left:0;border-left:0}
 .hero__stats b{
   display:block;font-family:var(--font-head);
-  font-size:23px;line-height:1;font-weight:800;color:var(--ink);
+  font-size:clamp(20px,4.9vw,28px);line-height:1;
+  font-weight:700;color:var(--ink);   /* Poppins Bold */
 }
 .hero__stats span{
-  display:block;margin-top:5px;font-size:11px;font-weight:700;
+  display:block;margin-top:5px;
+  font-size:clamp(10px,2.5vw,11.5px);
+  font-weight:500;                    /* Inter Medium */
+  text-transform:uppercase;
   /* --ink-mute ficava em 4,43:1 sobre o rosa do hero — abaixo de AA. */
-  letter-spacing:.04em;color:var(--ink-soft);
+  letter-spacing:.09em;color:var(--ink-soft);
 }
-/* Ícone do trio de números — some no mobile estreito para não
-   competir com o próprio número. */
 .hero__stats .ico{flex:none;color:var(--rose-strong)}
 .hero__stats b{display:flex;align-items:center;gap:7px}
 /* Reforços abaixo do CTA (nunca acima: acima o botão cai para fora
    da primeira dobra num aparelho de 812px). */
 .hero__trust{
-  display:flex;flex-wrap:wrap;gap:10px 18px;margin-top:26px;
-  font-size:10.5px;font-weight:800;letter-spacing:.1em;
+  display:flex;flex-wrap:wrap;gap:10px clamp(14px,1.6vw,22px);
+  margin-top:clamp(20px,2.8vw,28px);
+  font-size:clamp(10px,2.4vw,11.5px);
+  font-weight:500;                    /* Inter Medium */
+  letter-spacing:.1em;
   text-transform:uppercase;color:var(--ink-soft);
 }
 .hero__trust li{display:flex;align-items:center;gap:6px}
 .hero__trust .ico{flex:none;color:var(--rose-strong)}
 
 /* ─── 6.2 BLOCO DE TEXTO EDITORIAL ──────────────────────────── */
-/* Contextos escuros: .band entra na lista junto com sec--rose/--deep.
-   Sem isso, .closing e .editorial mantêm a cor escura sobre fundo escuro. */
 .closing{
   margin-top:38px;padding-top:32px;border-top:1px solid rgba(61,36,48,.12);
   font-size:clamp(19px,4.8vw,26px);line-height:1.35;
   font-weight:600;color:var(--ink);
-}
-.sec--rose .closing,.sec--deep .closing,.band .closing{
-  border-top-color:rgba(255,255,255,.16);color:var(--white);
 }
 
 /* ─── 6.3 NARRATIVA (linha do tempo) ────────────────────────── */
@@ -407,11 +435,15 @@ ul{padding:0;list-style:none}
   color:var(--ink);
 }
 .offer__head{
-  background:var(--petrol);color:var(--white);padding:26px 22px;text-align:center;
+  /* Cabeçalho do card em AZUL BEBÊ, não em petróleo sólido: com o topo
+     escuro, o CTA petróleo logo abaixo deixava de ser o elemento de
+     maior contraste do bloco — que é o papel dele. */
+  background:var(--baby-blue);color:var(--petrol);padding:26px 22px;text-align:center;
 }
 .offer__tag{
   display:inline-block;margin-bottom:12px;padding:6px 15px;
-  background:var(--petrol);color:var(--white);border-radius:999px;
+  /* Badge pequeno = lugar legítimo para cor forte. */
+  background:var(--rose-strong);color:var(--white);border-radius:999px;
   font-size:10.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
 }
 .offer__body{padding:28px 22px}
@@ -472,12 +504,12 @@ ul{padding:0;list-style:none}
    o texto branco continua legível em vez de cair sobre o off-white. */
 .band{
   position:relative;isolation:isolate;overflow:hidden;
-  background:var(--rose-deep);color:var(--white);
+  background:var(--blush);color:var(--ink);
 }
 .band__img{position:absolute;inset:0;z-index:-2;width:100%;height:100%;object-fit:cover}
 .band::after{
   content:"";position:absolute;inset:0;z-index:-1;
-  background:linear-gradient(180deg,rgba(126,39,68,.88),rgba(126,39,68,.94));
+  background:linear-gradient(180deg,rgba(247,220,230,.93),rgba(247,220,230,.88));
 }
 
 /* ─── 6.13 GARANTIA ─────────────────────────────────────────── */
@@ -511,16 +543,16 @@ details[open] .faq-a{animation:fade .24s ease}
 @keyframes fade{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
 
 /* ─── 6.15 RODAPÉ ───────────────────────────────────────────── */
-footer{background:var(--rose-darker);color:var(--rose-light);padding:56px 0 40px;font-size:13.5px}
-.foot-logo{font-size:23px;color:var(--white);margin-bottom:10px}
+footer{background:var(--blush);color:var(--ink-soft);padding:56px 0 40px;font-size:13.5px}
+.foot-logo{font-size:23px;color:var(--ink);margin-bottom:10px}
 .foot-links{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 20px;margin:26px 0 22px}
 .foot-links a{
   display:inline-flex;align-items:center;min-height:44px;
-  color:var(--rose-light);text-decoration:none;font-weight:600;padding:0 4px;
+  color:var(--rose-deep);text-decoration:none;font-weight:600;padding:0 4px;
 }
 .foot-legal{
-  border-top:1px solid rgba(255,255,255,.1);padding-top:22px;
-  font-size:12px;line-height:1.6;color:#D9AFC0;text-align:center;
+  border-top:1px solid rgba(61,36,48,.12);padding-top:22px;
+  font-size:12px;line-height:1.6;color:var(--ink-mute);text-align:center;
 }
 .foot-legal p+p{margin-top:10px}
 
@@ -575,8 +607,6 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
   background:transparent;color:var(--rose-deep);
   border:2px solid var(--rose-deep);box-shadow:none;
 }
-.sec--rose .btn--ghost,.sec--deep .btn--ghost,.band .btn--ghost,
-.poll__out .btn--ghost{color:var(--white);border-color:rgba(255,255,255,.55)}
 
 /* ─── Arquétipo 2: petróleo — CTAs ligados ao produto/oferta ───── */
 .btn--petrol{background:var(--petrol);box-shadow:0 10px 26px rgba(27,53,64,.34)}
@@ -602,12 +632,13 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 .poll__opt[aria-pressed="true"]{border-color:var(--rose-strong);background:var(--rose-pale)}
 .poll__out{
   max-width:440px;margin:24px auto 0;padding:24px 22px;
-  background:var(--rose-deep);color:var(--white);border-radius:var(--radius);text-align:center;
+  background:var(--white);color:var(--ink);border:1px solid #F0DDE5;
+  border-radius:var(--radius);text-align:center;
 }
-.poll__msg{font-size:16.5px;line-height:1.5;color:var(--rose-tint)}
+.poll__msg{font-size:16.5px;line-height:1.5;color:var(--ink-soft)}
 .poll__fix{
-  margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,.16);
-  font-size:19px;font-weight:700;color:var(--white);line-height:1.35;
+  margin-top:16px;padding-top:16px;border-top:1px solid rgba(61,36,48,.12);
+  font-size:19px;font-weight:700;color:var(--ink);line-height:1.35;
 }
 .poll__out .btn{margin-top:20px}
 
@@ -615,23 +646,23 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 .versus{display:grid;gap:16px;max-width:760px;margin:0 auto}
 .versus__col{border-radius:var(--radius);padding:24px 22px}
 .versus__col--bad{background:#F2EDE8;border:1px solid #E3D8CE}
-.versus__col--good{background:var(--petrol);color:var(--white)}
+.versus__col--good{background:var(--baby-blue);color:var(--ink)}
 .versus__lbl{
   display:block;margin-bottom:14px;
   font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
 }
 .versus__col--bad .versus__lbl{color:#7A5C43}  /* 3,35:1 -> 5,2:1 */
-.versus__col--good .versus__lbl{color:var(--petrol-light)}
+.versus__col--good .versus__lbl{color:var(--petrol)}
 .versus li{position:relative;padding:10px 0 10px 26px;font-size:15.5px;line-height:1.45}
 .versus__col--bad li{color:#6B5647}
 .versus__col--bad li::before{
   content:"\00D7";position:absolute;left:0;top:9px;
   font-size:18px;font-weight:800;color:#B08968;
 }
-.versus__col--good li{color:var(--petrol-light)}
+.versus__col--good li{color:var(--ink-soft)}
 .versus__col--good li::before{
   content:"\2713";position:absolute;left:0;top:10px;
-  font-size:15px;font-weight:800;color:var(--petrol-light);
+  font-size:15px;font-weight:800;color:var(--rose-deep);
 }
 .facts{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;max-width:700px;margin:30px auto 0}
 .facts li{
@@ -669,9 +700,9 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 }
 .pages figcaption{
   margin-top:11px;text-align:center;font-size:11.5px;font-weight:800;
-  letter-spacing:.09em;text-transform:uppercase;color:var(--petrol-light);
+  letter-spacing:.09em;text-transform:uppercase;color:var(--ink-soft);
 }
-.pages__hint{text-align:center;margin-top:2px;font-size:13px;color:var(--petrol-light)}
+.pages__hint{text-align:center;margin-top:2px;font-size:13px;color:var(--ink-soft)}
 
 /* ─── AUTORA ────────────────────────────────────────────────── */
 .autora{display:grid;gap:22px;justify-items:center;text-align:center;max-width:560px;margin:0 auto}
@@ -775,20 +806,6 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
   background:var(--rose-pale);color:var(--rose-deep);
   font-size:11.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;
 }
-/* variante para as seções escuras */
-.sec--rose .sig,.sec--deep .sig,.band .sig{
-  background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.16);box-shadow:none;
-}
-.sec--rose .sig__txt b,.sec--deep .sig__txt b{color:var(--white)}
-.sec--rose .sig__txt span,.band .sig__txt span{color:var(--rose-tint)}
-.sec--deep .sig__txt span{color:var(--petrol-light)}
-.sec--rose .sig__foto,.sec--deep .sig__foto{background:rgba(255,255,255,.16)}
-.sec--rose .sig__mono,.band .sig__mono{color:var(--rose-tint)}
-/* Sobre o chip translúcido (petróleo + 2 camadas de branco a 7%/16%) o
-   --petrol-light cai para 3,64:1; o tom pálido resolve sem sair do azul. */
-.sec--deep .sig__mono{color:var(--petrol-pale)}
-.sec--rose .sig__ig,.band .sig__ig{background:rgba(255,255,255,.16);color:var(--rose-tint)}
-.sec--deep .sig__ig{background:rgba(255,255,255,.16);color:var(--petrol-pale)}
 @media (max-width:479px){
   .sig{border-radius:20px;flex-wrap:wrap}
   .sig__ig{width:100%;justify-content:center}
@@ -803,8 +820,8 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
   width:100%;height:auto;aspect-ratio:760/950;object-fit:cover;
   border-radius:var(--radius);box-shadow:var(--shadow-lg);
 }
-.prova figcaption{font-size:16px;line-height:1.5;color:var(--rose-tint);text-align:center}
-.prova figcaption b{display:block;color:var(--white);font-size:18px;margin-bottom:6px}
+.prova figcaption{font-size:16px;line-height:1.5;color:var(--ink-soft);text-align:center}
+.prova figcaption b{display:block;color:var(--ink);font-size:18px;margin-bottom:6px}
 
 /* ─── SEÇÃO DA AUTORA ───────────────────────────────────────── */
 .autora{display:grid;gap:26px;justify-items:center;text-align:center;max-width:620px;margin:0 auto}
@@ -1018,20 +1035,23 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
    de uma divisória rígida. */
 @media (min-width:900px){
   .hero{align-items:center;min-height:calc(100svh - 46px)}
-  .hero::after{
+  .hero__media::after{
     background:linear-gradient(90deg,
       rgba(250,210,211,.98) 0%,
-      rgba(250,210,211,.95) 44%,
-      rgba(250,210,211,.55) 54%,
-      rgba(250,210,211,0)   66%);
+      rgba(250,210,211,.96) 50%,
+      rgba(250,210,211,.55) 60%,
+      rgba(250,210,211,0)   72%);
   }
   .hero__content{
-    width:100%;max-width:1240px;margin-inline:auto;
-    padding-inline:clamp(32px,5vw,68px);
+    width:var(--shell);margin-inline:auto;padding-inline:0;
   }
-  .hero__content > .wrap{max-width:min(40%,460px);margin:0;padding:0}
-  .hero__title{font-size:clamp(30px,2.7vw,40px)}
-  .hero__stats{margin-top:32px}
+  /* A coluna precisa caber a MAIOR linha da headline ("SEM ABANDONAR
+     SUA"), que em Poppins 800 caixa alta mede ~11,1x o font-size. Como
+     as linhas usam nowrap para manter o pareamento de 4 linhas, uma
+     coluna estreita não faz a linha quebrar — faz ela transbordar por
+     cima da comida. Daí o teto em 640px, e não em ch do corpo. */
+  .hero__content > .wrap{max-width:min(52%,640px);margin:0;padding:0}
+  .hero__title{font-size:clamp(30px,3.05vw,44px)}
 }
 
 @media (min-width:1024px){
@@ -1042,6 +1062,37 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
     border:1px solid #EFDCE4;padding:10px 12px 10px 24px;box-shadow:var(--shadow-lg);
   }
   .sticky-bar .btn{min-width:0}
+}
+
+/* ─── 10. TELAS GRANDES E ULTRAWIDE ─────────────────────────────
+   O conteúdo cresce em DEGRAUS até 1560px e para; a fotografia
+   cresce até --hero-band e para. Sem isso, a 3440px o texto ficaria
+   colado nas bordas e a arte (1672px nativos) seria esticada 2x.
+   Como a área fora da faixa usa o mesmo rosa do fundo da foto, o
+   corte não aparece — a tela continua sendo um campo rosa só. */
+@media (min-width:1440px){
+  :root{--shell-max:1320px;--pad:40px}
+  .hero__title{font-size:clamp(40px,2.9vw,50px)}
+}
+@media (min-width:1920px){
+  :root{--shell-max:1440px;--pad:48px}
+  .hero__title{font-size:52px}
+  .hero__sub{font-size:19px}
+}
+@media (min-width:2560px){
+  :root{--shell-max:1560px;--hero-band:2000px}
+  .hero__title{font-size:56px}
+  .hero__sub{font-size:20px}
+  .hero__stats b{font-size:30px}
+  /* O CTA para de crescer: num monitor de 5120px um botão proporcional
+     à tela viraria uma barra. */
+  .hero .btn{min-width:360px;font-size:18px}
+}
+@media (min-width:3440px){
+  /* Acima disso nada mais escala — só a moldura rosa aumenta, o que
+     mantém a composição igual à do desktop grande em vez de virar
+     uma página esticada. */
+  :root{--shell-max:1560px}
 }
 </style>
 </head>
@@ -1104,9 +1155,16 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
         Oferta de lançamento
       </p>
 
+      <!-- 4 linhas EXPLÍCITAS: a referência quebra em pares
+           (frase escura / frase colorida) e deixar o navegador
+           decidir a quebra desalinhava esse pareamento. A caixa
+           alta é só apresentação (text-transform), o texto no HTML
+           segue legível para leitor de tela e indexação. -->
       <h1 class="hero__title">
-        <span>Mate a vontade de <span class="hl">comer doce</span>.</span>
-        <span>Sem abandonar sua <span class="hl-mark">rotina&nbsp;saudável</span>.</span>
+        <span>Mate a vontade de</span>
+        <span class="hl">comer doce.</span>
+        <span>Sem abandonar sua</span>
+        <span class="hl">rotina saudável.</span>
       </h1>
 
       <p class="hero__sub">
@@ -1324,7 +1382,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 <!-- ══════════════════════════════════════════════════════════════
      9c. AUTORA
      ══════════════════════════════════════════════════════════════ -->
-<section class="sec sec--soft" id="autora">
+<section class="sec" id="autora">
   <div class="wrap">
     <div class="autora reveal">
 
@@ -1367,7 +1425,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 <!-- ══════════════════════════════════════════════════════════════
      8. PRIMEIRA OFERTA
      ══════════════════════════════════════════════════════════════ -->
-<section class="sec sec--rose" id="oferta">
+<section class="sec sec--blush" id="oferta">
   <div class="wrap">
     <div class="sec-head center reveal">
       <p class="kicker">Sem enrolação</p>
@@ -1411,7 +1469,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 <!-- ══════════════════════════════════════════════════════════════
      9b. POR DENTRO DO EBOOK (páginas reais)
      ══════════════════════════════════════════════════════════════ -->
-<section class="sec sec--deep" id="dentro">
+<section class="sec sec--ebook" id="dentro">
   <div class="wrap">
     <div class="sec-head center reveal">
       <p class="kicker kicker--light">Transparência</p>
@@ -1454,7 +1512,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 <!-- ══════════════════════════════════════════════════════════════
      3c. GASTAR MELHOR
      ══════════════════════════════════════════════════════════════ -->
-<section class="sec sec--blush" id="dinheiro">
+<section class="sec" id="dinheiro">
   <div class="wrap wrap--wide">
     <div class="sec-head center reveal">
       <p class="kicker">Sobre dinheiro</p>
@@ -1631,7 +1689,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 <!-- ══════════════════════════════════════════════════════════════
      13. FAQ
      ══════════════════════════════════════════════════════════════ -->
-<section class="sec sec--soft" id="faq">
+<section class="sec sec--babyblue" id="faq">
   <div class="wrap wrap--wide">
     <div class="sec-head center reveal">
       <p class="kicker">Dúvidas frequentes</p>
