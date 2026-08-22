@@ -304,9 +304,10 @@ ul{padding:0;list-style:none}
 .hero__badge{
   display:inline-flex;align-items:center;gap:8px;
   padding:8px 15px;margin-bottom:22px;
-  /* --rose-strong dava 3,95:1 sobre o rosa do hero (medido por amostragem
-     de pixel); o tom mais escuro passa. A borda pode seguir clara. */
-  background:transparent;color:var(--rose-deep);border-radius:999px;
+  /* Sobre o rosa do hero: --rose-strong dava 3,95:1 e --rose-deep parava
+     exatamente em 4,50 (na fronteira do AA, sem folga). O tom mais escuro
+     resolve com margem; a borda segue clara, preservando o desenho. */
+  background:transparent;color:var(--rose-darker);border-radius:999px;
   border:1.5px solid var(--rose-strong);
   font-size:11px;font-weight:800;
   letter-spacing:.08em;text-transform:uppercase;line-height:1.2;
@@ -1085,8 +1086,8 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
   <div class="hero__media">
     <picture>
       <source media="(min-width:900px)" srcset="img/hero-desktop.webp"
-              width="1560" height="878">
-      <img src="img/hero-mobile.webp" width="780" height="1397"
+              width="1672" height="941">
+      <img src="img/hero-mobile.webp" width="1170" height="2095"
            fetchpriority="high" decoding="async"
            alt="Mesa rosa vista de cima com cheesecake de frutas vermelhas, torta de limão, pudim, picolés, cookies, panquecas e outros doces do Doce Sem Culpa">
     </picture>
