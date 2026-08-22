@@ -814,7 +814,8 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
   background:var(--whipple);border:4px solid var(--white);
   box-shadow:var(--shadow-md);display:grid;place-items:center;
 }
-.autora__foto img{width:100%;height:100%;object-fit:cover}
+.autora__foto{position:relative}
+.autora__foto img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
 .autora__mono{font-size:44px;font-weight:700;color:var(--yarmouth-dark);letter-spacing:.03em}  /* 2,36:1 -> 4,8:1 */
 .autora__nome{font-size:clamp(24px,6vw,32px);line-height:1.15;color:var(--narra)}
 .autora__papel{
@@ -924,6 +925,44 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
   .antesdepois{grid-template-columns:1fr 1fr;gap:18px}
   .pilares{grid-template-columns:1fr 1fr}
   .recipes{grid-template-columns:1fr 1fr;max-width:720px}
+}
+
+/* ─── ASSINATURA DA AUTORA (nas seções sobre o livro) ───────── */
+.sig{
+  display:flex;align-items:center;gap:14px;
+  max-width:530px;margin:34px auto 0;padding:14px 16px;
+  background:var(--white);border:1px solid #E5EDF2;border-radius:999px;
+  box-shadow:var(--shadow-sm);
+}
+.sig__foto{
+  position:relative;flex:none;width:54px;height:54px;border-radius:50%;
+  overflow:hidden;background:var(--whipple);display:grid;place-items:center;
+}
+/* a foto (injetada pelo script) cobre o monograma que fica atras */
+.sig__foto img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
+/* injetada pelo script quando img/autora.webp existir */
+.sig__mono{font-size:17px;font-weight:800;color:var(--yarmouth-dark);letter-spacing:.02em}
+.sig__txt{flex:1;min-width:0;line-height:1.32}
+.sig__txt b{display:block;font-size:15px;color:var(--narra)}
+.sig__txt span{font-size:12.5px;color:var(--ink-soft)}
+.sig__ig{
+  flex:none;display:inline-flex;align-items:center;min-height:44px;
+  padding:9px 15px;border-radius:999px;text-decoration:none;
+  background:var(--whipple);color:var(--yarmouth-dark);
+  font-size:11.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;
+}
+/* variante para as seções escuras */
+.sec--dark .sig,.sec--deep .sig,.band .sig{
+  background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.16);box-shadow:none;
+}
+.sec--dark .sig__txt b,.sec--deep .sig__txt b{color:var(--white)}
+.sec--dark .sig__txt span,.sec--deep .sig__txt span{color:#ADC6D3}
+.sec--dark .sig__foto,.sec--deep .sig__foto{background:rgba(186,212,219,.16)}
+.sec--dark .sig__mono,.sec--deep .sig__mono{color:var(--woodlawn)}
+.sec--dark .sig__ig,.sec--deep .sig__ig{background:rgba(186,212,219,.16);color:var(--woodlawn)}
+@media (max-width:479px){
+  .sig{border-radius:20px;flex-wrap:wrap}
+  .sig__ig{width:100%;justify-content:center}
 }
 
 /* ─── 9. DESKTOP (progressive enhancement) ──────────────────── */
@@ -1388,6 +1427,16 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
         </figcaption>
       </figure>
     </div>
+    <div class="sig reveal">
+      <span class="sig__foto">
+        <span class="sig__mono serif" aria-hidden="true">HA</span>
+      </span>
+      <span class="sig__txt">
+        <b>Dra. Helena Azevedo</b>
+        <span>Selecionou e organizou as 50 receitas</span>
+      </span>
+      <a class="sig__ig" href="https://www.instagram.com/dra.helenaazevedo/" target="_blank" rel="noopener noreferrer">Ver Instagram</a>
+    </div>
   </div>
 </section>
 
@@ -1418,6 +1467,17 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
       <li><span class="quero"><span class="em">🤏</span> Beliscar</span>
           <span class="faz"><span>Trufa Proteica</span></span></li>
     </ul>
+
+    <div class="sig reveal">
+      <span class="sig__foto">
+        <span class="sig__mono serif" aria-hidden="true">HA</span>
+      </span>
+      <span class="sig__txt">
+        <b>Dra. Helena Azevedo</b>
+        <span>Montou este mapa dentro do ebook</span>
+      </span>
+      <a class="sig__ig" href="https://www.instagram.com/dra.helenaazevedo/" target="_blank" rel="noopener noreferrer">Ver Instagram</a>
+    </div>
 
     <div class="btn-wrap reveal">
       <a class="btn" data-checkout href="#oferta-final" rel="nofollow noopener">
@@ -1632,6 +1692,16 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
       <figure><img src="img/pg-bonus.webp" width="620" height="928" loading="lazy" decoding="async" alt="Cardápio de 7 dias, um dos bônus"><figcaption>Bônus</figcaption></figure>
     </div>
     <p class="pages__hint">Arraste para o lado para ver mais páginas →</p>
+    <div class="sig reveal">
+      <span class="sig__foto">
+        <span class="sig__mono serif" aria-hidden="true">HA</span>
+      </span>
+      <span class="sig__txt">
+        <b>Dra. Helena Azevedo</b>
+        <span>Autora do material que você está vendo</span>
+      </span>
+      <a class="sig__ig" href="https://www.instagram.com/dra.helenaazevedo/" target="_blank" rel="noopener noreferrer">Ver Instagram</a>
+    </div>
   </div>
 </section>
 
@@ -1641,11 +1711,13 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 <section class="sec" id="autora">
   <div class="wrap">
     <div class="autora reveal">
-      <!-- ⚠️ SUBSTITUA pelo retrato real da autora:
-           <img src="img/autora.webp" width="300" height="300" alt="Retrato de Helena Azevedo">
-           Enquanto não houver foto, fica o monograma — nunca uma foto de banco
-           de imagens, que seria passar outra pessoa por ela. -->
-      <div class="autora__foto"><span class="autora__mono serif">HA</span></div>
+      <!-- 📷 Para publicar o retrato: salve o arquivo como img/autora.webp.
+           O script o injeta aqui e nas 3 assinaturas automaticamente — não é
+           preciso editar HTML. Sem o arquivo, fica o monograma; nunca uma foto
+           de banco de imagens, que seria passar outra pessoa por ela. -->
+      <div class="autora__foto">
+        <span class="autora__mono serif" aria-hidden="true">HA</span>
+      </div>
 
       <div>
         <h2 class="serif autora__nome">Dra. Helena Azevedo</h2>
@@ -2124,6 +2196,28 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
         }
       });
     });
+  })();
+
+  /* 14. Foto da autora — sondada UMA vez.
+        Enquanto img/autora.webp não existir, ficam os monogramas. Assim que o
+        arquivo for adicionado, ele aparece nos 4 lugares sem editar o HTML.
+        Uma sondagem só, em vez de 4 imagens lazy pedindo arquivo inexistente. */
+  (function(){
+    var alvos = $$('.sig__foto, .autora__foto');
+    if (!alvos.length) return;
+    var teste = new Image();
+    teste.onload = function(){
+      alvos.forEach(function(cx){
+        var img = document.createElement('img');
+        img.src = 'img/autora.webp';
+        img.alt = 'Dra. Helena Azevedo, autora do Doce Sem Culpa';
+        img.decoding = 'async';
+        cx.appendChild(img);
+        var mono = $('.sig__mono, .autora__mono', cx);
+        if (mono) mono.setAttribute('aria-hidden','true');
+      });
+    };
+    teste.src = 'img/autora.webp';
   })();
 
   /* 8. Purchase — NÃO dispara aqui: a compra acontece no checkout da Kiwify.
