@@ -27,6 +27,12 @@
 
 <!-- A foto do hero é o maior elemento da primeira tela (LCP): buscar cedo.
      O `media` garante que cada dispositivo pré-carregue só o seu recorte. -->
+<!-- Mona Sans é a única webfont do projeto: 2 pesos pre-carregados
+     (o resto do sistema segue em fontes do SO). -->
+<link rel="preload" as="font" type="font/woff2" crossorigin
+      href="https://cdn.jsdelivr.net/npm/mona-sans@1.0.0/woff2/Mona-Sans-ExtraBold.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin
+      href="https://cdn.jsdelivr.net/npm/mona-sans@1.0.0/woff2/Mona-Sans-Regular.woff2">
 <link rel="preload" as="image" href="img/hero-mobile.webp" media="(max-width:899px)" fetchpriority="high">
 <link rel="preload" as="image" href="img/hero-desktop.webp"
       media="(min-width:900px)" fetchpriority="high">
@@ -78,6 +84,30 @@ fbq('track', 'PageView');
 </script>
 
 <style>
+/* ─── TIPOGRAFIA — Mona Sans ─────────────────────────────────
+   Única webfont do projeto: 4 pesos estáticos (400/600/700/800),
+   ~63 KB no total, servidos do pacote npm oficial via jsdelivr.
+   São exatamente os pesos já usados na folha de estilo — carregar
+   só esses evita que o navegador "arredonde" 700 para 800 por
+   falta de face exata. O .serif (headings editoriais em outras
+   seções) continua em fonte do sistema, sem requisição externa. */
+@font-face{
+  font-family:"Mona Sans";font-style:normal;font-weight:400;font-display:swap;
+  src:url("https://cdn.jsdelivr.net/npm/mona-sans@1.0.0/woff2/Mona-Sans-Regular.woff2") format("woff2");
+}
+@font-face{
+  font-family:"Mona Sans";font-style:normal;font-weight:600;font-display:swap;
+  src:url("https://cdn.jsdelivr.net/npm/mona-sans@1.0.0/woff2/Mona-Sans-SemiBold.woff2") format("woff2");
+}
+@font-face{
+  font-family:"Mona Sans";font-style:normal;font-weight:700;font-display:swap;
+  src:url("https://cdn.jsdelivr.net/npm/mona-sans@1.0.0/woff2/Mona-Sans-Bold.woff2") format("woff2");
+}
+@font-face{
+  font-family:"Mona Sans";font-style:normal;font-weight:800;font-display:swap;
+  src:url("https://cdn.jsdelivr.net/npm/mona-sans@1.0.0/woff2/Mona-Sans-ExtraBold.woff2") format("woff2");
+}
+
 /* ═══════════════════════════════════════════════════════════════
    DOCE SEM CULPA — landing editorial, mobile-first
    1.Tokens 2.Reset 3.Tipografia 4.Botões 5.Layout
@@ -114,6 +144,7 @@ fbq('track', 'PageView');
   --shadow-md:0 10px 34px rgba(22,50,60,.10);
   --shadow-lg:0 24px 60px rgba(22,50,60,.18);
 
+  --font-sans:"Mona Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
   --pad:22px;             /* respiro lateral no celular */
   --maxw:560px;           /* largura de leitura */
   --gap-sec:clamp(64px,13vw,120px);   /* respiro entre seções */
@@ -132,7 +163,7 @@ html{
 }
 body{
   margin:0;background:var(--offwhite);color:var(--ink);
-  font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  font-family:var(--font-sans);
   font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased;
   padding-bottom:var(--sticky-h);
 }
@@ -215,12 +246,20 @@ ul{padding:0;list-style:none}
 .topbar b{color:var(--caramel-light);font-weight:800}
 
 /* ─── 6.1 HERO ──────────────────────────────────────────────────
-   A fotografia agora é CLARA e traz área negativa própria. Então o
-   texto é ESCURO e ocupa esse vazio, em vez de exigir véu escuro por
-   cima da comida — a comida continua apetitosa, que é o ponto.
-   Duas composições distintas:
-     • mobile  → véu claro no topo, comida ocupando a metade de baixo
-     • desktop → texto na faixa limpa à esquerda, comida à direita   */
+   Fotografia CLARA com área negativa própria: o texto é escuro e
+   ocupa esse vazio, sem escurecer a comida. O véu agora é um painel
+   CURTO e definido — antes a transição se estendia por boa parte da
+   largura/altura e deixava uma faixa "lavada" no meio, sem servir
+   nem de texto nem de foto. Aqui a leitura fica sólida perto do
+   texto e a comida aparece vívida logo em seguida.
+   Tipografia em Mona Sans, título em minúsculas/maiúsculas mistas
+   (não caixa-alta): mais editorial, hierarquia por peso e tamanho
+   em vez de "grito". Menos blocos empilhados, respiro crescente
+   entre eles — badge e título ficam próximos (mesma ideia), título
+   e subtítulo formam a "mensagem", CTA é a virada, estatísticas
+   fecham como prova.
+     • mobile  → véu no topo, comida ocupando a metade de baixo
+     • desktop → texto na faixa esquerda, comida à direita           */
 .hero{
   position:relative;isolation:isolate;overflow:hidden;
   display:grid;align-items:start;
@@ -230,56 +269,61 @@ ul{padding:0;list-style:none}
 .hero__media{position:absolute;inset:0;z-index:-2}
 .hero__media picture{display:block;width:100%;height:100%}
 .hero__media img{display:block;width:100%;height:100%;object-fit:cover}
-/* Véu CLARO — clareia para dar leitura, nunca escurece a fotografia. */
 .hero::after{
   content:"";position:absolute;inset:0;z-index:-1;
   background:linear-gradient(180deg,
-    rgba(251,250,247,.97) 0%,
-    rgba(251,250,247,.94) 38%,
-    rgba(251,250,247,.82) 54%,
-    rgba(251,250,247,.30) 68%,
-    rgba(251,250,247,0)   80%);
+    rgba(251,250,247,.98) 0%,
+    rgba(251,250,247,.97) 46%,
+    rgba(251,250,247,.74) 62%,
+    rgba(251,250,247,0)   74%);
 }
 .hero__content{
   position:relative;z-index:2;
-  padding-block:clamp(22px,4vh,38px) clamp(28px,6vh,52px);
+  padding-block:clamp(26px,4.5vh,44px) clamp(30px,6vh,56px);
 }
 .hero__badge{
-  display:inline-flex;align-items:center;gap:9px;
-  padding:8px 15px;margin-bottom:20px;
+  display:inline-flex;align-items:center;gap:8px;
+  padding:8px 15px;margin-bottom:22px;
   background:#A85C2E;color:var(--white);border-radius:999px;
-  font-size:clamp(9.5px,2.6vw,11px);font-weight:800;
-  letter-spacing:.11em;text-transform:uppercase;line-height:1.2;
+  font-size:11px;font-weight:800;
+  letter-spacing:.08em;text-transform:uppercase;line-height:1.2;
 }
 .hero__badge svg{flex:none}
 .hero__title{
-  text-transform:uppercase;font-weight:700;letter-spacing:-.005em;
-  line-height:1.05;color:var(--narra);
-  font-size:clamp(26px,7vw,56px);
+  font-weight:800;letter-spacing:-.02em;
+  line-height:1.1;color:var(--narra);
+  font-size:clamp(30px,8.2vw,42px);
+  text-wrap:balance;
 }
 /* Só os filhos DIRETOS viram linha: sem o ">", os spans de destaque
    virariam bloco e jogariam o ponto final para uma linha sozinha. */
-.hero__title > span{display:block;text-wrap:balance}
+.hero__title > span{display:block}
 .hero__title .hl{color:var(--caramel)}
 .hero__title .hl-mark{
-  background:linear-gradient(transparent 86%,rgba(196,112,60,.42) 86%);
-  padding:0 .04em;
-}
-.hero__rule{
-  display:block;width:72px;height:4px;border-radius:2px;
-  background:var(--caramel);margin:22px 0;
+  background:linear-gradient(transparent 84%,rgba(196,112,60,.4) 84%);
+  padding:0 .03em;
 }
 .hero__sub{
-  font-size:clamp(15px,3.9vw,18.5px);line-height:1.55;
+  margin-top:18px;
+  font-size:clamp(15.5px,3.9vw,18px);line-height:1.6;
   color:var(--ink-soft);max-width:26em;
 }
-.hero__sub strong{color:var(--narra);font-weight:700}
-.hero .btn{margin-inline:0;margin-top:28px}
-.hero__micro{
-  margin-top:13px;font-size:clamp(9.6px,2.7vw,12px);font-weight:800;letter-spacing:.07em;
-  text-transform:uppercase;color:var(--yarmouth-dark);
+.hero__sub strong{color:var(--narra);font-weight:600}
+.hero .btn{margin-inline:0;margin-top:30px}
+
+/* Trio de números: substitui a antiga legenda de uma linha em
+   caixa-alta minúscula — mesma informação (50 · 25 · 25), com peso
+   tipográfico de verdade em vez de apagada no rodapé do bloco. */
+.hero__stats{display:flex;margin-top:28px}
+.hero__stats li{padding-inline:18px;border-left:1px solid rgba(22,50,60,.15)}
+.hero__stats li:first-child{padding-left:0;border-left:0}
+.hero__stats b{
+  display:block;font-size:23px;line-height:1;font-weight:800;color:var(--narra);
 }
-.hero__micro b{color:#A85C2E;margin-inline:3px}  /* 3,5:1 -> 4,8:1 */
+.hero__stats span{
+  display:block;margin-top:5px;font-size:11px;font-weight:700;
+  letter-spacing:.04em;color:var(--yarmouth-dark);
+}
 
 /* ─── 6.2 BLOCO DE TEXTO EDITORIAL ──────────────────────────── */
 .editorial p{
@@ -1072,24 +1116,25 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
   .trust li{font-size:12px}
 }
 /* DESKTOP: o texto ocupa a faixa limpa da própria fotografia, à
-   esquerda. O véu vira horizontal e some antes de chegar na comida. */
+   esquerda. Véu horizontal mais curto que antes (some a 54%, não a
+   66%): a comida fica vívida mais cedo, sem a faixa "enevoada" que
+   sobrava no meio da imagem. */
 @media (min-width:900px){
   .hero{align-items:center;min-height:calc(100svh - 46px)}
   .hero::after{
     background:linear-gradient(90deg,
-      rgba(251,250,247,.97) 0%,
-      rgba(251,250,247,.96) 30%,
-      rgba(251,250,247,.86) 42%,
-      rgba(251,250,247,.34) 54%,
+      rgba(251,250,247,.98) 0%,
+      rgba(251,250,247,.97) 46%,
+      rgba(251,250,247,.55) 56%,
       rgba(251,250,247,0)   66%);
   }
   .hero__content{
     width:100%;max-width:1240px;margin-inline:auto;
     padding-inline:clamp(32px,5vw,68px);
   }
-  /* limitado a 40% para o texto não invadir os pratos da direita */
-  .hero__content > .wrap{max-width:min(38%,430px);margin:0;padding:0}
-  .hero__title{font-size:clamp(26px,2.5vw,38px)}  /* medido: coluna 430px comporta ate 35px */
+  .hero__content > .wrap{max-width:min(40%,460px);margin:0;padding:0}
+  .hero__title{font-size:clamp(30px,2.7vw,40px)}
+  .hero__stats{margin-top:32px}
 }
 
 @media (min-width:1024px){
@@ -1155,17 +1200,18 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
   <div class="hero__content">
     <div class="wrap">
 
+      <!-- Badge usa "Oferta de lançamento" (não repete a topbar logo
+           acima, que já diz "Condição especial de lançamento") —
+           mesmo vocabulário do selo reaproveitado depois na oferta. -->
       <p class="hero__badge">
         <svg width="15" height="15" viewBox="0 0 24 24"><use href="#i-gift"/></svg>
-        Condição especial de lançamento
+        Oferta de lançamento
       </p>
 
-      <h1 class="serif hero__title">
+      <h1 class="hero__title">
         <span>Mate a vontade de <span class="hl">comer doce</span>.</span>
         <span>Sem abandonar sua <span class="hl-mark">rotina&nbsp;saudável</span>.</span>
       </h1>
-
-      <span class="hero__rule" aria-hidden="true"></span>
 
       <p class="hero__sub">
         50 receitas fitness <strong>deliciosas e práticas</strong> para matar a
@@ -1177,7 +1223,11 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
         <svg width="20" height="20" viewBox="0 0 24 24"><use href="#i-arrow"/></svg>
       </a>
 
-      <p class="hero__micro">50 receitas <b>•</b> 25 doces <b>•</b> 25 lanches rápidos</p>
+      <ul class="hero__stats" aria-label="O que você recebe">
+        <li><b>50</b><span>Receitas</span></li>
+        <li><b>25</b><span>Doces</span></li>
+        <li><b>25</b><span>Lanches</span></li>
+      </ul>
 
     </div>
   </div>
