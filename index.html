@@ -366,45 +366,6 @@ ul{padding:0;list-style:none}
   border-radius:50%;background:var(--caramel-light);
 }
 
-/* ─── 6.7 MOCKUP 3D DO EBOOK (CSS puro, sem imagem) ─────────── */
-.book-stage{display:flex;justify-content:center;perspective:1200px;margin-bottom:8px}
-.book{
-  position:relative;width:186px;height:254px;
-  transform:rotateY(-19deg) rotateX(4deg);transform-style:preserve-3d;
-  filter:drop-shadow(0 30px 40px rgba(0,0,0,.45));
-}
-.book__pages{
-  position:absolute;top:5px;bottom:5px;right:-9px;width:10px;
-  background:repeating-linear-gradient(180deg,#fff 0 2px,#D9E3EC 2px 4px);
-  border-radius:0 3px 3px 0;transform:rotateY(88deg) translateX(4px);
-}
-.book__cover{
-  position:absolute;inset:0;border-radius:5px 13px 13px 5px;overflow:hidden;
-  background:linear-gradient(150deg,#F7F4EE 0%,var(--whipple) 48%,#C9DCE8 100%);
-  border:1px solid rgba(255,255,255,.6);
-  padding:19px 15px 15px 25px;display:flex;flex-direction:column;text-align:left;
-}
-.book__cover::before{ /* lombada */
-  content:"";position:absolute;left:0;top:0;bottom:0;width:15px;
-  background:linear-gradient(90deg,rgba(22,50,60,.34),rgba(22,50,60,.04));
-}
-.book__cover::after{ /* brilho de capa */
-  content:"";position:absolute;top:-40%;left:-60%;width:75%;height:190%;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);
-  transform:rotate(16deg);
-}
-.book__kicker{
-  font-size:8.5px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--yarmouth-dark);
-}
-.book__title{font-size:26px;line-height:1.02;color:var(--narra);margin-top:7px}
-.book__rule{width:32px;height:3px;background:var(--caramel);border-radius:2px;margin:10px 0 9px}
-.book__sub{font-size:9.5px;line-height:1.4;color:var(--ink-soft);font-weight:600}
-.book__count{
-  margin-top:auto;font-size:8.5px;font-weight:800;letter-spacing:.13em;
-  text-transform:uppercase;color:var(--yarmouth-dark);text-align:center;
-}
-
 /* ─── 6.8 SEQUÊNCIA "IMAGINE" ───────────────────────────────── */
 .flow{display:grid;gap:30px;margin:0 auto;max-width:440px}
 .flow__q{
@@ -946,6 +907,159 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
   .prova figcaption{text-align:left}
 }
 
+/* ─── O MATERIAL: mockup editorial com a capa real ──────────── */
+.mock{
+  position:relative;display:grid;justify-items:center;
+  margin:8px auto 0;max-width:520px;
+}
+
+/* livro em perspectiva. A capa é a página 1 do PDF, sem redesenho. */
+.mock__stage{position:relative;display:inline-block}
+.mock__book{
+  position:relative;width:min(62vw,240px);aspect-ratio:820/1228;
+  transform:perspective(1400px) rotateY(-16deg) rotateX(3deg);
+  transform-style:preserve-3d;
+  filter:drop-shadow(0 26px 36px rgba(14,34,41,.34));
+  z-index:3;
+}
+.mock__cover{
+  width:100%;height:100%;object-fit:cover;display:block;
+  border-radius:3px 8px 8px 3px;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.10);
+}
+.mock__spine{           /* vinco da lombada */
+  position:absolute;inset:0 auto 0 0;width:16px;border-radius:3px 0 0 3px;
+  background:linear-gradient(90deg,rgba(0,0,0,.46),rgba(0,0,0,.12) 55%,transparent);
+}
+.mock__edge{            /* corte das páginas, à direita */
+  position:absolute;top:6px;bottom:6px;right:-7px;width:8px;border-radius:0 3px 3px 0;
+  background:repeating-linear-gradient(180deg,#fff 0 2px,#D9E3EC 2px 4px);
+  transform:rotateY(78deg) translateX(3px);transform-origin:left center;
+}
+.mock__gloss{           /* brilho diagonal do papel couché */
+  position:absolute;inset:0;border-radius:3px 8px 8px 3px;pointer-events:none;
+  background:linear-gradient(104deg,transparent 34%,rgba(255,255,255,.16) 46%,transparent 58%);
+}
+
+/* selo 50 receitas */
+.mock__selo{
+  position:absolute;z-index:4;display:grid;place-items:center;
+  width:92px;height:92px;border-radius:50%;
+  background:var(--narra);color:var(--white);text-align:center;
+  box-shadow:0 12px 26px rgba(14,34,41,.32);
+  border:2px solid rgba(255,255,255,.22);
+  right:-16px;bottom:-16px;   /* ancorado no livro, não no container */
+}
+.mock__selo b{display:block;font-size:29px;line-height:1;font-weight:700}
+.mock__selo span{
+  display:block;margin-top:2px;font-size:8.5px;font-weight:800;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--woodlawn);
+}
+
+/* páginas internas */
+.mock__pgs{
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;
+  width:100%;margin-top:30px;
+}
+.mock__pg{margin:0;position:relative}
+.mock__pg img{
+  width:100%;height:auto;aspect-ratio:620/928;object-fit:cover;
+  border-radius:8px;background:var(--white);
+  box-shadow:0 10px 26px rgba(14,34,41,.16);
+}
+.mock__pg figcaption{
+  margin-top:8px;text-align:center;font-size:10.5px;font-weight:800;
+  letter-spacing:.09em;text-transform:uppercase;color:var(--yarmouth-dark);
+}
+
+/* ─── destaques 50 / 25 / 25 ────────────────────────────────── */
+.mat-nums{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
+  max-width:480px;margin:40px auto 0;
+}
+.mat-nums li{
+  text-align:center;padding:18px 8px;border-radius:16px;
+  background:var(--white);border:1px solid #E2EAF0;box-shadow:var(--shadow-sm);
+}
+.mat-nums b{display:block;font-size:30px;line-height:1;font-weight:700;color:var(--narra)}
+.mat-nums span{
+  display:block;margin-top:7px;font-size:10px;font-weight:800;
+  letter-spacing:.11em;text-transform:uppercase;color:var(--yarmouth-dark);
+}
+
+/* ─── 4 garantias do material ───────────────────────────────── */
+.mat-feats{display:grid;gap:9px;max-width:520px;margin:22px auto 0}
+.mat-feats li{
+  display:flex;align-items:center;gap:13px;padding:14px 17px;
+  background:var(--white);border:1px solid #E2EAF0;border-radius:14px;
+  font-size:15px;font-weight:600;color:var(--ink);
+}
+.mat-feats .ico{flex:none;color:var(--whipple-blue)}
+
+.mat-frase{
+  margin:34px auto 0;max-width:19em;text-align:center;
+  font-size:clamp(20px,5vw,26px);line-height:1.32;font-weight:600;color:var(--narra);
+}
+
+@media (min-width:860px){
+  /* desktop: livro grande ao centro, páginas flutuando em volta */
+  .mock{max-width:900px;min-height:520px;display:block}
+  .mock__stage{position:absolute;left:50%;top:12px;transform:translateX(-50%)}
+  .mock__book{
+    width:262px;
+    transform:perspective(1400px) rotateY(-16deg) rotateX(3deg);
+  }
+  .mock__pgs{display:block;margin:0;height:520px}
+  .mock__pg{position:absolute;width:158px}
+  .mock__pg img{box-shadow:0 16px 34px rgba(14,34,41,.20)}
+  .mock__pg--1{left:2px;   top:26px;  transform:rotate(-7deg)}
+  .mock__pg--2{left:126px; top:214px; transform:rotate(-3deg)}
+  .mock__pg--3{right:126px;top:214px; transform:rotate(3deg)}
+  .mock__pg--4{right:2px;  top:26px;  transform:rotate(7deg)}
+  .mock__pg figcaption{font-size:9.5px}
+  .mat-feats{grid-template-columns:1fr 1fr;max-width:660px}
+}
+
+/* ─── abas doce / lanche dentro de O MATERIAL ───────────────── */
+.tabs{
+  display:flex;gap:6px;max-width:420px;margin:34px auto 18px;
+  background:var(--white);padding:6px;border-radius:999px;
+  border:1px solid #E2EAF0;
+}
+.tab{
+  flex:1;min-height:50px;padding:12px 14px;border:0;border-radius:999px;
+  background:transparent;color:var(--yarmouth-dark);cursor:pointer;
+  font-size:14.5px;font-weight:800;letter-spacing:.03em;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:background .2s ease,color .2s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+.tab[aria-selected="true"]{background:var(--narra);color:var(--white)}
+.tab .em{font-size:17px;line-height:1}
+.tabp[hidden]{display:none!important}
+.tabp{max-width:660px;margin-inline:auto}
+/* foto da categoria como cabeçalho da aba */
+.tabp__foto{
+  width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;
+  border-radius:16px;box-shadow:var(--shadow-md);margin-bottom:16px;
+}
+.recipes{display:grid;gap:9px}
+.recipes li{
+  display:flex;align-items:center;gap:13px;
+  padding:13px 17px;background:var(--white);
+  border:1px solid #E2EAF0;border-radius:14px;
+  font-size:15px;font-weight:600;color:var(--ink);
+}
+.recipes .n{
+  flex:none;width:29px;height:29px;border-radius:9px;
+  background:var(--whipple);color:var(--yarmouth-dark);
+  font-size:11.5px;font-weight:800;display:grid;place-items:center;
+}
+.recipes__more{
+  text-align:center;margin-top:16px;font-size:14px;color:var(--yarmouth-dark);
+}
+@media (min-width:720px){ .recipes{grid-template-columns:1fr 1fr} }
+
 /* ─── 9. DESKTOP (progressive enhancement) ──────────────────── */
 @media (min-width:720px){
   :root{--maxw:660px;--pad:32px}
@@ -953,8 +1067,6 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
   .btn{width:fit-content;min-width:340px;max-width:100%;margin-inline:auto;
        padding-inline:48px;font-size:17px}
   .hero .btn{min-width:320px}
-  .book{width:236px;height:322px}
-  .book__title{font-size:33px}
   .pair{grid-template-columns:1fr 1fr;gap:22px}
   .flow{grid-template-columns:1fr 1fr;gap:40px;max-width:760px}
   .trust li{font-size:12px}
@@ -1134,23 +1246,67 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
      ══════════════════════════════════════════════════════════════ -->
 <section class="sec sec--soft" id="produto">
   <div class="wrap wrap--wide">
+
     <div class="sec-head center reveal">
       <p class="kicker">O material</p>
       <h2 class="serif d2">50 receitas pensadas para a vida real.</h2>
+      <p class="lead">Doces e lanches fitness, fáceis de fazer, com ingredientes
+        acessíveis e o passo a passo que você precisa para ter mais opções na sua rotina.</p>
     </div>
 
-    <div class="book-stage reveal">
-      <div class="book" role="img" aria-label="Mockup do ebook Doce Sem Culpa">
-        <div class="book__pages"></div>
-        <div class="book__cover">
-          <span class="book__kicker">Ebook</span>
-          <span class="book__title serif">Doce<br>Sem<br>Culpa</span>
-          <span class="book__rule"></span>
-          <span class="book__sub">50 receitas práticas<br>para o dia a dia</span>
-          <span class="book__count">25 doces + 25 lanches</span>
+    <!-- A capa e as páginas são renderizações fiéis do PDF. Nenhum texto da
+         landing está dentro das imagens: título, selos e CTA são HTML/CSS. -->
+    <div class="mock reveal">
+      <div class="mock__stage">
+        <div class="mock__book">
+          <img class="mock__cover" src="img/pg-capa.webp" width="820" height="1228"
+               loading="lazy" decoding="async"
+               alt="Capa do ebook Viva Leve — Doce Sem Culpa">
+          <span class="mock__spine" aria-hidden="true"></span>
+          <span class="mock__edge" aria-hidden="true"></span>
+          <span class="mock__gloss" aria-hidden="true"></span>
         </div>
+        <span class="mock__selo" aria-hidden="true"><b class="serif">50</b><span>Receitas</span></span>
+      </div>
+
+      <div class="mock__pgs">
+      <figure class="mock__pg mock__pg--1">
+        <img src="img/pg-indice.webp" width="620" height="928" loading="lazy"
+             decoding="async" alt="Página de índice com as 50 receitas">
+        <figcaption>Índice</figcaption>
+      </figure>
+      <figure class="mock__pg mock__pg--2">
+        <img src="img/pg-doce.webp" width="620" height="928" loading="lazy"
+             decoding="async" alt="Página da receita de brigadeiro proteico de chocolate">
+        <figcaption>Receita doce</figcaption>
+      </figure>
+      <figure class="mock__pg mock__pg--3">
+        <img src="img/pg-salgado.webp" width="620" height="928" loading="lazy"
+             decoding="async" alt="Página da receita de pão de queijo proteico">
+        <figcaption>Receita salgada</figcaption>
+      </figure>
+      <figure class="mock__pg mock__pg--4">
+        <img src="img/pg-lista.webp" width="620" height="928" loading="lazy"
+             decoding="async" alt="Página do bônus com a lista de compras organizada">
+        <figcaption>Lista de compras</figcaption>
+      </figure>
       </div>
     </div>
+
+    <p class="mat-frase serif reveal">Você sabe exatamente o que está levando.</p>
+
+    <ul class="mat-nums reveal">
+      <li><b class="serif">50</b><span>Receitas</span></li>
+      <li><b class="serif">25</b><span>Doces</span></li>
+      <li><b class="serif">25</b><span>Lanches</span></li>
+    </ul>
+
+    <ul class="mat-feats reveal">
+      <li><svg class="ico" width="19" height="19" viewBox="0 0 24 24"><use href="#i-check"/></svg>Ingredientes acessíveis</li>
+      <li><svg class="ico" width="19" height="19" viewBox="0 0 24 24"><use href="#i-check"/></svg>Passo a passo simples</li>
+      <li><svg class="ico" width="19" height="19" viewBox="0 0 24 24"><use href="#i-check"/></svg>Tempo e dificuldade indicados</li>
+      <li><svg class="ico" width="19" height="19" viewBox="0 0 24 24"><use href="#i-check"/></svg>Pensado para rotina corrida</li>
+    </ul>
 
     <!-- Receitas reais do ebook (páginas 10-52). Não inventar nomes aqui. -->
     <div class="tabs reveal" role="tablist" aria-label="Tipo de receita">
@@ -1163,70 +1319,53 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
     </div>
 
     <div class="tabp reveal" id="painelDoces" role="tabpanel" aria-labelledby="tabDoces">
+      <img class="tabp__foto" src="img/doces.webp" width="760" height="950"
+           loading="lazy" decoding="async"
+           alt="Morangos cobertos com chocolate, exemplo de receita doce do ebook">
       <ul class="recipes">
-        <li><span class="n">01</span>Brigadeiro Proteico de Chocolate</li>
-        <li><span class="n">02</span>Brownie Fitness</li>
-        <li><span class="n">03</span>Mousse Proteico de Chocolate</li>
-        <li><span class="n">04</span>Cookie de Aveia e Chocolate</li>
-        <li><span class="n">05</span>Sorvete Proteico de Banana</li>
-        <li><span class="n">06</span>Muffin Proteico</li>
+          <li><span class="n">01</span>Brigadeiro Proteico de Chocolate</li>
+          <li><span class="n">02</span>Brownie Fitness</li>
+          <li><span class="n">03</span>Mousse Proteico de Chocolate</li>
+          <li><span class="n">04</span>Cookie de Aveia e Chocolate</li>
+          <li><span class="n">05</span>Sorvete Proteico de Banana</li>
+          <li><span class="n">06</span>Muffin Proteico</li>
       </ul>
       <p class="recipes__more">…e mais 19 receitas doces no ebook.</p>
     </div>
 
     <div class="tabp" id="painelSalg" role="tabpanel" aria-labelledby="tabSalg" hidden>
+      <img class="tabp__foto" src="img/lanches.webp" width="760" height="950"
+           loading="lazy" decoding="async"
+           alt="Tapioca recheada, exemplo de lanche salgado do ebook">
       <ul class="recipes">
-        <li><span class="n">01</span>Coxinha Fitness de Frango</li>
-        <li><span class="n">02</span>Pão de Queijo Proteico</li>
-        <li><span class="n">03</span>Pizza Fitness de Frigideira</li>
-        <li><span class="n">04</span>Wrap Proteico</li>
-        <li><span class="n">05</span>Crepioca Recheada</li>
-        <li><span class="n">06</span>Sanduíche Natural Proteico</li>
+          <li><span class="n">01</span>Coxinha Fitness de Frango</li>
+          <li><span class="n">02</span>Pão de Queijo Proteico</li>
+          <li><span class="n">03</span>Pizza Fitness de Frigideira</li>
+          <li><span class="n">04</span>Wrap Proteico</li>
+          <li><span class="n">05</span>Crepioca Recheada</li>
+          <li><span class="n">06</span>Sanduíche Natural Proteico</li>
       </ul>
       <p class="recipes__more">…e mais 19 lanches salgados no ebook.</p>
     </div>
 
-    <div class="pair" style="margin-top:44px">
-      <figure class="reveal">
-        <img src="img/doces.webp" width="760" height="950" loading="lazy" decoding="async"
-             alt="Morangos cobertos com chocolate em uma travessa">
-        <figcaption>
-          <span class="n serif">25</span>
-          <span class="t">Doces</span>
-          <ul>
-            <li>Sobremesas</li>
-            <li>Bolos</li>
-            <li>Doces rápidos</li>
-            <li>Opções práticas</li>
-          </ul>
-        </figcaption>
-      </figure>
-
-      <figure class="reveal">
-        <img src="img/lanches.webp" width="760" height="950" loading="lazy" decoding="async"
-             alt="Tapioca recheada com ovos e tomate em um prato">
-        <figcaption>
-          <span class="n serif">25</span>
-          <span class="t">Lanches rápidos</span>
-          <ul>
-            <li>Lanches salgados</li>
-            <li>Preparações simples</li>
-            <li>Opções para dias corridos</li>
-            <li>Receitas práticas</li>
-          </ul>
-        </figcaption>
-      </figure>
-    </div>
     <div class="sig reveal">
       <span class="sig__foto">
         <span class="sig__mono serif" aria-hidden="true">HA</span>
       </span>
       <span class="sig__txt">
         <b>Dra. Helena Azevedo</b>
-        <span>Selecionou e organizou as 50 receitas</span>
+        <span>Autora do ebook Doce Sem Culpa</span>
       </span>
       <a class="sig__ig" href="https://www.instagram.com/dra.helenaazevedo/" target="_blank" rel="noopener noreferrer">Ver Instagram</a>
     </div>
+
+    <div class="btn-wrap reveal">
+      <a class="btn" data-checkout href="#oferta" rel="nofollow noopener">
+        Quero o Doce Sem Culpa
+        <svg width="20" height="20" viewBox="0 0 24 24"><use href="#i-arrow"/></svg>
+      </a>
+    </div>
+
   </div>
 </section>
 
