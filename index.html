@@ -27,8 +27,7 @@
 
 <!-- A foto do hero é o maior elemento da primeira tela (LCP): buscar cedo.
      O `media` garante que cada dispositivo pré-carregue só o seu recorte. -->
-<link rel="preload" as="image" href="img/hero-mobile.webp"
-      media="(max-width:899px)" fetchpriority="high">
+<link rel="preload" as="image" href="img/hero-mobile.webp" media="(max-width:899px)" fetchpriority="high">
 <link rel="preload" as="image" href="img/hero-desktop.webp"
       media="(min-width:900px)" fetchpriority="high">
 
@@ -216,18 +215,34 @@ ul{padding:0;list-style:none}
 .topbar b{color:var(--caramel-light);font-weight:800}
 
 /* ─── 6.1 HERO ──────────────────────────────────────────────────
-   DUAS composições distintas, não uma adaptação da outra:
-     • mobile  → pilha vertical, texto sobre fundo sólido e foto abaixo
-     • desktop → split horizontal, texto à esquerda e foto à direita
-   Em nenhuma delas o texto depende de véu sobre a foto para ser legível,
-   que é o que costuma sujar hero com fotografia farta.               */
+   A fotografia agora é CLARA e traz área negativa própria. Então o
+   texto é ESCURO e ocupa esse vazio, em vez de exigir véu escuro por
+   cima da comida — a comida continua apetitosa, que é o ponto.
+   Duas composições distintas:
+     • mobile  → véu claro no topo, comida ocupando a metade de baixo
+     • desktop → texto na faixa limpa à esquerda, comida à direita   */
 .hero{
-  position:relative;display:grid;
-  background:var(--narra-deep);color:var(--white);
+  position:relative;isolation:isolate;overflow:hidden;
+  display:grid;align-items:start;
+  min-height:calc(100svh - 42px);
+  background:var(--offwhite);color:var(--ink);
+}
+.hero__media{position:absolute;inset:0;z-index:-2}
+.hero__media picture{display:block;width:100%;height:100%}
+.hero__media img{display:block;width:100%;height:100%;object-fit:cover}
+/* Véu CLARO — clareia para dar leitura, nunca escurece a fotografia. */
+.hero::after{
+  content:"";position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(180deg,
+    rgba(251,250,247,.97) 0%,
+    rgba(251,250,247,.94) 38%,
+    rgba(251,250,247,.82) 54%,
+    rgba(251,250,247,.30) 68%,
+    rgba(251,250,247,0)   80%);
 }
 .hero__content{
   position:relative;z-index:2;
-  padding-block:clamp(26px,5vh,46px) clamp(26px,4.5vh,42px);
+  padding-block:clamp(22px,4vh,38px) clamp(28px,6vh,52px);
 }
 .hero__badge{
   display:inline-flex;align-items:center;gap:9px;
@@ -239,61 +254,32 @@ ul{padding:0;list-style:none}
 .hero__badge svg{flex:none}
 .hero__title{
   text-transform:uppercase;font-weight:700;letter-spacing:-.005em;
-  line-height:1.05;color:var(--white);
-  /* Piso em 26px: medido em 375px, "SEM ABANDONAR SUA" ocupa 319px dos
-     331px disponíveis. Acima disso a frase quebra e deixa "SUA" órfã. */
+  line-height:1.05;color:var(--narra);
   font-size:clamp(26px,7vw,56px);
 }
-/* Só os filhos DIRETOS viram linha. Sem o ">", os spans de destaque
-   (.hl / .hl-mark) também virariam bloco e jogavam o ponto final
-   para uma linha sozinha.
-   `balance` distribui as duas linhas de cada frase com larguras parecidas,
-   como na referência. Onde não houver suporte, cai na quebra normal. */
+/* Só os filhos DIRETOS viram linha: sem o ">", os spans de destaque
+   virariam bloco e jogariam o ponto final para uma linha sozinha. */
 .hero__title > span{display:block;text-wrap:balance}
+.hero__title .hl{color:var(--caramel)}
+.hero__title .hl-mark{
+  background:linear-gradient(transparent 86%,rgba(196,112,60,.42) 86%);
+  padding:0 .04em;
+}
 .hero__rule{
   display:block;width:72px;height:4px;border-radius:2px;
   background:var(--caramel);margin:22px 0;
 }
 .hero__sub{
   font-size:clamp(15px,3.9vw,18.5px);line-height:1.55;
-  color:#C9DCE4;max-width:30em;
+  color:var(--ink-soft);max-width:26em;
 }
-.hero__sub strong{color:var(--caramel-light);font-weight:700}
-.hero__stats{
-  display:flex;flex-wrap:wrap;gap:clamp(15px,4.6vw,30px);
-  margin:26px 0 30px;
-}
-.hero__stats li{display:flex;align-items:center;gap:10px}
-.hero__stats .ico{
-  flex:none;width:38px;height:38px;border-radius:50%;
-  border:1.5px solid rgba(224,138,76,.55);color:var(--caramel-light);
-  display:grid;place-items:center;
-}
-.hero__stats b{display:block;font-size:17px;font-weight:800;line-height:1;color:var(--white)}
-.hero__stats span{
-  display:block;margin-top:3px;font-size:9.5px;font-weight:700;
-  letter-spacing:.09em;text-transform:uppercase;color:var(--woodlawn);
-  line-height:1.3;
-}
-.hero .btn{margin-inline:0}
+.hero__sub strong{color:var(--narra);font-weight:700}
+.hero .btn{margin-inline:0;margin-top:28px}
 .hero__micro{
-  margin-top:14px;font-size:11.5px;font-weight:700;letter-spacing:.09em;
-  text-transform:uppercase;color:var(--woodlawn);
+  margin-top:13px;font-size:clamp(9.6px,2.7vw,12px);font-weight:800;letter-spacing:.07em;
+  text-transform:uppercase;color:var(--yarmouth-dark);
 }
-.hero__micro b{color:var(--caramel-light);margin-inline:2px}
-.hero__media{position:relative;z-index:1}
-/* <picture> é inline por padrão: sem isto, o height:100% da img não resolve */
-.hero__media picture{display:block;width:100%;height:100%}
-.hero__media img{display:block;width:100%;height:100%;object-fit:cover}
-
-/* MOBILE: a foto entra abaixo do texto, com emenda suave no topo dela */
-@media (max-width:899px){
-  .hero__media{height:clamp(190px,31vh,300px)}
-  .hero__media::before{
-    content:"";position:absolute;inset:0 0 auto 0;height:64px;z-index:1;
-    background:linear-gradient(var(--narra-deep),transparent);
-  }
-}
+.hero__micro b{color:#A85C2E;margin-inline:3px}  /* 3,5:1 -> 4,8:1 */
 
 /* ─── 6.2 BLOCO DE TEXTO EDITORIAL ──────────────────────────── */
 .editorial p{
@@ -768,7 +754,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 }
 .prep__steps li::before{
   content:counter(s);flex:none;width:30px;height:30px;border-radius:50%;
-  background:var(--caramel);color:var(--white);
+  background:#A85C2E;color:var(--white);  /* contraste AA em 13px */
   font-size:13px;font-weight:800;display:grid;place-items:center;
 }
 
@@ -864,6 +850,82 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
   .mapa .faz{justify-content:flex-end}
 }
 
+/* ─── TABS doce / lanche ────────────────────────────────────── */
+.tabs{
+  display:flex;gap:6px;max-width:420px;margin:0 auto 24px;
+  background:var(--whipple);padding:6px;border-radius:999px;
+}
+.tab{
+  flex:1;min-height:50px;padding:12px 16px;border:0;border-radius:999px;
+  background:transparent;color:var(--yarmouth-dark);cursor:pointer;
+  font-size:14.5px;font-weight:800;letter-spacing:.04em;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:background .2s ease,color .2s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+.tab[aria-selected="true"]{background:var(--narra);color:var(--white)}
+.tab .em{font-size:17px;line-height:1}
+.tabp[hidden]{display:none!important}
+.recipes{display:grid;gap:9px;max-width:560px;margin:0 auto}
+.recipes li{
+  display:flex;align-items:center;gap:13px;
+  padding:14px 18px;background:var(--white);
+  border:1px solid #E5EDF2;border-radius:14px;box-shadow:var(--shadow-sm);
+  font-size:15.5px;font-weight:600;color:var(--ink);
+}
+.recipes .n{
+  flex:none;width:30px;height:30px;border-radius:9px;
+  background:var(--whipple);color:var(--yarmouth-dark);
+  font-size:12px;font-weight:800;display:grid;place-items:center;
+}
+.recipes__more{
+  text-align:center;margin-top:18px;font-size:14.5px;color:var(--yarmouth-dark);
+}
+
+/* ─── OS 4 PILARES ──────────────────────────────────────────── */
+.pilares{display:grid;gap:12px;max-width:640px;margin:0 auto}
+.pilar{
+  display:flex;gap:16px;align-items:flex-start;
+  padding:20px;background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.14);border-radius:var(--radius);
+}
+.pilar .n{
+  flex:none;width:34px;height:34px;border-radius:50%;
+  background:#A85C2E;color:var(--white);  /* 3,7:1 -> 5,0:1 em 13px */
+  font-size:13px;font-weight:800;display:grid;place-items:center;
+}
+.pilar b{display:block;font-size:17px;color:var(--white);margin-bottom:5px}
+.pilar span{font-size:14.5px;line-height:1.5;color:#ADC6D3}
+
+/* ─── ANTES / DEPOIS ────────────────────────────────────────── */
+.antesdepois{display:grid;gap:14px;max-width:680px;margin:0 auto}
+.ad{border-radius:var(--radius);padding:22px}
+.ad--antes{background:#F2EDE8;border:1px solid #E3D8CE}
+.ad--depois{background:var(--narra);color:var(--white)}
+.ad__lbl{
+  display:block;margin-bottom:14px;
+  font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+}
+.ad--antes .ad__lbl{color:#7A5C43}
+.ad--depois .ad__lbl{color:var(--woodlawn)}
+.ad--antes li{
+  padding:8px 0;font-size:15.5px;color:#6B5647;font-style:italic;
+}
+.ad--depois li{
+  padding:10px 0;font-size:21px;font-weight:700;color:var(--white);
+  display:flex;align-items:center;gap:12px;
+}
+.ad--depois li::before{
+  content:"";flex:none;width:8px;height:8px;border-radius:50%;
+  background:var(--caramel-light);
+}
+
+@media (min-width:720px){
+  .antesdepois{grid-template-columns:1fr 1fr;gap:18px}
+  .pilares{grid-template-columns:1fr 1fr}
+  .recipes{grid-template-columns:1fr 1fr;max-width:720px}
+}
+
 /* ─── 9. DESKTOP (progressive enhancement) ──────────────────── */
 @media (min-width:720px){
   :root{--maxw:660px;--pad:32px}
@@ -879,27 +941,25 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
   .flow{grid-template-columns:1fr 1fr;gap:40px;max-width:760px}
   .trust li{font-size:12px}
 }
-/* DESKTOP: split horizontal — texto à esquerda, fotografia à direita.
-   A foto sangra até a borda; um degradê costura a emenda com o painel. */
+/* DESKTOP: o texto ocupa a faixa limpa da própria fotografia, à
+   esquerda. O véu vira horizontal e some antes de chegar na comida. */
 @media (min-width:900px){
-  .hero{
-    grid-template-columns:minmax(0,1fr) minmax(0,1.06fr);
-    align-items:stretch;min-height:calc(100svh - 44px);
+  .hero{align-items:center;min-height:calc(100svh - 46px)}
+  .hero::after{
+    background:linear-gradient(90deg,
+      rgba(251,250,247,.97) 0%,
+      rgba(251,250,247,.96) 30%,
+      rgba(251,250,247,.86) 42%,
+      rgba(251,250,247,.34) 54%,
+      rgba(251,250,247,0)   66%);
   }
   .hero__content{
-    display:flex;flex-direction:column;justify-content:center;
-    padding-inline:clamp(34px,5.2vw,76px);
+    width:100%;max-width:1240px;margin-inline:auto;
+    padding-inline:clamp(32px,5vw,68px);
   }
-  .hero__content > .wrap{max-width:none;margin:0;padding:0}
-  /* A headline vive numa COLUNA, não na largura da tela: o clamp do mobile
-     (até 56px) estourava para 7 linhas aqui e empurrava o CTA para fora da
-     dobra. Medido: "SEM ABANDONAR SUA" pede ~1,23x o tamanho da fonte por
-     100px de coluna, e 3,1vw mantém as 4 linhas de 900px a 1600px. */
-  .hero__title{font-size:clamp(26px,2.9vw,44px)}
-  .hero__media::after{
-    content:"";position:absolute;inset:0 auto 0 0;width:110px;z-index:1;
-    background:linear-gradient(90deg,var(--narra-deep),transparent);
-  }
+  /* limitado a 40% para o texto não invadir os pratos da direita */
+  .hero__content > .wrap{max-width:min(38%,430px);margin:0;padding:0}
+  .hero__title{font-size:clamp(26px,2.5vw,38px)}  /* medido: coluna 430px comporta ate 35px */
 }
 
 @media (min-width:1024px){
@@ -943,13 +1003,25 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
      ══════════════════════════════════════════════════════════════ -->
 <!-- A faixa NÃO repete o selo do hero: os dois ficam a menos de 100px um do
      outro e a repetição literal da mesma frase lê como descuido. -->
-<p class="topbar">🔒 Compra segura <b>•</b> 7 dias de garantia</p>
+<p class="topbar">🍫 Condição especial de lançamento <b>•</b> Acesso imediato</p>
 
 
 <!-- ══════════════════════════════════════════════════════════════
      1. HERO
      ══════════════════════════════════════════════════════════════ -->
 <header class="hero">
+  <!-- Duas fotos da MESMA campanha, uma por dispositivo. Nenhum texto
+       está queimado na imagem: headline, CTA e selos são HTML/CSS. -->
+  <div class="hero__media">
+    <picture>
+      <source media="(min-width:900px)" srcset="img/hero-desktop.webp"
+              width="1560" height="871">
+      <img src="img/hero-mobile.webp" width="780" height="1397"
+           fetchpriority="high" decoding="async"
+           alt="Variedade de doces e lanches fitness do Doce Sem Culpa sobre uma mesa de madeira">
+    </picture>
+  </div>
+
   <div class="hero__content">
     <div class="wrap">
 
@@ -970,42 +1042,14 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
         vontade de comer doce e facilitar sua alimentação até nos dias mais corridos.
       </p>
 
-      <ul class="hero__stats">
-        <li>
-          <span class="ico"><svg width="19" height="19" viewBox="0 0 24 24"><use href="#i-chef"/></svg></span>
-          <div><b>50</b><span>Receitas</span></div>
-        </li>
-        <li>
-          <span class="ico"><svg width="19" height="19" viewBox="0 0 24 24"><use href="#i-cake"/></svg></span>
-          <div><b>25</b><span>Doces</span></div>
-        </li>
-        <li>
-          <span class="ico"><svg width="19" height="19" viewBox="0 0 24 24"><use href="#i-stack"/></svg></span>
-          <div><b>25</b><span>Lanches<br>rápidos</span></div>
-        </li>
-      </ul>
-
-      <a class="btn" href="#oferta">
+      <a class="btn" data-checkout href="#oferta" rel="nofollow noopener">
         Quero o Doce Sem Culpa
         <svg width="20" height="20" viewBox="0 0 24 24"><use href="#i-arrow"/></svg>
       </a>
-      <!-- O preço aparece já na primeira tela: o visitante não deve
-           precisar rolar para saber quanto custa. -->
-      <p class="hero__micro">Acesso digital imediato <b>•</b> R$27,90</p>
+
+      <p class="hero__micro">50 receitas <b>•</b> 25 doces <b>•</b> 25 lanches rápidos</p>
 
     </div>
-  </div>
-
-  <!-- Dois recortes da mesma fotografia: um vertical para a pilha do mobile,
-       outro mais alto para a coluna do desktop. Só um é baixado. -->
-  <div class="hero__media">
-    <picture>
-      <source media="(min-width:900px)" srcset="img/hero-desktop.webp"
-              width="980" height="1041">
-      <img src="img/hero-mobile.webp" width="720" height="900"
-           fetchpriority="high" decoding="async"
-           alt="Mesa posta com bolo de chocolate, brigadeiros, cookies, mousse, pão de queijo, sanduíche e wrap">
-    </picture>
   </div>
 </header>
 
@@ -1230,6 +1274,17 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
       </div>
     </div>
 
+    <ul class="pilares reveal" style="margin-top:34px">
+      <li class="pilar"><span class="n">01</span>
+        <div><b>Comer bem</b><span>Doce e lanche que você quer comer de novo — não comida sem graça.</span></div></li>
+      <li class="pilar"><span class="n">02</span>
+        <div><b>Gastar melhor</b><span>Ingredientes de supermercado comum e lista de compras organizada.</span></div></li>
+      <li class="pilar"><span class="n">03</span>
+        <div><b>Ganhar tempo</b><span>Preparos de 5 a 50 minutos, sempre declarados na receita.</span></div></li>
+      <li class="pilar"><span class="n">04</span>
+        <div><b>Ter controle da rotina</b><span>Cardápio pronto e preparo antecipado: menos improviso na semana.</span></div></li>
+    </ul>
+
     <p class="lead lead--light reveal" style="margin-top:34px;max-width:26em;margin-inline:auto">
       Em vez de decidir o que comer quando a vontade aparece, você passa a ter
       opções para consultar em poucos segundos.
@@ -1266,6 +1321,40 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
           <span class="book__count">25 doces + 25 lanches</span>
         </div>
       </div>
+    </div>
+
+    <!-- Receitas reais do ebook (páginas 10-52). Não inventar nomes aqui. -->
+    <div class="tabs reveal" role="tablist" aria-label="Tipo de receita">
+      <button type="button" class="tab" role="tab" id="tabDoces"
+              aria-selected="true" aria-controls="painelDoces">
+        <span class="em">🍫</span> 25 doces</button>
+      <button type="button" class="tab" role="tab" id="tabSalg"
+              aria-selected="false" aria-controls="painelSalg">
+        <span class="em">🥪</span> 25 lanches</button>
+    </div>
+
+    <div class="tabp reveal" id="painelDoces" role="tabpanel" aria-labelledby="tabDoces">
+      <ul class="recipes">
+        <li><span class="n">01</span>Brigadeiro Proteico de Chocolate</li>
+        <li><span class="n">02</span>Brownie Fitness</li>
+        <li><span class="n">03</span>Mousse Proteico de Chocolate</li>
+        <li><span class="n">04</span>Cookie de Aveia e Chocolate</li>
+        <li><span class="n">05</span>Sorvete Proteico de Banana</li>
+        <li><span class="n">06</span>Muffin Proteico</li>
+      </ul>
+      <p class="recipes__more">…e mais 19 receitas doces no ebook.</p>
+    </div>
+
+    <div class="tabp" id="painelSalg" role="tabpanel" aria-labelledby="tabSalg" hidden>
+      <ul class="recipes">
+        <li><span class="n">01</span>Coxinha Fitness de Frango</li>
+        <li><span class="n">02</span>Pão de Queijo Proteico</li>
+        <li><span class="n">03</span>Pizza Fitness de Frigideira</li>
+        <li><span class="n">04</span>Wrap Proteico</li>
+        <li><span class="n">05</span>Crepioca Recheada</li>
+        <li><span class="n">06</span>Sanduíche Natural Proteico</li>
+      </ul>
+      <p class="recipes__more">…e mais 19 lanches salgados no ebook.</p>
     </div>
 
     <div class="pair" style="margin-top:44px">
@@ -1349,6 +1438,27 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
       <p class="lead lead--light">“Qual receita?” • “O que comprar?” • “Tenho os
         ingredientes?” • “Quanto tempo tenho?”<br>
         Vira: <strong>abra, escolha, prepare.</strong></p>
+    </div>
+
+    <div class="antesdepois reveal" style="margin:30px auto 6px">
+      <div class="ad ad--antes">
+        <span class="ad__lbl">Antes</span>
+        <ul>
+          <li>“Qual receita?”</li>
+          <li>“O que comprar?”</li>
+          <li>“Tenho os ingredientes?”</li>
+          <li>“Quanto tempo eu tenho?”</li>
+          <li>“O que eu faço hoje?”</li>
+        </ul>
+      </div>
+      <div class="ad ad--depois">
+        <span class="ad__lbl">Depois</span>
+        <ul>
+          <li>Abra.</li>
+          <li>Escolha.</li>
+          <li>Prepare.</li>
+        </ul>
+      </div>
     </div>
 
     <div class="reveal">
@@ -1643,6 +1753,8 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
         <ul class="offer__list">
           <li><svg class="ico" width="19" height="19" viewBox="0 0 24 24"><use href="#i-check"/></svg><span><b>50 receitas</b> — 25 doces + 25 lanches</span></li>
           <li><svg class="ico" width="19" height="19" viewBox="0 0 24 24"><use href="#i-check"/></svg><span>3 bônus: lista de compras, cardápio de 7 dias e guia de substituições</span></li>
+          <li><svg class="ico" width="19" height="19" viewBox="0 0 24 24"><use href="#i-check"/></svg><span>Índice clicável, feito para usar no celular enquanto cozinha</span></li>
+          <li><svg class="ico" width="19" height="19" viewBox="0 0 24 24"><use href="#i-check"/></svg><span>Máximo de 8 ingredientes e preparos de 5 a 50 minutos</span></li>
           <li><svg class="ico" width="19" height="19" viewBox="0 0 24 24"><use href="#i-check"/></svg><span>Acesso imediato, direto no celular</span></li>
         </ul>
 
@@ -1987,6 +2099,31 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
     form.addEventListener('change', atualiza);
     form.addEventListener('submit', function(e){ e.preventDefault(); });
     atualiza();
+  })();
+
+  /* 13. Tabs doce / lanche */
+  (function(){
+    var tl = $('.tabs'); if (!tl) return;
+    var tabs = $$('.tab', tl);
+    function abrir(t){
+      tabs.forEach(function(o){
+        var sel = o === t;
+        o.setAttribute('aria-selected', sel ? 'true' : 'false');
+        var p = $('#' + o.getAttribute('aria-controls'));
+        if (p) p.hidden = !sel;
+      });
+    }
+    tabs.forEach(function(t){
+      t.addEventListener('click', function(){ abrir(t); });
+      t.addEventListener('keydown', function(e){
+        var i = tabs.indexOf(t);
+        if (e.key === 'ArrowRight' || e.key === 'ArrowLeft'){
+          e.preventDefault();
+          var alvo = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+          alvo.focus(); abrir(alvo);
+        }
+      });
+    });
   })();
 
   /* 8. Purchase — NÃO dispara aqui: a compra acontece no checkout da Kiwify.
