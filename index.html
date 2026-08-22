@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#16323C">
+<meta name="theme-color" content="#075B48">
 
 <title>DOCE SEM CULPA — 50 Receitas Fitness Práticas e Saborosas</title>
 <meta name="description" content="50 receitas fitness práticas: 25 doces para matar a vontade e 25 lanches rápidos para os dias corridos. Ebook digital, acesso imediato por R$27,90.">
@@ -23,16 +23,17 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="robots" content="index, follow">
 
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2316323C'/><path d='M9 20c0-4 3.1-7 7-7s7 3 7 7z' fill='%23E08A4C'/><rect x='7' y='20' width='18' height='3' rx='1.5' fill='%23FBFAF6'/></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23075B48'/><path d='M9 20c0-4 3.1-7 7-7s7 3 7 7z' fill='%23F4C51B'/><rect x='7' y='20' width='18' height='3' rx='1.5' fill='%23F7F4EC'/></svg>">
 
 <!-- A foto do hero é o maior elemento da primeira tela (LCP): buscar cedo.
      O `media` garante que cada dispositivo pré-carregue só o seu recorte. -->
-<!-- Mona Sans é a única webfont do projeto: 2 pesos pre-carregados
-     (o resto do sistema segue em fontes do SO). -->
-<link rel="preload" as="font" type="font/woff2" crossorigin
-      href="https://cdn.jsdelivr.net/npm/mona-sans@1.0.0/woff2/Mona-Sans-ExtraBold.woff2">
-<link rel="preload" as="font" type="font/woff2" crossorigin
-      href="https://cdn.jsdelivr.net/npm/mona-sans@1.0.0/woff2/Mona-Sans-Regular.woff2">
+<!-- Tipografia: Poppins (títulos) + Inter (corpo), via Google Fonts.
+     preconnect nos dois hosts porque o CSS vem de um e os .woff2 de outro —
+     sem isso o navegador só descobre o segundo host depois de baixar o CSS. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700;800&display=swap">
 <link rel="preload" as="image" href="img/hero-mobile.webp" media="(max-width:899px)" fetchpriority="high">
 <link rel="preload" as="image" href="img/hero-desktop.webp"
       media="(min-width:900px)" fetchpriority="high">
@@ -84,30 +85,6 @@ fbq('track', 'PageView');
 </script>
 
 <style>
-/* ─── TIPOGRAFIA — Mona Sans ─────────────────────────────────
-   Única webfont do projeto: 4 pesos estáticos (400/600/700/800),
-   ~63 KB no total, servidos do pacote npm oficial via jsdelivr.
-   São exatamente os pesos já usados na folha de estilo — carregar
-   só esses evita que o navegador "arredonde" 700 para 800 por
-   falta de face exata. O .serif (headings editoriais em outras
-   seções) continua em fonte do sistema, sem requisição externa. */
-@font-face{
-  font-family:"Mona Sans";font-style:normal;font-weight:400;font-display:swap;
-  src:url("https://cdn.jsdelivr.net/npm/mona-sans@1.0.0/woff2/Mona-Sans-Regular.woff2") format("woff2");
-}
-@font-face{
-  font-family:"Mona Sans";font-style:normal;font-weight:600;font-display:swap;
-  src:url("https://cdn.jsdelivr.net/npm/mona-sans@1.0.0/woff2/Mona-Sans-SemiBold.woff2") format("woff2");
-}
-@font-face{
-  font-family:"Mona Sans";font-style:normal;font-weight:700;font-display:swap;
-  src:url("https://cdn.jsdelivr.net/npm/mona-sans@1.0.0/woff2/Mona-Sans-Bold.woff2") format("woff2");
-}
-@font-face{
-  font-family:"Mona Sans";font-style:normal;font-weight:800;font-display:swap;
-  src:url("https://cdn.jsdelivr.net/npm/mona-sans@1.0.0/woff2/Mona-Sans-ExtraBold.woff2") format("woff2");
-}
-
 /* ═══════════════════════════════════════════════════════════════
    DOCE SEM CULPA — landing editorial, mobile-first
    1.Tokens 2.Reset 3.Tipografia 4.Botões 5.Layout
@@ -116,35 +93,38 @@ fbq('track', 'PageView');
 
 /* ─── 1. TOKENS ─────────────────────────────────────────────── */
 :root{
-  /* Paleta amostrada do leque Benjamin Moore (PALETA DE CORES.jpg),
-     com correção de branco. Luminosidade ajustada para tela; o MATIZ
-     foi preservado e puxa para o azul. Nada de sálvia/verde. */
-  --narra:#16323C;        /* HC-157 aprofundado — cor principal */
-  --narra-70:#28505E;     /* HC-157 no tom real — gradientes */
-  --narra-deep:#0E2229;   /* fundo mais profundo, faixas e rodapé */
-  --yarmouth:#A8C8D6;     /* HC-150 */
-  --yarmouth-dark:#3A6C82;/* HC-150 escurecido — texto pequeno (AA) */
-  --whipple:#E4EEF3;      /* fundo suave */
-  --whipple-blue:#6BA3B9; /* HC-152 no tom real — o azul do leque */
-  --woodlawn:#BAD4DB;     /* HC-147 */
-  --offwhite:#FBFAF7;
+  /* Paleta obrigatória DOCE SEM CULPA (rebrand 22/08/2026) — verde/
+     petróleo/amarelo/off-white. Assinatura semântica: VERDE = marca,
+     PETRÓLEO = produto, AMARELO = destaque, OFF-WHITE = respiro.
+     Contrastes calculados em RETOMAR-AQUI.md — não recalcular do zero. */
+  --green-deep:#075B48;    /* VERDE PROFUNDO — marca. Bg forte; também
+                               texto seguro sobre --green-pale (6,66:1)
+                               e --offwhite (7,35:1) quando --green-mid
+                               não bate AA em texto pequeno. */
+  --green-darker:#054539;  /* fundo mais profundo — topbar, rodapé */
+  --green-mid:#147A62;     /* VERDE MÉDIO — hover, detalhes, secundários */
+  --green-pale:#DCEDE7;    /* VERDE CLARO — cards, fundos claros */
+  --mint:#BFE3D6;          /* accent claro sobre fundo verde/petróleo escuro */
+  --petrol:#1B3540;        /* AZUL PETRÓLEO — produto: headlines, títulos,
+                               mockups, números, texto forte, blocos premium */
+  --amarelo:#F4C51B;       /* destaque — NUNCA como texto sobre fundo claro
+                               (1,49:1, reprova WCAG) */
+  --amarelo-soft:#FCEFC4;  /* tint suave p/ selos e pills com texto escuro */
+  --offwhite:#F7F4EC;
   --white:#fff;
 
-  /* Acento quente — só no universo dos doces e nos CTAs */
-  --caramel:#C4703C;
-  --caramel-light:#E08A4C;
-  --caramel-soft:#FBEDE2;
-
-  --ink:#16323C;
-  --ink-soft:#46626E;
-  --ink-mute:#5A7787;      /* escurecido: em 13px o tom anterior dava 3,8:1 */
+  --ink:#1B3540;
+  --ink-soft:#3F5A55;
+  --ink-mute:#4F6862;
 
   --radius:20px;
-  --shadow-sm:0 2px 12px rgba(22,50,60,.06);
-  --shadow-md:0 10px 34px rgba(22,50,60,.10);
-  --shadow-lg:0 24px 60px rgba(22,50,60,.18);
+  --shadow-sm:0 2px 12px rgba(27,53,64,.06);
+  --shadow-md:0 10px 34px rgba(27,53,64,.10);
+  --shadow-lg:0 24px 60px rgba(27,53,64,.18);
 
-  --font-sans:"Mona Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+  /* Poppins carrega o peso visual; Inter carrega a leitura. */
+  --font-head:"Poppins","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --font-sans:"Inter","Helvetica Neue",Helvetica,Arial,sans-serif;
   --pad:22px;             /* respiro lateral no celular */
   --maxw:560px;           /* largura de leitura */
   --gap-sec:clamp(64px,13vw,120px);   /* respiro entre seções */
@@ -173,29 +153,28 @@ h1,h2,h3,p,ul,ol,figure{margin:0}
 ul{padding:0;list-style:none}
 
 /* ─── 3. TIPOGRAFIA ─────────────────────────────────────────── */
-/* Serifada do sistema (New York no iOS, Georgia no Android/Windows):
-   visual editorial com ZERO requisição de fonte externa. */
+/* .serif mantém o nome por compatibilidade com o HTML já escrito,
+   mas agora aponta para Poppins — é a classe de "voz de título" do
+   projeto, aplicada em 28 lugares. Trocar aqui muda todos de uma vez. */
 .serif{
-  font-family:ui-serif,"Iowan Old Style","Apple Garamond",Georgia,
-              "Palatino Linotype","Times New Roman",serif;
-  font-weight:600;letter-spacing:-.02em;
+  font-family:var(--font-head);
+  font-weight:700;letter-spacing:-.02em;
 }
-.d1{font-size:clamp(34px,9.2vw,68px);line-height:1.05}
 .d2{font-size:clamp(28px,7.2vw,50px);line-height:1.12}
 .d3{font-size:clamp(23px,5.6vw,34px);line-height:1.2}
 .kicker{
   font-size:11.5px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--yarmouth-dark);
+  color:var(--green-deep);
 }
-.kicker--light{color:var(--woodlawn)}
+.kicker--light{color:var(--mint)}
 .lead{font-size:clamp(17px,4.2vw,20px);line-height:1.55;color:var(--ink-soft)}
 .lead--light{color:#C3D9E5}
 .center{text-align:center}
-.hl{color:var(--caramel-light)}
+.hl{color:var(--amarelo)}
 .hl-mark{
   /* Sublinhado fino em caramelo, não tarja. Uma faixa alta e opaca sobre
      foto escura lê como censura e rouba o contraste do texto branco. */
-  background:linear-gradient(transparent 86%,rgba(224,138,76,.9) 86%);
+  background:linear-gradient(transparent 86%,rgba(20,122,98,.9) 86%);
   padding:0 .04em;
 }
 
@@ -203,11 +182,12 @@ ul{padding:0;list-style:none}
 .btn{
   display:flex;align-items:center;justify-content:center;gap:10px;
   width:100%;min-height:64px;padding:19px 26px;
-  background:linear-gradient(180deg,var(--caramel-light),var(--caramel));
+  background:var(--green-deep);
   color:var(--white);text-decoration:none;
-  font-size:16px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;
+  font-family:var(--font-head);
+  font-size:16px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;
   border:0;border-radius:999px;cursor:pointer;
-  box-shadow:0 10px 26px rgba(196,112,60,.32);
+  box-shadow:0 10px 26px rgba(7,91,72,.32);
   transition:transform .16s ease,box-shadow .16s ease;
   -webkit-tap-highlight-color:transparent;
 }
@@ -217,16 +197,15 @@ ul{padding:0;list-style:none}
   display:flex;align-items:center;justify-content:center;gap:8px;
   margin-top:14px;font-size:13.5px;color:var(--ink-mute);
 }
-.btn-note--light{color:#9DB8C6}
 .btn-wrap{margin-top:34px}
 
 /* ─── 5. LAYOUT ─────────────────────────────────────────────── */
 .wrap{width:100%;max-width:var(--maxw);margin-inline:auto;padding-inline:var(--pad)}
 .wrap--wide{max-width:1080px}
 .sec{padding-block:var(--gap-sec)}
-.sec--dark{background:var(--narra);color:var(--offwhite)}
-.sec--deep{background:var(--narra-deep);color:var(--offwhite)}
-.sec--soft{background:var(--whipple)}
+.sec--dark{background:var(--green-deep);color:var(--offwhite)}
+.sec--deep{background:var(--petrol);color:var(--offwhite)}
+.sec--soft{background:var(--green-pale)}
 .sec--dark h2,.sec--deep h2,.sec--dark h3{color:var(--white)}
 .sec-head{margin-bottom:clamp(30px,7vw,52px)}
 .sec-head .kicker{margin-bottom:16px}
@@ -236,14 +215,14 @@ ul{padding:0;list-style:none}
 /* ─── 6.0 BARRA SUPERIOR ────────────────────────────────────── */
 /* Uma linha só no celular: em duas, a barra come altura da primeira dobra. */
 .topbar{
-  background:var(--narra-deep);color:var(--woodlawn);
+  background:var(--green-darker);color:var(--mint);
   padding:11px 12px calc(11px + env(safe-area-inset-top));
   text-align:center;white-space:nowrap;
   font-size:clamp(8.6px,2.45vw,11px);font-weight:800;
   letter-spacing:.1em;text-transform:uppercase;line-height:1.3;
 }
 @media (min-width:520px){ .topbar{letter-spacing:.16em} }
-.topbar b{color:var(--caramel-light);font-weight:800}
+.topbar b{color:var(--amarelo);font-weight:800}
 
 /* ─── 6.1 HERO ──────────────────────────────────────────────────
    Fotografia CLARA com área negativa própria: o texto é escuro e
@@ -252,7 +231,7 @@ ul{padding:0;list-style:none}
    largura/altura e deixava uma faixa "lavada" no meio, sem servir
    nem de texto nem de foto. Aqui a leitura fica sólida perto do
    texto e a comida aparece vívida logo em seguida.
-   Tipografia em Mona Sans, título em minúsculas/maiúsculas mistas
+   Tipografia em Poppins, título em minúsculas/maiúsculas mistas
    (não caixa-alta): mais editorial, hierarquia por peso e tamanho
    em vez de "grito". Menos blocos empilhados, respiro crescente
    entre eles — badge e título ficam próximos (mesma ideia), título
@@ -284,23 +263,25 @@ ul{padding:0;list-style:none}
 .hero__badge{
   display:inline-flex;align-items:center;gap:8px;
   padding:8px 15px;margin-bottom:22px;
-  background:#A85C2E;color:var(--white);border-radius:999px;
+  background:var(--petrol);color:var(--white);border-radius:999px;
   font-size:11px;font-weight:800;
   letter-spacing:.08em;text-transform:uppercase;line-height:1.2;
 }
 .hero__badge svg{flex:none}
 .hero__title{
-  font-weight:800;letter-spacing:-.02em;
-  line-height:1.1;color:var(--narra);
+  font-family:var(--font-head);
+  font-weight:800;letter-spacing:-.025em;
+  line-height:1.1;color:var(--petrol);
   font-size:clamp(30px,8.2vw,42px);
   text-wrap:balance;
 }
 /* Só os filhos DIRETOS viram linha: sem o ">", os spans de destaque
    virariam bloco e jogariam o ponto final para uma linha sozinha. */
 .hero__title > span{display:block}
-.hero__title .hl{color:var(--caramel)}
+.hero__title .hl{color:var(--petrol);background:linear-gradient(transparent 78%,rgba(244,197,27,.55) 78%);padding:0 .03em}
 .hero__title .hl-mark{
-  background:linear-gradient(transparent 84%,rgba(196,112,60,.4) 84%);
+  color:var(--green-mid);
+  background:linear-gradient(transparent 84%,rgba(20,122,98,.35) 84%);
   padding:0 .03em;
 }
 .hero__sub{
@@ -308,44 +289,31 @@ ul{padding:0;list-style:none}
   font-size:clamp(15.5px,3.9vw,18px);line-height:1.6;
   color:var(--ink-soft);max-width:26em;
 }
-.hero__sub strong{color:var(--narra);font-weight:600}
+.hero__sub strong{color:var(--petrol);font-weight:600}
 .hero .btn{margin-inline:0;margin-top:30px}
 
 /* Trio de números: substitui a antiga legenda de uma linha em
    caixa-alta minúscula — mesma informação (50 · 25 · 25), com peso
    tipográfico de verdade em vez de apagada no rodapé do bloco. */
 .hero__stats{display:flex;margin-top:28px}
-.hero__stats li{padding-inline:18px;border-left:1px solid rgba(22,50,60,.15)}
+.hero__stats li{padding-inline:18px;border-left:1px solid rgba(27,53,64,.15)}
 .hero__stats li:first-child{padding-left:0;border-left:0}
 .hero__stats b{
-  display:block;font-size:23px;line-height:1;font-weight:800;color:var(--narra);
+  display:block;font-family:var(--font-head);
+  font-size:23px;line-height:1;font-weight:800;color:var(--petrol);
 }
 .hero__stats span{
   display:block;margin-top:5px;font-size:11px;font-weight:700;
-  letter-spacing:.04em;color:var(--yarmouth-dark);
+  letter-spacing:.04em;color:var(--green-deep);
 }
 
 /* ─── 6.2 BLOCO DE TEXTO EDITORIAL ──────────────────────────── */
-.editorial p{
-  font-size:clamp(18px,4.6vw,23px);line-height:1.5;
-  color:var(--ink-soft);margin-bottom:20px;text-wrap:pretty;
-}
-.editorial p:last-child{margin-bottom:0}
 /* Contextos escuros: .band entra na lista junto com sec--dark/--deep.
    Sem isso, .closing e .editorial mantêm a cor escura sobre fundo escuro. */
-.sec--dark .editorial p,.sec--deep .editorial p,.band .editorial p{color:#C3D9E5}
-.editorial strong{color:var(--ink);font-weight:700}
-.sec--dark .editorial strong,.sec--deep .editorial strong,
-.band .editorial strong{color:var(--white)}
-.rule{
-  width:52px;height:3px;border-radius:2px;
-  background:var(--caramel);margin:34px 0;
-}
-.rule--center{margin-inline:auto}
 .closing{
-  margin-top:38px;padding-top:32px;border-top:1px solid rgba(22,50,60,.12);
+  margin-top:38px;padding-top:32px;border-top:1px solid rgba(27,53,64,.12);
   font-size:clamp(19px,4.8vw,26px);line-height:1.35;
-  font-weight:600;color:var(--narra);
+  font-weight:600;color:var(--petrol);
 }
 .sec--dark .closing,.sec--deep .closing,.band .closing{
   border-top-color:rgba(255,255,255,.16);color:var(--white);
@@ -359,78 +327,18 @@ ul{padding:0;list-style:none}
 }
 .beats li::before{
   content:"";position:absolute;left:0;top:22px;
-  width:8px;height:8px;border-radius:50%;background:var(--whipple-blue);
+  width:8px;height:8px;border-radius:50%;background:var(--green-mid);
 }
 .beats li.is-key{color:var(--white);font-weight:700}
 .beats li.is-quote{
-  font-style:italic;color:var(--caramel-light);font-weight:600;
+  font-style:italic;color:var(--amarelo);font-weight:600;
 }
 
 /* ─── 6.4 CHECKLIST ─────────────────────────────────────────── */
-.checks{display:grid;gap:2px;margin:0 auto;max-width:26em}
-.checks li{
-  display:flex;gap:16px;align-items:flex-start;
-  padding:16px 0;border-bottom:1px solid rgba(22,50,60,.10);
-  font-size:clamp(16.5px,4.2vw,19px);line-height:1.4;
-}
-.checks li:last-child{border-bottom:0}
-.checks .ico{
-  flex:none;margin-top:2px;color:var(--whipple-blue);
-}
 
 /* ─── 6.6 DUPLA DE FOTOS (25 doces / 25 lanches) ────────────── */
-.pair{display:grid;gap:26px}
-.pair figure{
-  position:relative;border-radius:var(--radius);overflow:hidden;
-  box-shadow:var(--shadow-md);background:var(--narra);
-}
-.pair img{width:100%;height:auto;aspect-ratio:4/5;object-fit:cover}
-.pair figcaption{
-  position:absolute;inset:auto 0 0 0;padding:26px 20px 20px;
-  /* O véu precisa já estar denso no topo da legenda: nas fotos claras
-     (louça branca) o número perdia contraste com um gradiente tardio. */
-  background:linear-gradient(transparent 0,rgba(14,34,41,.74) 30%,
-                             rgba(14,34,41,.96) 72%);
-  color:var(--white);
-}
-.pair .n{
-  display:block;font-size:38px;line-height:1;font-weight:700;
-}
-.pair .t{
-  display:block;margin-top:4px;font-size:14px;font-weight:800;
-  letter-spacing:.1em;text-transform:uppercase;color:var(--woodlawn);
-}
-.pair ul{margin-top:14px;display:grid;gap:6px}
-.pair li{
-  font-size:14px;line-height:1.35;color:#D6E4E9;
-  padding-left:15px;position:relative;
-}
-.pair li::before{
-  content:"";position:absolute;left:0;top:8px;width:5px;height:5px;
-  border-radius:50%;background:var(--caramel-light);
-}
 
 /* ─── 6.8 SEQUÊNCIA "IMAGINE" ───────────────────────────────── */
-.flow{display:grid;gap:30px;margin:0 auto;max-width:440px}
-.flow__q{
-  font-size:clamp(20px,5.2vw,26px);line-height:1.25;font-weight:700;
-  color:var(--white);margin-bottom:16px;
-}
-.flow__q .em{color:var(--caramel-light)}
-.flow ol{display:grid;gap:10px;counter-reset:p}
-.flow li{
-  counter-increment:p;position:relative;padding-left:42px;
-  font-size:16.5px;line-height:1.4;color:#C3D9E5;
-  display:flex;align-items:center;min-height:30px;
-}
-.flow li::before{
-  content:counter(p);position:absolute;left:0;top:0;
-  width:30px;height:30px;border-radius:50%;
-  background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.20);
-  color:var(--woodlawn);font-size:13px;font-weight:800;
-  display:grid;place-items:center;
-}
-.flow li:last-child{color:var(--white);font-weight:700}
 
 /* ─── 6.9 OFERTA ────────────────────────────────────────────── */
 .offer{
@@ -442,12 +350,11 @@ ul{padding:0;list-style:none}
   color:var(--ink);
 }
 .offer__head{
-  background:var(--narra);color:var(--white);padding:26px 22px;text-align:center;
+  background:var(--petrol);color:var(--white);padding:26px 22px;text-align:center;
 }
 .offer__tag{
   display:inline-block;margin-bottom:12px;padding:6px 15px;
-  /* caramelo mais profundo que o token: em 11px o --caramel dava só 3,7:1 */
-  background:#A85C2E;color:var(--white);border-radius:999px;
+  background:var(--petrol);color:var(--white);border-radius:999px;
   font-size:10.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
 }
 .offer__body{padding:28px 22px}
@@ -455,73 +362,65 @@ ul{padding:0;list-style:none}
 .offer__list li{
   display:flex;gap:12px;align-items:flex-start;font-size:15.5px;line-height:1.4;
 }
-.offer__list .ico{flex:none;margin-top:3px;color:var(--whipple-blue)}
+.offer__list .ico{flex:none;margin-top:3px;color:var(--green-mid)}
 .price{text-align:center;margin-bottom:26px}
 .price__from{display:block;font-size:13px;color:var(--ink-mute);letter-spacing:.04em}
 .price__now{
   display:flex;align-items:flex-start;justify-content:center;gap:5px;
-  margin-top:8px;color:var(--narra);
+  margin-top:8px;color:var(--petrol);
 }
 .price__cur{font-size:24px;font-weight:700;margin-top:13px}
 .price__val{font-size:clamp(64px,17vw,82px);line-height:.9;font-weight:700;letter-spacing:-.04em}
 .price__cents{font-size:28px;font-weight:700;margin-top:8px}
 .price__pay{
   display:inline-block;margin-top:14px;padding:8px 16px;
-  background:var(--caramel-soft);color:#8A4A20;border-radius:999px;
+  background:var(--amarelo-soft);color:var(--petrol);border-radius:999px;
   font-size:13px;font-weight:700;
 }
 .trust{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:22px}
 .trust li{
   display:grid;place-items:center;gap:7px;text-align:center;
-  padding:15px 6px;background:var(--whipple);border-radius:14px;
-  font-size:11px;font-weight:700;color:var(--narra);line-height:1.25;
+  padding:15px 6px;background:var(--green-pale);border-radius:14px;
+  font-size:11px;font-weight:700;color:var(--petrol);line-height:1.25;
 }
-.trust .ico{color:var(--yarmouth-dark)}
+.trust .ico{color:var(--green-deep)}
 
 /* urgência real — o contador só aparece com LAUNCH_DEADLINE configurado */
 .urgency{
-  background:var(--whipple);border:1px solid var(--woodlawn);
+  background:var(--green-pale);border:1px solid var(--mint);
   border-radius:16px;padding:18px;margin-bottom:26px;text-align:center;
 }
 .urgency__label{
   display:inline-flex;align-items:center;gap:8px;
   font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--yarmouth-dark);
+  color:var(--green-deep);
 }
 .urgency p{margin-top:8px;font-size:13.5px;color:var(--ink-soft);line-height:1.45}
 .countdown[hidden]{display:none}
 .countdown{display:flex;justify-content:center;gap:8px;margin-top:15px}
 .countdown div{
-  min-width:60px;background:var(--narra);color:var(--white);
+  min-width:60px;background:var(--petrol);color:var(--white);
   border-radius:12px;padding:10px 6px;
 }
 .countdown b{display:block;font-size:23px;font-weight:800;line-height:1}
 .countdown span{
   display:block;margin-top:4px;font-size:9.5px;font-weight:700;
-  letter-spacing:.09em;text-transform:uppercase;color:var(--woodlawn);
+  letter-spacing:.09em;text-transform:uppercase;color:var(--mint);
 }
 
 /* ─── 6.11 BENEFÍCIOS ───────────────────────────────────────── */
-.benefits{display:grid;gap:2px;max-width:520px;margin-inline:auto}
-.benefits li{
-  display:flex;gap:16px;align-items:center;
-  padding:19px 0;border-bottom:1px solid rgba(22,50,60,.10);
-  font-size:clamp(16.5px,4.2vw,19px);line-height:1.35;font-weight:600;
-}
-.benefits li:last-child{border-bottom:0}
-.benefits .ico{flex:none;color:var(--whipple-blue)}
 
 /* ─── 6.12 FAIXA COM FOTO ───────────────────────────────────── */
 /* Cor de fundo sólida por baixo da foto: se a imagem falhar ou demorar,
    o texto branco continua legível em vez de cair sobre o off-white. */
 .band{
   position:relative;isolation:isolate;overflow:hidden;
-  background:var(--narra-deep);color:var(--white);
+  background:var(--green-deep);color:var(--white);
 }
 .band__img{position:absolute;inset:0;z-index:-2;width:100%;height:100%;object-fit:cover}
 .band::after{
   content:"";position:absolute;inset:0;z-index:-1;
-  background:linear-gradient(180deg,rgba(14,34,41,.86),rgba(14,34,41,.94));
+  background:linear-gradient(180deg,rgba(5,69,57,.86),rgba(5,69,57,.94));
 }
 
 /* ─── 6.13 GARANTIA ─────────────────────────────────────────── */
@@ -529,38 +428,38 @@ ul{padding:0;list-style:none}
 .seal{
   width:96px;height:96px;border-radius:50%;margin:0 auto 24px;
   display:grid;place-items:center;
-  background:var(--whipple);border:3px dashed var(--whipple-blue);color:var(--narra);
+  background:var(--green-pale);border:3px dashed var(--green-mid);color:var(--petrol);
 }
 .seal b{font-size:31px;line-height:1;display:block;font-weight:800}
 .seal span{font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
 
 /* ─── 6.14 FAQ ──────────────────────────────────────────────── */
 .faq{display:grid;gap:0;max-width:620px;margin-inline:auto}
-details{border-bottom:1px solid rgba(22,50,60,.12)}
+details{border-bottom:1px solid rgba(27,53,64,.12)}
 summary{
   display:flex;align-items:center;justify-content:space-between;gap:16px;
-  padding:22px 0;font-size:16.5px;font-weight:700;color:var(--narra);
+  padding:22px 0;font-size:16.5px;font-weight:700;color:var(--petrol);
   cursor:pointer;list-style:none;min-height:60px;
   -webkit-tap-highlight-color:transparent;
 }
 summary::-webkit-details-marker{display:none}
 summary .chev{
   flex:none;width:28px;height:28px;border-radius:50%;
-  background:var(--whipple);color:var(--narra);
+  background:var(--green-pale);color:var(--petrol);
   display:grid;place-items:center;transition:transform .22s ease;
 }
-details[open] summary .chev{transform:rotate(180deg);background:var(--whipple-blue)}
+details[open] summary .chev{transform:rotate(180deg);background:var(--green-mid)}
 .faq-a{padding:0 0 24px;font-size:15.5px;color:var(--ink-soft);line-height:1.6}
 details[open] .faq-a{animation:fade .24s ease}
 @keyframes fade{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
 
 /* ─── 6.15 RODAPÉ ───────────────────────────────────────────── */
-footer{background:var(--narra-deep);color:#9DB8C6;padding:56px 0 40px;font-size:13.5px}
+footer{background:var(--green-deep);color:#BFE3D6;padding:56px 0 40px;font-size:13.5px}
 .foot-logo{font-size:23px;color:var(--white);margin-bottom:10px}
 .foot-links{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 20px;margin:26px 0 22px}
 .foot-links a{
   display:inline-flex;align-items:center;min-height:44px;
-  color:var(--woodlawn);text-decoration:none;font-weight:600;padding:0 4px;
+  color:var(--mint);text-decoration:none;font-weight:600;padding:0 4px;
 }
 .foot-legal{
   border-top:1px solid rgba(255,255,255,.1);padding-top:22px;
@@ -575,7 +474,7 @@ footer{background:var(--narra-deep);color:#9DB8C6;padding:56px 0 40px;font-size:
   padding:10px 14px calc(10px + env(safe-area-inset-bottom));
   background:rgba(251,250,247,.95);
   -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
-  border-top:1px solid #DAE4EC;box-shadow:0 -6px 22px rgba(22,50,60,.09);
+  border-top:1px solid #DAE4EC;box-shadow:0 -6px 22px rgba(27,53,64,.09);
   transform:translateY(120%);transition:transform .3s cubic-bezier(.22,1,.36,1);
 }
 .sticky-bar.is-visible{transform:none}
@@ -584,7 +483,7 @@ footer{background:var(--narra-deep);color:#9DB8C6;padding:56px 0 40px;font-size:
   display:block;font-size:10px;color:var(--ink-mute);text-decoration:none;
   font-weight:800;letter-spacing:.09em;text-transform:uppercase;
 }
-.sticky-bar__info b{display:block;font-size:19px;color:var(--narra);font-weight:800}
+.sticky-bar__info b{display:block;font-size:19px;color:var(--petrol);font-weight:800}
 .sticky-bar__info i{display:block;font-size:9.5px;font-style:normal;color:var(--ink-mute)}
 .sticky-bar .btn{min-height:52px;padding:14px 20px;font-size:14px}
 
@@ -611,30 +510,39 @@ footer{background:var(--narra-deep);color:#9DB8C6;padding:56px 0 40px;font-size:
 
 /* foco visível em tudo que é interativo */
 a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visible{
-  outline:3px solid var(--caramel-light);outline-offset:3px;border-radius:8px;
+  outline:3px solid var(--amarelo);outline-offset:3px;border-radius:8px;
 }
 
 /* ─── CTA secundário ────────────────────────────────────────── */
 .btn--ghost{
-  background:transparent;color:var(--narra);
-  border:2px solid var(--narra);box-shadow:none;
+  background:transparent;color:var(--petrol);
+  border:2px solid var(--petrol);box-shadow:none;
 }
 .sec--dark .btn--ghost,.sec--deep .btn--ghost,.band .btn--ghost,
 .poll__out .btn--ghost{color:var(--white);border-color:rgba(255,255,255,.55)}
+
+/* ─── Arquétipo 2: petróleo — CTAs ligados ao produto/oferta ───── */
+.btn--petrol{background:var(--petrol);box-shadow:0 10px 26px rgba(27,53,64,.34)}
+
+/* ─── Arquétipo 3: amarelo — CTAs de alta atenção (hero, oferta final) ─ */
+.btn--gold{
+  background:var(--amarelo);color:var(--petrol);
+  box-shadow:0 10px 26px rgba(244,197,27,.38);
+}
 
 /* ─── ENQUETE: quanto sua rotina te custa ───────────────────── */
 .poll{display:grid;gap:10px;max-width:440px;margin:0 auto}
 .poll__opt{
   width:100%;min-height:58px;padding:16px 20px;text-align:left;
   background:var(--white);border:2px solid #DCE6EC;border-radius:16px;
-  font-size:16px;font-weight:700;color:var(--narra);cursor:pointer;
+  font-size:16px;font-weight:700;color:var(--petrol);cursor:pointer;
   transition:border-color .18s ease,background .18s ease;
   -webkit-tap-highlight-color:transparent;
 }
-.poll__opt[aria-pressed="true"]{border-color:var(--caramel);background:var(--caramel-soft)}
+.poll__opt[aria-pressed="true"]{border-color:var(--green-mid);background:var(--green-pale)}
 .poll__out{
   max-width:440px;margin:24px auto 0;padding:24px 22px;
-  background:var(--narra);color:var(--white);border-radius:var(--radius);text-align:center;
+  background:var(--green-deep);color:var(--white);border-radius:var(--radius);text-align:center;
 }
 .poll__msg{font-size:16.5px;line-height:1.5;color:#C9DCE4}
 .poll__fix{
@@ -647,13 +555,13 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 .versus{display:grid;gap:16px;max-width:760px;margin:0 auto}
 .versus__col{border-radius:var(--radius);padding:24px 22px}
 .versus__col--bad{background:#F2EDE8;border:1px solid #E3D8CE}
-.versus__col--good{background:var(--narra);color:var(--white)}
+.versus__col--good{background:var(--petrol);color:var(--white)}
 .versus__lbl{
   display:block;margin-bottom:14px;
   font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
 }
 .versus__col--bad .versus__lbl{color:#7A5C43}  /* 3,35:1 -> 5,2:1 */
-.versus__col--good .versus__lbl{color:var(--woodlawn)}
+.versus__col--good .versus__lbl{color:var(--mint)}
 .versus li{position:relative;padding:10px 0 10px 26px;font-size:15.5px;line-height:1.45}
 .versus__col--bad li{color:#6B5647}
 .versus__col--bad li::before{
@@ -663,37 +571,15 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 .versus__col--good li{color:#D6E4EA}
 .versus__col--good li::before{
   content:"\2713";position:absolute;left:0;top:10px;
-  font-size:15px;font-weight:800;color:var(--caramel-light);
+  font-size:15px;font-weight:800;color:var(--amarelo);
 }
 .facts{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;max-width:700px;margin:30px auto 0}
 .facts li{
-  padding:9px 16px;background:var(--whipple);border-radius:999px;
-  font-size:13px;font-weight:700;color:var(--narra);
+  padding:9px 16px;background:var(--green-pale);border-radius:999px;
+  font-size:13px;font-weight:700;color:var(--petrol);
 }
 
 /* ─── QUAL É O SEU MOMENTO ──────────────────────────────────── */
-.moments{display:grid;gap:11px;max-width:520px;margin:0 auto}
-.moment{
-  display:flex;align-items:center;gap:14px;width:100%;min-height:64px;
-  padding:16px 18px;text-align:left;
-  background:var(--white);border:2px solid #DCE6EC;border-radius:16px;
-  font-size:16.5px;font-weight:700;color:var(--narra);cursor:pointer;
-  transition:border-color .18s ease,background .18s ease;
-  -webkit-tap-highlight-color:transparent;
-}
-.moment .em{font-size:23px;line-height:1;flex:none}
-.moment[aria-expanded="true"]{border-color:var(--caramel);background:var(--caramel-soft)}
-.moment__ans{
-  max-width:520px;margin:16px auto 0;padding:22px;
-  background:var(--narra);color:#C9DCE4;border-radius:var(--radius);
-  font-size:15.5px;line-height:1.55;
-}
-.moment__ans b{display:block;margin-bottom:10px;font-size:17px;color:var(--white)}
-.moment__ans .pick{
-  display:inline-block;margin:7px 7px 0 0;padding:7px 14px;
-  background:rgba(224,138,76,.16);border:1px solid rgba(224,138,76,.42);
-  border-radius:999px;font-size:13.5px;font-weight:700;color:var(--caramel-light);
-}
 
 /* ─── PREPARO DE 60 MINUTOS ─────────────────────────────────── */
 .prep__steps{display:grid;gap:10px;max-width:460px;margin:24px auto 0;counter-reset:s}
@@ -705,42 +591,11 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 }
 .prep__steps li::before{
   content:counter(s);flex:none;width:30px;height:30px;border-radius:50%;
-  background:#A85C2E;color:var(--white);  /* contraste AA em 13px */
+  background:var(--green-mid);color:var(--white);  /* contraste AA em 13px */
   font-size:13px;font-weight:800;display:grid;place-items:center;
 }
 
 /* ─── QUIZ DE QUALIFICAÇÃO ──────────────────────────────────── */
-.quiz{display:grid;gap:0;max-width:520px;margin:0 auto}
-.quiz label{
-  display:flex;align-items:center;gap:15px;min-height:56px;padding:15px 4px;
-  cursor:pointer;border-bottom:1px solid rgba(22,50,60,.10);
-  font-size:16.5px;line-height:1.35;color:var(--ink);
-  -webkit-tap-highlight-color:transparent;
-}
-.quiz label:last-of-type{border-bottom:0}
-.quiz input{position:absolute;width:1px;height:1px;opacity:0}
-.quiz .box{
-  flex:none;width:26px;height:26px;border-radius:8px;border:2px solid #C4D3DB;
-  display:grid;place-items:center;color:transparent;
-  transition:background .16s ease,border-color .16s ease;
-}
-.quiz input:checked + .box{
-  background:var(--whipple-blue);border-color:var(--whipple-blue);color:var(--white);
-}
-.quiz input:focus-visible + .box{outline:3px solid var(--caramel-light);outline-offset:3px}
-.quiz__bar{
-  max-width:520px;margin:26px auto 0;height:8px;border-radius:99px;
-  background:#DCE6EC;overflow:hidden;
-}
-.quiz__fill{
-  height:100%;width:0;border-radius:99px;
-  background:linear-gradient(90deg,var(--whipple-blue),var(--caramel));
-  transition:width .35s cubic-bezier(.22,1,.36,1);
-}
-.quiz__msg{
-  max-width:520px;margin:14px auto 0;min-height:2.8em;text-align:center;
-  font-size:16.5px;font-weight:700;color:var(--narra);line-height:1.4;
-}
 
 /* ─── POR DENTRO DO EBOOK ───────────────────────────────────── */
 .pages{
@@ -750,11 +605,11 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 .pages figure{scroll-snap-align:center;flex:0 0 auto;width:min(72vw,258px)}
 .pages img{
   width:100%;height:auto;aspect-ratio:620/928;border-radius:14px;
-  box-shadow:var(--shadow-md);background:var(--whipple);
+  box-shadow:var(--shadow-md);background:var(--green-pale);
 }
 .pages figcaption{
   margin-top:11px;text-align:center;font-size:11.5px;font-weight:800;
-  letter-spacing:.09em;text-transform:uppercase;color:var(--woodlawn);
+  letter-spacing:.09em;text-transform:uppercase;color:var(--mint);
 }
 .pages__hint{text-align:center;margin-top:2px;font-size:13px;color:#9DB8C6}
 
@@ -762,21 +617,21 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 .autora{display:grid;gap:22px;justify-items:center;text-align:center;max-width:560px;margin:0 auto}
 .autora__foto{
   width:148px;height:148px;border-radius:50%;overflow:hidden;
-  background:var(--whipple);border:4px solid var(--white);
+  background:var(--green-pale);border:4px solid var(--white);
   box-shadow:var(--shadow-md);display:grid;place-items:center;
 }
 .autora__foto{position:relative}
 .autora__foto img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
-.autora__mono{font-size:44px;font-weight:700;color:var(--yarmouth-dark);letter-spacing:.03em}  /* 2,36:1 -> 4,8:1 */
-.autora__nome{font-size:clamp(24px,6vw,32px);line-height:1.15;color:var(--narra)}
+.autora__mono{font-size:44px;font-weight:700;color:var(--green-deep);letter-spacing:.03em}  /* 2,36:1 -> 4,8:1 */
+.autora__nome{font-size:clamp(24px,6vw,32px);line-height:1.15;color:var(--petrol)}
 .autora__papel{
   margin-top:9px;font-size:11.5px;font-weight:800;letter-spacing:.15em;
-  text-transform:uppercase;color:var(--yarmouth-dark);
+  text-transform:uppercase;color:var(--green-deep);
 }
 .autora p{font-size:16.5px;line-height:1.6;color:var(--ink-soft)}
 .btn--ig{
-  background:linear-gradient(135deg,#833AB4,#C13584 45%,#E1306C 72%,#F77737);
-  box-shadow:0 10px 26px rgba(193,53,132,.30);
+  background:var(--petrol);
+  box-shadow:0 10px 26px rgba(27,53,64,.30);
 }
 
 /* ─── CREDIBILIDADE ─────────────────────────────────────────── */
@@ -786,14 +641,12 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
   background:var(--white);border:1px solid #E5EDF2;border-radius:14px;
   box-shadow:var(--shadow-sm);font-size:15.5px;line-height:1.4;
 }
-.trustlist .ico{flex:none;margin-top:2px;color:var(--whipple-blue)}
-.trustlist b{display:block;color:var(--narra)}
+.trustlist .ico{flex:none;margin-top:2px;color:var(--green-mid)}
+.trustlist b{display:block;color:var(--petrol)}
 .trustlist span{color:var(--ink-soft);font-size:14px}
 
 @media (min-width:720px){
   .versus{grid-template-columns:1fr 1fr;gap:20px}
-  .moments{grid-template-columns:1fr 1fr;max-width:640px}
-  .moment__ans{max-width:640px}
   .trustlist{grid-template-columns:1fr 1fr}
   .poll{grid-template-columns:1fr 1fr;max-width:560px}
   .poll__out{max-width:560px}
@@ -803,17 +656,17 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 /* ─── TABS doce / lanche ────────────────────────────────────── */
 .tabs{
   display:flex;gap:6px;max-width:420px;margin:0 auto 24px;
-  background:var(--whipple);padding:6px;border-radius:999px;
+  background:var(--green-pale);padding:6px;border-radius:999px;
 }
 .tab{
   flex:1;min-height:50px;padding:12px 16px;border:0;border-radius:999px;
-  background:transparent;color:var(--yarmouth-dark);cursor:pointer;
+  background:transparent;color:var(--green-deep);cursor:pointer;
   font-size:14.5px;font-weight:800;letter-spacing:.04em;
   display:flex;align-items:center;justify-content:center;gap:8px;
   transition:background .2s ease,color .2s ease;
   -webkit-tap-highlight-color:transparent;
 }
-.tab[aria-selected="true"]{background:var(--narra);color:var(--white)}
+.tab[aria-selected="true"]{background:var(--petrol);color:var(--white)}
 .tab .em{font-size:17px;line-height:1}
 .tabp[hidden]{display:none!important}
 .recipes{display:grid;gap:9px;max-width:560px;margin:0 auto}
@@ -825,38 +678,16 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 }
 .recipes .n{
   flex:none;width:30px;height:30px;border-radius:9px;
-  background:var(--whipple);color:var(--yarmouth-dark);
+  background:var(--green-pale);color:var(--green-deep);
   font-size:12px;font-weight:800;display:grid;place-items:center;
 }
 .recipes__more{
-  text-align:center;margin-top:18px;font-size:14.5px;color:var(--yarmouth-dark);
+  text-align:center;margin-top:18px;font-size:14.5px;color:var(--green-deep);
 }
 
 /* ─── ANTES / DEPOIS ────────────────────────────────────────── */
-.antesdepois{display:grid;gap:14px;max-width:680px;margin:0 auto}
-.ad{border-radius:var(--radius);padding:22px}
-.ad--antes{background:#F2EDE8;border:1px solid #E3D8CE}
-.ad--depois{background:var(--narra);color:var(--white)}
-.ad__lbl{
-  display:block;margin-bottom:14px;
-  font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
-}
-.ad--antes .ad__lbl{color:#7A5C43}
-.ad--depois .ad__lbl{color:var(--woodlawn)}
-.ad--antes li{
-  padding:8px 0;font-size:15.5px;color:#6B5647;font-style:italic;
-}
-.ad--depois li{
-  padding:10px 0;font-size:21px;font-weight:700;color:var(--white);
-  display:flex;align-items:center;gap:12px;
-}
-.ad--depois li::before{
-  content:"";flex:none;width:8px;height:8px;border-radius:50%;
-  background:var(--caramel-light);
-}
 
 @media (min-width:720px){
-  .antesdepois{grid-template-columns:1fr 1fr;gap:18px}
   .recipes{grid-template-columns:1fr 1fr;max-width:720px}
 }
 
@@ -869,19 +700,19 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 }
 .sig__foto{
   position:relative;flex:none;width:54px;height:54px;border-radius:50%;
-  overflow:hidden;background:var(--whipple);display:grid;place-items:center;
+  overflow:hidden;background:var(--green-pale);display:grid;place-items:center;
 }
 /* a foto (injetada pelo script) cobre o monograma que fica atras */
 .sig__foto img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
 /* injetada pelo script quando img/autora.webp existir */
-.sig__mono{font-size:17px;font-weight:800;color:var(--yarmouth-dark);letter-spacing:.02em}
+.sig__mono{font-size:17px;font-weight:800;color:var(--green-deep);letter-spacing:.02em}
 .sig__txt{flex:1;min-width:0;line-height:1.32}
-.sig__txt b{display:block;font-size:15px;color:var(--narra)}
+.sig__txt b{display:block;font-size:15px;color:var(--petrol)}
 .sig__txt span{font-size:12.5px;color:var(--ink-soft)}
 .sig__ig{
   flex:none;display:inline-flex;align-items:center;min-height:44px;
   padding:9px 15px;border-radius:999px;text-decoration:none;
-  background:var(--whipple);color:var(--yarmouth-dark);
+  background:var(--green-pale);color:var(--green-deep);
   font-size:11.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;
 }
 /* variante para as seções escuras */
@@ -891,8 +722,8 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 .sec--dark .sig__txt b,.sec--deep .sig__txt b{color:var(--white)}
 .sec--dark .sig__txt span,.sec--deep .sig__txt span{color:#ADC6D3}
 .sec--dark .sig__foto,.sec--deep .sig__foto{background:rgba(186,212,219,.16)}
-.sec--dark .sig__mono,.sec--deep .sig__mono{color:var(--woodlawn)}
-.sec--dark .sig__ig,.sec--deep .sig__ig{background:rgba(186,212,219,.16);color:var(--woodlawn)}
+.sec--dark .sig__mono,.sec--deep .sig__mono{color:var(--mint)}
+.sec--dark .sig__ig,.sec--deep .sig__ig{background:rgba(186,212,219,.16);color:var(--mint)}
 @media (max-width:479px){
   .sig{border-radius:20px;flex-wrap:wrap}
   .sig__ig{width:100%;justify-content:center}
@@ -914,24 +745,24 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 .autora{display:grid;gap:26px;justify-items:center;text-align:center;max-width:620px;margin:0 auto}
 .autora__foto{
   position:relative;width:190px;height:190px;border-radius:50%;overflow:hidden;
-  background:var(--whipple);border:5px solid var(--white);
+  background:var(--green-pale);border:5px solid var(--white);
   box-shadow:var(--shadow-lg);display:grid;place-items:center;
 }
 .autora__foto img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
-.autora__mono{font-size:52px;font-weight:700;color:var(--yarmouth-dark)}
-.autora__nome{font-size:clamp(26px,6.4vw,36px);line-height:1.12;color:var(--narra)}
+.autora__mono{font-size:52px;font-weight:700;color:var(--green-deep)}
+.autora__nome{font-size:clamp(26px,6.4vw,36px);line-height:1.12;color:var(--petrol)}
 .autora__papel{
   margin-top:10px;font-size:11.5px;font-weight:800;letter-spacing:.15em;
-  text-transform:uppercase;color:var(--yarmouth-dark);
+  text-transform:uppercase;color:var(--green-deep);
 }
 .autora p{font-size:16.5px;line-height:1.62;color:var(--ink-soft)}
 .autora__frase{
   font-size:clamp(19px,4.8vw,24px);line-height:1.4;font-weight:600;
-  color:var(--narra);max-width:19em;
+  color:var(--petrol);max-width:19em;
 }
 .btn--ig{
-  background:linear-gradient(135deg,#833AB4,#C13584 45%,#E1306C 72%,#F77737);
-  box-shadow:0 10px 26px rgba(193,53,132,.30);
+  background:var(--petrol);
+  box-shadow:0 10px 26px rgba(27,53,64,.30);
 }
 /* faixa com a autora na cozinha, logo abaixo do retrato */
 .autora__faixa{
@@ -943,7 +774,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 /* passos dos 60 min sobre fundo claro */
 .prep__steps--claro{max-width:420px;margin-inline:auto}
 .prep__steps--claro li{
-  background:var(--whipple);border-color:#CFE0E8;color:var(--narra);
+  background:var(--green-pale);border-color:#CFE0E8;color:var(--petrol);
 }
 
 @media (min-width:720px){
@@ -963,7 +794,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
   position:relative;width:min(62vw,240px);aspect-ratio:820/1228;
   transform:perspective(1400px) rotateY(-16deg) rotateX(3deg);
   transform-style:preserve-3d;
-  filter:drop-shadow(0 26px 36px rgba(14,34,41,.34));
+  filter:drop-shadow(0 26px 36px rgba(5,69,57,.34));
   z-index:3;
 }
 .mock__cover{
@@ -989,15 +820,15 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 .mock__selo{
   position:absolute;z-index:4;display:grid;place-items:center;
   width:92px;height:92px;border-radius:50%;
-  background:var(--narra);color:var(--white);text-align:center;
-  box-shadow:0 12px 26px rgba(14,34,41,.32);
+  background:var(--amarelo);color:var(--petrol);text-align:center;
+  box-shadow:0 12px 26px rgba(5,69,57,.32);
   border:2px solid rgba(255,255,255,.22);
   right:-16px;bottom:-16px;   /* ancorado no livro, não no container */
 }
 .mock__selo b{display:block;font-size:29px;line-height:1;font-weight:700}
 .mock__selo span{
   display:block;margin-top:2px;font-size:8.5px;font-weight:800;
-  letter-spacing:.14em;text-transform:uppercase;color:var(--woodlawn);
+  letter-spacing:.14em;text-transform:uppercase;color:var(--petrol);
 }
 
 /* páginas internas */
@@ -1009,11 +840,11 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 .mock__pg img{
   width:100%;height:auto;aspect-ratio:620/928;object-fit:cover;
   border-radius:8px;background:var(--white);
-  box-shadow:0 10px 26px rgba(14,34,41,.16);
+  box-shadow:0 10px 26px rgba(5,69,57,.16);
 }
 .mock__pg figcaption{
   margin-top:8px;text-align:center;font-size:10.5px;font-weight:800;
-  letter-spacing:.09em;text-transform:uppercase;color:var(--yarmouth-dark);
+  letter-spacing:.09em;text-transform:uppercase;color:var(--green-deep);
 }
 
 /* ─── destaques 50 / 25 / 25 ────────────────────────────────── */
@@ -1025,10 +856,10 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
   text-align:center;padding:18px 8px;border-radius:16px;
   background:var(--white);border:1px solid #E2EAF0;box-shadow:var(--shadow-sm);
 }
-.mat-nums b{display:block;font-size:30px;line-height:1;font-weight:700;color:var(--narra)}
+.mat-nums b{display:block;font-size:30px;line-height:1;font-weight:700;color:var(--petrol)}
 .mat-nums span{
   display:block;margin-top:7px;font-size:10px;font-weight:800;
-  letter-spacing:.11em;text-transform:uppercase;color:var(--yarmouth-dark);
+  letter-spacing:.11em;text-transform:uppercase;color:var(--green-deep);
 }
 
 /* ─── 4 garantias do material ───────────────────────────────── */
@@ -1038,11 +869,11 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
   background:var(--white);border:1px solid #E2EAF0;border-radius:14px;
   font-size:15px;font-weight:600;color:var(--ink);
 }
-.mat-feats .ico{flex:none;color:var(--whipple-blue)}
+.mat-feats .ico{flex:none;color:var(--green-mid)}
 
 .mat-frase{
   margin:34px auto 0;max-width:19em;text-align:center;
-  font-size:clamp(20px,5vw,26px);line-height:1.32;font-weight:600;color:var(--narra);
+  font-size:clamp(20px,5vw,26px);line-height:1.32;font-weight:600;color:var(--petrol);
 }
 
 @media (min-width:860px){
@@ -1055,7 +886,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
   }
   .mock__pgs{display:block;margin:0;height:520px}
   .mock__pg{position:absolute;width:158px}
-  .mock__pg img{box-shadow:0 16px 34px rgba(14,34,41,.20)}
+  .mock__pg img{box-shadow:0 16px 34px rgba(5,69,57,.20)}
   .mock__pg--1{left:2px;   top:26px;  transform:rotate(-7deg)}
   .mock__pg--2{left:126px; top:214px; transform:rotate(-3deg)}
   .mock__pg--3{right:126px;top:214px; transform:rotate(3deg)}
@@ -1072,13 +903,13 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 }
 .tab{
   flex:1;min-height:50px;padding:12px 14px;border:0;border-radius:999px;
-  background:transparent;color:var(--yarmouth-dark);cursor:pointer;
+  background:transparent;color:var(--green-deep);cursor:pointer;
   font-size:14.5px;font-weight:800;letter-spacing:.03em;
   display:flex;align-items:center;justify-content:center;gap:8px;
   transition:background .2s ease,color .2s ease;
   -webkit-tap-highlight-color:transparent;
 }
-.tab[aria-selected="true"]{background:var(--narra);color:var(--white)}
+.tab[aria-selected="true"]{background:var(--petrol);color:var(--white)}
 .tab .em{font-size:17px;line-height:1}
 .tabp[hidden]{display:none!important}
 .tabp{max-width:660px;margin-inline:auto}
@@ -1096,11 +927,11 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 }
 .recipes .n{
   flex:none;width:29px;height:29px;border-radius:9px;
-  background:var(--whipple);color:var(--yarmouth-dark);
+  background:var(--green-pale);color:var(--green-deep);
   font-size:11.5px;font-weight:800;display:grid;place-items:center;
 }
 .recipes__more{
-  text-align:center;margin-top:16px;font-size:14px;color:var(--yarmouth-dark);
+  text-align:center;margin-top:16px;font-size:14px;color:var(--green-deep);
 }
 @media (min-width:720px){ .recipes{grid-template-columns:1fr 1fr} }
 
@@ -1111,8 +942,6 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
   .btn{width:fit-content;min-width:340px;max-width:100%;margin-inline:auto;
        padding-inline:48px;font-size:17px}
   .hero .btn{min-width:320px}
-  .pair{grid-template-columns:1fr 1fr;gap:22px}
-  .flow{grid-template-columns:1fr 1fr;gap:40px;max-width:760px}
   .trust li{font-size:12px}
 }
 /* DESKTOP: o texto ocupa a faixa limpa da própria fotografia, à
@@ -1140,7 +969,6 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 @media (min-width:1024px){
   :root{--maxw:720px}
   .faq{max-width:760px}
-  .checks,.benefits,.bonus{max-width:640px}
   .sticky-bar{
     left:auto;right:26px;bottom:26px;border-radius:999px;
     border:1px solid #DAE4EC;padding:10px 12px 10px 24px;box-shadow:var(--shadow-lg);
@@ -1218,7 +1046,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
         vontade de comer doce e facilitar sua alimentação até nos dias mais corridos.
       </p>
 
-      <a class="btn" data-checkout href="#oferta" rel="nofollow noopener">
+      <a class="btn btn--gold" data-checkout href="#oferta" rel="nofollow noopener">
         Quero o Doce Sem Culpa
         <svg width="20" height="20" viewBox="0 0 24 24"><use href="#i-arrow"/></svg>
       </a>
@@ -1294,7 +1122,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 <!-- ══════════════════════════════════════════════════════════════
      6. APRESENTAÇÃO DO PRODUTO
      ══════════════════════════════════════════════════════════════ -->
-<section class="sec sec--soft" id="produto">
+<section class="sec" id="produto">
   <div class="wrap wrap--wide">
 
     <div class="sec-head center reveal">
@@ -1410,7 +1238,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
     </div>
 
     <div class="btn-wrap reveal">
-      <a class="btn" data-checkout href="#oferta" rel="nofollow noopener">
+      <a class="btn btn--petrol" data-checkout href="#oferta" rel="nofollow noopener">
         Quero o Doce Sem Culpa
         <svg width="20" height="20" viewBox="0 0 24 24"><use href="#i-arrow"/></svg>
       </a>
@@ -1450,7 +1278,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
              alt="Dra. Helena Azevedo na cozinha, apoiada na bancada com frutas frescas">
       </div>
 
-      <p style="font-weight:700;color:var(--narra)">
+      <p style="font-weight:700;color:var(--petrol)">
         Veja os conteúdos, as dicas e os bastidores no Instagram dela.</p>
 
       <a class="btn btn--ig" href="https://www.instagram.com/dra.helenaazevedo/" target="_blank" rel="noopener noreferrer">
@@ -1493,7 +1321,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
           <span class="price__pay">Pagamento único • Pix, cartão ou boleto</span>
         </div>
 
-        <a class="btn" data-checkout href="#oferta-final" rel="nofollow noopener">
+        <a class="btn btn--petrol" data-checkout href="#oferta-final" rel="nofollow noopener">
           Quero começar agora
           <svg width="20" height="20" viewBox="0 0 24 24"><use href="#i-arrow"/></svg>
         </a>
@@ -1688,7 +1516,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
           <span class="price__pay">Pagamento único • Pix, cartão ou boleto</span>
         </div>
 
-        <a class="btn" data-checkout href="#oferta-final" rel="nofollow noopener">
+        <a class="btn btn--gold" data-checkout href="#oferta-final" rel="nofollow noopener">
           Sim. Quero o Doce Sem Culpa
           <svg width="20" height="20" viewBox="0 0 24 24"><use href="#i-arrow"/></svg>
         </a>
@@ -1710,7 +1538,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 <!-- ══════════════════════════════════════════════════════════════
      12. GARANTIA
      ══════════════════════════════════════════════════════════════ -->
-<section class="sec sec--soft" id="garantia">
+<section class="sec" id="garantia">
   <div class="wrap">
     <div class="guarantee reveal">
       <div class="seal">
@@ -1973,25 +1801,6 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
     });
   })();
 
-  /* 10. "Qual é o seu momento" — resposta com receitas reais do ebook */
-  (function(){
-    var box = $('#moments'); if (!box) return;
-    var ans = $('#momentAns');
-    $$('.moment', box).forEach(function(b){
-      b.addEventListener('click', function(){
-        var aberto = b.getAttribute('aria-expanded') === 'true';
-        $$('.moment', box).forEach(function(o){ o.setAttribute('aria-expanded','false'); });
-        if (aberto){ ans.hidden = true; return; }
-        b.setAttribute('aria-expanded','true');
-        var picks = (b.dataset.p || '').split('|').filter(Boolean)
-          .map(function(p){ return '<span class="pick">' + p + '</span>'; }).join('');
-        ans.innerHTML = '<b>' + b.dataset.t + '</b>' + b.dataset.b +
-                        (picks ? '<div>' + picks + '</div>' : '');
-        ans.hidden = false;
-      });
-    });
-  })();
-
   /* 11. Preparo de 60 minutos */
   (function(){
     var b = $('#prepBtn'), alvo = $('#prepSteps'); if (!b || !alvo) return;
@@ -2001,24 +1810,6 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
       alvo.hidden = aberto;
       if (!aberto) b.textContent = 'Perfeito. É só seguir os 5 passos.';
     });
-  })();
-
-  /* 12. Quiz de qualificação com barra de progresso */
-  (function(){
-    var form = $('#quiz'); if (!form) return;
-    var fill = $('#quizFill'), msg = $('#quizMsg'), bar = $('#quizBar');
-    var cxs = $$('input[type=checkbox]', form);
-    function atualiza(){
-      var n = cxs.filter(function(c){ return c.checked; }).length;
-      fill.style.width = (n / cxs.length * 100) + '%';
-      bar.setAttribute('aria-valuenow', n);
-      if (n === 0) msg.textContent = 'Marque o que combina com você.';
-      else if (n < 3) msg.textContent = 'Você está entendendo seu próprio problema.';
-      else msg.textContent = 'Provavelmente você já entendeu por que o DOCE SEM CULPA foi criado.';
-    }
-    form.addEventListener('change', atualiza);
-    form.addEventListener('submit', function(e){ e.preventDefault(); });
-    atualiza();
   })();
 
   /* 13. Tabs doce / lanche */
