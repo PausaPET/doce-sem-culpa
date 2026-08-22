@@ -334,27 +334,6 @@ ul{padding:0;list-style:none}
   flex:none;margin-top:2px;color:var(--whipple-blue);
 }
 
-/* ─── 6.5 NÚMEROS 25 + 25 ───────────────────────────────────── */
-.split{
-  display:grid;gap:14px;margin:0 auto;max-width:420px;
-  align-items:stretch;
-}
-.split__item{
-  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);
-  border-radius:var(--radius);padding:24px 22px;text-align:center;
-}
-.split__num{
-  display:block;font-size:52px;line-height:1;font-weight:700;color:var(--white);
-}
-.split__lbl{
-  display:block;margin-top:8px;font-size:14px;font-weight:700;
-  letter-spacing:.09em;text-transform:uppercase;color:var(--woodlawn);
-}
-.split__plus{
-  text-align:center;font-size:26px;font-weight:800;color:var(--caramel-light);
-  line-height:1;
-}
-
 /* ─── 6.6 DUPLA DE FOTOS (25 doces / 25 lanches) ────────────── */
 .pair{display:grid;gap:26px}
 .pair figure{
@@ -516,21 +495,6 @@ ul{padding:0;list-style:none}
   display:block;margin-top:4px;font-size:9.5px;font-weight:700;
   letter-spacing:.09em;text-transform:uppercase;color:var(--woodlawn);
 }
-
-/* ─── 6.10 BÔNUS ────────────────────────────────────────────── */
-.bonus{display:grid;gap:2px;max-width:520px;margin-inline:auto}
-.bonus li{
-  display:flex;gap:18px;align-items:flex-start;
-  padding:22px 0;border-bottom:1px solid rgba(255,255,255,.14);
-}
-.bonus li:last-child{border-bottom:0}
-.bonus .n{
-  flex:none;width:34px;height:34px;border-radius:50%;
-  background:rgba(186,212,219,.14);color:var(--woodlawn);
-  display:grid;place-items:center;font-size:14px;font-weight:800;
-}
-.bonus h3{font-size:17px;margin-bottom:5px;color:var(--white)}
-.bonus p{font-size:14.5px;line-height:1.45;color:#ADC6D3}
 
 /* ─── 6.11 BENEFÍCIOS ───────────────────────────────────────── */
 .benefits{display:grid;gap:2px;max-width:520px;margin-inline:auto}
@@ -726,24 +690,6 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
   border-radius:999px;font-size:13.5px;font-weight:700;color:var(--caramel-light);
 }
 
-/* ─── MAPA DE DECISÃO ───────────────────────────────────────── */
-.mapa{display:grid;gap:0;max-width:620px;margin:0 auto}
-.mapa li{
-  display:grid;grid-template-columns:1fr;gap:9px;
-  padding:17px 0;border-bottom:1px solid rgba(22,50,60,.10);
-}
-.mapa li:last-child{border-bottom:0}
-.mapa .quero{
-  display:flex;align-items:center;gap:11px;
-  font-size:16.5px;font-weight:700;color:var(--narra);
-}
-.mapa .quero .em{font-size:20px;line-height:1;flex:none}
-.mapa .faz{display:flex;flex-wrap:wrap;gap:7px}
-.mapa .faz span{
-  padding:6px 13px;background:var(--whipple);border-radius:999px;
-  font-size:13px;font-weight:700;color:var(--yarmouth-dark);
-}
-
 /* ─── PREPARO DE 60 MINUTOS ─────────────────────────────────── */
 .prep__steps{display:grid;gap:10px;max-width:460px;margin:24px auto 0;counter-reset:s}
 .prep__steps li{
@@ -847,8 +793,6 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
   .poll{grid-template-columns:1fr 1fr;max-width:560px}
   .poll__out{max-width:560px}
   .pages figure{width:250px}
-  .mapa li{grid-template-columns:1fr auto;gap:8px 18px;align-items:center}
-  .mapa .faz{justify-content:flex-end}
 }
 
 /* ─── TABS doce / lanche ────────────────────────────────────── */
@@ -883,21 +827,6 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
   text-align:center;margin-top:18px;font-size:14.5px;color:var(--yarmouth-dark);
 }
 
-/* ─── OS 4 PILARES ──────────────────────────────────────────── */
-.pilares{display:grid;gap:12px;max-width:640px;margin:0 auto}
-.pilar{
-  display:flex;gap:16px;align-items:flex-start;
-  padding:20px;background:rgba(255,255,255,.07);
-  border:1px solid rgba(255,255,255,.14);border-radius:var(--radius);
-}
-.pilar .n{
-  flex:none;width:34px;height:34px;border-radius:50%;
-  background:#A85C2E;color:var(--white);  /* 3,7:1 -> 5,0:1 em 13px */
-  font-size:13px;font-weight:800;display:grid;place-items:center;
-}
-.pilar b{display:block;font-size:17px;color:var(--white);margin-bottom:5px}
-.pilar span{font-size:14.5px;line-height:1.5;color:#ADC6D3}
-
 /* ─── ANTES / DEPOIS ────────────────────────────────────────── */
 .antesdepois{display:grid;gap:14px;max-width:680px;margin:0 auto}
 .ad{border-radius:var(--radius);padding:22px}
@@ -923,7 +852,6 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 
 @media (min-width:720px){
   .antesdepois{grid-template-columns:1fr 1fr;gap:18px}
-  .pilares{grid-template-columns:1fr 1fr}
   .recipes{grid-template-columns:1fr 1fr;max-width:720px}
 }
 
@@ -963,16 +891,6 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 @media (max-width:479px){
   .sig{border-radius:20px;flex-wrap:wrap}
   .sig__ig{width:100%;justify-content:center}
-}
-
-/* ─── FOTO-TESE (chocolate + maçã) ──────────────────────────── */
-.autora-tese{max-width:330px;margin:30px auto 0;text-align:center}
-.autora-tese img{
-  width:100%;height:auto;aspect-ratio:760/950;object-fit:cover;
-  border-radius:var(--radius);box-shadow:var(--shadow-lg);
-}
-.autora-tese figcaption{
-  margin-top:16px;font-size:16px;line-height:1.45;font-weight:600;color:var(--woodlawn);
 }
 
 /* ─── PROVA: a autora com o livro ───────────────────────────── */
@@ -1026,7 +944,6 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 @media (min-width:720px){
   .prova{grid-template-columns:1fr 1fr;gap:26px;max-width:760px}
   .prova figcaption{text-align:left}
-  .autora-tese{max-width:380px}
 }
 
 /* ─── 9. DESKTOP (progressive enhancement) ──────────────────── */
@@ -1038,8 +955,6 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
   .hero .btn{min-width:320px}
   .book{width:236px;height:322px}
   .book__title{font-size:33px}
-  .split{grid-template-columns:1fr auto 1fr;gap:18px;max-width:560px;align-items:center}
-  .split__plus{font-size:30px}
   .pair{grid-template-columns:1fr 1fr;gap:22px}
   .flow{grid-template-columns:1fr 1fr;gap:40px;max-width:760px}
   .trust li{font-size:12px}
@@ -1208,62 +1123,8 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
       <p class="poll__msg" id="pollMsg"></p>
       <p class="poll__fix serif">Quanto mais sua alimentação depende do improviso,
         mais difícil fica controlar tempo, escolhas e gastos.</p>
-      <a class="btn btn--ghost" href="#virada">Quero ver como funciona
+      <a class="btn btn--ghost" href="#produto">Quero ver como funciona
         <svg width="19" height="19" viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════════════════════════
-     5. MOMENTO DE VIRADA
-     ══════════════════════════════════════════════════════════════ -->
-<section class="sec sec--deep" id="virada">
-  <div class="wrap center">
-    <div class="sec-head reveal">
-      <p class="kicker kicker--light">A virada</p>
-      <h2 class="serif d2">Foi para esses momentos que criamos o Doce Sem Culpa.</h2>
-    </div>
-
-    <div class="split reveal">
-      <div class="split__item">
-        <span class="split__num serif">25</span>
-        <span class="split__lbl">Doces fitness</span>
-      </div>
-      <div class="split__plus" aria-hidden="true">+</div>
-      <div class="split__item">
-        <span class="split__num serif">25</span>
-        <span class="split__lbl">Lanches rápidos</span>
-      </div>
-    </div>
-
-    <ul class="pilares reveal" style="margin-top:34px">
-      <li class="pilar"><span class="n">01</span>
-        <div><b>Comer bem</b><span>Doce e lanche que você quer comer de novo — não comida sem graça.</span></div></li>
-      <li class="pilar"><span class="n">02</span>
-        <div><b>Gastar melhor</b><span>Ingredientes de supermercado comum e lista de compras organizada.</span></div></li>
-      <li class="pilar"><span class="n">03</span>
-        <div><b>Ganhar tempo</b><span>Preparos de 5 a 50 minutos, sempre declarados na receita.</span></div></li>
-      <li class="pilar"><span class="n">04</span>
-        <div><b>Ter controle da rotina</b><span>Cardápio pronto e preparo antecipado: menos improviso na semana.</span></div></li>
-    </ul>
-
-    <p class="lead lead--light reveal" style="margin-top:34px;max-width:26em;margin-inline:auto">
-      Em vez de decidir o que comer quando a vontade aparece, você passa a ter
-      opções para consultar em poucos segundos.
-    </p>
-
-    <figure class="autora-tese reveal">
-      <img src="img/autora-tese.webp" width="760" height="950" loading="lazy"
-           decoding="async"
-           alt="Dra. Helena Azevedo segurando uma barra de chocolate em uma mão e uma maçã na outra">
-      <figcaption>Não é escolher entre os dois. É saber fazer os dois caberem.</figcaption>
-    </figure>
-
-    <div class="btn-wrap reveal">
-      <a class="btn" href="#oferta">
-        Quero ter essas opções
-        <svg width="20" height="20" viewBox="0 0 24 24"><use href="#i-arrow"/></svg>
-      </a>
     </div>
   </div>
 </section>
@@ -1365,52 +1226,6 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
         <span>Selecionou e organizou as 50 receitas</span>
       </span>
       <a class="sig__ig" href="https://www.instagram.com/dra.helenaazevedo/" target="_blank" rel="noopener noreferrer">Ver Instagram</a>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════════════════════════
-     6b. MAPA DE DECISÃO (conteúdo real, pág. 58)
-     ══════════════════════════════════════════════════════════════ -->
-<section class="sec" id="mapa">
-  <div class="wrap">
-    <div class="sec-head center reveal">
-      <p class="kicker">Direto ao ponto</p>
-      <h2 class="serif d2">Bateu vontade de quê? Faça isso.</h2>
-      <p class="lead">Este mapa está dentro do ebook. Você consulta e resolve —
-        sem abrir a geladeira procurando resposta.</p>
-    </div>
-
-    <ul class="mapa reveal">
-      <li><span class="quero"><span class="em">🍫</span> Chocolate</span>
-          <span class="faz"><span>Mousse Proteico</span><span>Brigadeiro Proteico</span></span></li>
-      <li><span class="quero"><span class="em">🍦</span> Sorvete</span>
-          <span class="faz"><span>Sorvete Proteico de Banana</span><span>Picolé Proteico</span></span></li>
-      <li><span class="quero"><span class="em">🍰</span> Bolo</span>
-          <span class="faz"><span>Muffin Proteico</span><span>Bolo de Banana com Aveia</span></span></li>
-      <li><span class="quero"><span class="em">🥛</span> Doce de leite</span>
-          <span class="faz"><span>Doce de Leite Fitness</span></span></li>
-      <li><span class="quero"><span class="em">🥔</span> Salgadinho</span>
-          <span class="faz"><span>Chips de Batata Doce</span><span>Snack de Grão-de-Bico</span></span></li>
-      <li><span class="quero"><span class="em">🤏</span> Beliscar</span>
-          <span class="faz"><span>Trufa Proteica</span></span></li>
-    </ul>
-
-    <div class="sig reveal">
-      <span class="sig__foto">
-        <span class="sig__mono serif" aria-hidden="true">HA</span>
-      </span>
-      <span class="sig__txt">
-        <b>Dra. Helena Azevedo</b>
-        <span>Montou este mapa dentro do ebook</span>
-      </span>
-      <a class="sig__ig" href="https://www.instagram.com/dra.helenaazevedo/" target="_blank" rel="noopener noreferrer">Ver Instagram</a>
-    </div>
-
-    <div class="btn-wrap reveal">
-      <a class="btn" data-checkout href="#oferta-final" rel="nofollow noopener">
-        Quero ter essas opções
-        <svg width="20" height="20" viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
     </div>
   </div>
 </section>
@@ -1601,44 +1416,6 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
     <p class="closing serif center reveal" style="max-width:22em;margin-inline:auto">
       Não é gastar menos a qualquer custo. É gastar melhor quando você decide antes.
     </p>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════════════════════════
-     9. BÔNUS
-     ══════════════════════════════════════════════════════════════ -->
-<section class="sec sec--dark" id="bonus">
-  <div class="wrap">
-    <div class="sec-head center reveal">
-      <p class="kicker kicker--light">Incluídos</p>
-      <h2 class="serif d2">3 aceleradores de praticidade</h2>
-      <p class="lead lead--light">Eles existem para tirar do caminho as decisões
-        que mais fazem desistir: o que comprar, o que fazer e o que trocar.</p>
-    </div>
-
-    <ul class="bonus">
-      <li class="reveal">
-        <span class="n">01</span>
-        <div>
-          <h3 class="serif">Lista de compras</h3>
-          <p>Organizada por seção do mercado. Você compra certo e não desperdiça.</p>
-        </div>
-      </li>
-      <li class="reveal">
-        <span class="n">02</span>
-        <div>
-          <h3 class="serif">Cardápio de 7 dias</h3>
-          <p>Uma semana montada, para você não perder tempo decidindo.</p>
-        </div>
-      </li>
-      <li class="reveal">
-        <span class="n">03</span>
-        <div>
-          <h3 class="serif">Guia de substituições</h3>
-          <p>Faltou um ingrediente? Troque sem perder o sabor da receita.</p>
-        </div>
-      </li>
-    </ul>
   </div>
 </section>
 
