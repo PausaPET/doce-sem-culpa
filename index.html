@@ -993,23 +993,26 @@ footer{background-color:var(--blush);color:var(--ink-soft);padding:38px 0 28px;f
   transition:transform .38s cubic-bezier(.22,.61,.36,1),width .38s cubic-bezier(.22,.61,.36,1);
 }
 
-/* ⚠️ QUADRADA, e é isso que equilibra a seção. A arte é retrato
-   (760x950): solta, ela ficava muito mais alta que a fotografia da
-   Helena na seção seguinte e as duas páginas perdiam o par. */
+/* MESMAS dimensões da foto da Helena (.aut__foto), valor por valor —
+   não "peso visual equivalente", simetria exata: mesmo width, mesmo
+   max-width, mesmo aspect-ratio, nos dois breakpoints. É o pedido
+   explícito desta rodada; a versão anterior (1/1, largura própria)
+   dava mesma ÁREA aproximada mas não as mesmas dimensões. */
 .cat__foto{
-  aspect-ratio:1/1;
-  width:100%;max-width:min(100%,430px);
+  width:min(92%,380px);aspect-ratio:4/5;
   margin-inline:auto;
   border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-lg);
 }
 @media (min-width:900px){
-  .cat__foto{max-width:none;margin-inline:0}
+  .cat__foto{width:100%;max-width:400px;margin-inline:0}
 }
 .cat__foto__i{display:block;width:100%;height:100%}
 .cat__foto img{
   display:block;width:100%;height:100%;object-fit:cover;
-  /* O prato fica na metade de baixo da arte; sem isto o recorte
-     quadrado cortaria justamente a comida. */
+  /* A arte fonte já é 760x950 — exatamente 4:5, a mesma proporção da
+     caixa. Com as duas iguais, cover não recorta nada: a foto aparece
+     INTEIRA. object-position fica aqui só como salvaguarda, caso uma
+     arte futura não venha nessa proporção exata. */
   object-position:center 58%;
 }
 
