@@ -200,6 +200,19 @@ ul{padding:0;list-style:none}
   font-weight:700;letter-spacing:-.02em;
 }
 .d2{font-size:clamp(28px,7.2vw,50px);line-height:1.12}
+/* Pergunta em cima, resposta destacada sozinha embaixo — cada <span>
+   vira bloco, então a quebra é a que o HTML define, não a que o
+   navegador escolhe. Um respiro pequeno separa as duas linhas. */
+.pergunta-resposta > span{display:block}
+.pergunta-resposta > span + span{margin-top:.14em}
+/* A 320px a largura natural de "amanhã eu começo?" (276px) empata
+   exatamente com a coluna disponível (276px) — qualquer arredondamento
+   de sub-pixel já quebra a linha, voltando a partir a resposta em duas
+   (medido: quebrava). Fonte um pouco menor só neste extremo abre folga
+   real. */
+@media (max-width:359px){
+  .pergunta-resposta{font-size:26px}
+}
 .d3{font-size:clamp(23px,5.6vw,34px);line-height:1.2}
 .kicker{
   font-size:11.5px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;
@@ -1773,7 +1786,14 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
          as outras (.sec-head da custo/oferta/faq/etc.) já usam. -->
     <div class="sec-head center reveal">
       <p class="kicker">A vontade não avisa. A rotina também não.</p>
-      <h2 class="serif d2">Quantas vezes você já pensou: <span class="hl">amanhã eu começo</span>?</h2>
+      <!-- Quebra EXPLÍCITA, mesma técnica do hero: a pergunta em cima,
+           a resposta destacada sozinha embaixo — não o navegador
+           decidindo onde a frase quebra (antes, dependendo da largura,
+           "amanhã eu" e "começo?" ficavam partidos em duas linhas). -->
+      <h2 class="serif d2 pergunta-resposta">
+        <span>Quantas vezes você já pensou:</span>
+        <span class="hl">amanhã eu começo?</span>
+      </h2>
     </div>
 
     <!-- Três atos: rotina → vontade → improviso. Cada um entra em
