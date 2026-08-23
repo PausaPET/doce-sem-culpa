@@ -137,7 +137,11 @@ fbq('track', 'PageView');
   /* Neutros quentes (puxados para o rosa, não para o cinza-azul) */
   --ink:#3D2430;           /* 13,11:1 sobre off-white */
   --ink-soft:#6B4C58;      /* 6,99:1 */
-  --ink-mute:#7A5866;      /* 5,73:1 — e 4,78:1 sobre blush */
+  /* Escurecido de #7A5866: com as nuvens mais presentes (sombra a 20%
+     em vez de 10%), o tom anterior caía para 4,53:1 sobre blush —
+     passava raspando. Este dá 5,14:1 e ainda melhora a leitura dos
+     textos pequenos. */
+  --ink-mute:#71505E;
 
   --radius:20px;
   --shadow-sm:0 2px 12px rgba(61,36,48,.06);
@@ -596,10 +600,16 @@ ul{padding:0;list-style:none}
                      #000 calc(100% - 130px),transparent 100%);
 }
 .band__img{display:block;width:100%;height:100%;object-fit:cover}
+/* Véu bem mais leve que o anterior (era .93/.88): a arte nova é pastel
+   e clara — luminância média 0,57 contra a foto escura de antes — então
+   pode aparecer de verdade. O limite aqui é a subheadline: por isso ela
+   escurece nesta faixa (regra abaixo), o que comprou ~0,07 de véu. */
 .band__media::after{
   content:"";position:absolute;inset:0;
-  background:linear-gradient(180deg,rgba(247,220,230,.93),rgba(247,220,230,.88));
+  background:linear-gradient(180deg,rgba(247,220,230,.58),rgba(247,220,230,.48));
 }
+/* Sobre a fotografia, o tom secundário não aguenta — vira tinta cheia. */
+.band .lead--light{color:var(--ink)}
 
 /* ─── 6.13 GARANTIA ─────────────────────────────────────────── */
 .guarantee{text-align:center;max-width:480px;margin-inline:auto}
