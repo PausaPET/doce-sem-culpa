@@ -252,8 +252,19 @@ ul{padding:0;list-style:none}
 .sec--soft{background:var(--rose-pale)}
 .sec--blush{background:var(--blush)}
 .sec--babyblue{background:var(--baby-blue)}
-/* As duas seções do e-book: mesmo azul, com a tinta do produto. */
-.sec--ebook{background:var(--baby-blue);color:var(--petrol)}
+/* As duas seções do e-book: mesmo azul, com a tinta do produto.
+   A textura de nuvens é o shader "Cloudscape" (fbm de 6 oitavas) gerado
+   UMA VEZ como imagem — o componente original era React/WebGL animado,
+   que não cabe num HTML estático nem na direção "leve" da página. Aqui
+   ele custa 5 KB e zero runtime. A cor sólida fica por baixo como
+   fallback: se a imagem falhar, a seção continua azul bebê. */
+.sec--ebook{
+  background-color:var(--baby-blue);
+  background-image:url("img/nuvens-ebook.webp");
+  background-size:cover;
+  background-position:center;
+  color:var(--petrol);
+}
 .sec-head{margin-bottom:clamp(30px,7vw,52px)}
 .sec-head .kicker{margin-bottom:16px}
 .sec-head h2{margin-bottom:0}
