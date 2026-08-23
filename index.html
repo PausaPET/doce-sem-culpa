@@ -593,13 +593,38 @@ ul{padding:0;list-style:none}
    vaza e aparece uma faixa escura. Como um bloco só, o que dissolve é
    a imagem JÁ velada, e o que surge por baixo é o degradê da página. */
 .band__media{
-  position:absolute;inset:0;z-index:-2;
+  position:absolute;inset:0;z-index:-2;overflow:hidden;
   -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 130px,
                      #000 calc(100% - 130px),transparent 100%);
           mask-image:linear-gradient(180deg,transparent 0,#000 130px,
                      #000 calc(100% - 130px),transparent 100%);
 }
+/* Sobra nos dois eixos: a VERTICAL é consumida pelo parallax da
+   rolagem, a HORIZONTAL garante a cobertura no mobile — lá a faixa tem
+   ~375px e, só com o zoom, sobravam 15px antes de a borda direita
+   entrar em quadro. Dar largura aqui evita ter de ampliar mais a foto,
+   que custaria nitidez. */
+.band__shift{position:absolute;inset:-8% -5%;will-change:transform}
 .band__img{display:block;width:100%;height:100%;object-fit:cover}
+/* Zoom/deriva lento — dá vida à foto com a página PARADA. Não anima os
+   elementos da imagem (isso exigiria vídeo); move a fotografia inteira,
+   que é o que uma foto estática permite. Alterna suave, 34s por meio
+   ciclo, para ler como respiração e não como movimento. */
+@media (prefers-reduced-motion:no-preference){
+  .band__img{
+    animation:respiro-faixa 34s ease-in-out infinite alternate;
+    will-change:transform;
+  }
+}
+/* A escala MÍNIMA é o que garante a cobertura, e o caso apertado é o
+   MOBILE: lá a faixa tem ~375px de largura, então o deslocamento
+   horizontal come quase toda a sobra. Medido no pior extremo (zoom
+   mínimo + parallax): 5px de folga com scale 1.05, 15px com 1.10,
+   ~20px com 1.12 e translate reduzido. */
+@keyframes respiro-faixa{
+  from{transform:scale(1.04) translate3d(-0.6%,-0.5%,0)}
+  to  {transform:scale(1.14) translate3d( 0.6%, 0.5%,0)}
+}
 /* Véu bem mais leve que o anterior (era .93/.88): a arte nova é pastel
    e clara — luminância média 0,57 contra a foto escura de antes — então
    pode aparecer de verdade. O limite aqui é a subheadline: por isso ela
@@ -1715,9 +1740,14 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
   <!-- A foto e o véu vivem no MESMO contêiner para serem mascarados
        juntos (igual ao hero). Separados, eles desapareciam em ritmos
        diferentes e a foto crua vazava na transição. -->
+  <!-- 3 camadas, cada uma com UM transform, porque um sobrescreveria o
+       outro: .band__media leva a máscara (fixa), .band__shift o
+       parallax da rolagem (JS) e .band__img o zoom lento (CSS). -->
   <div class="band__media" aria-hidden="true">
-    <img class="band__img" src="img/oferta.webp" width="1050" height="620"
-         loading="lazy" decoding="async" alt="">
+    <div class="band__shift">
+      <img class="band__img" src="img/oferta.webp" width="1600" height="893"
+           loading="lazy" decoding="async" alt="">
+    </div>
   </div>
   <div class="wrap">
     <div class="sec-head center reveal">
@@ -2183,16 +2213,32 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
     var agendado = false, reduzir =
       matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    var faixa = $('.band'), faixaShift = $('.band__shift');
+
     function posicionar(){
       agendado = false;
-      if (!ceu) return;
       var vh = window.innerHeight;
-      var max = document.documentElement.scrollHeight - vh;
-      var p = max > 0 ? window.scrollY / max : 0;
-      if (p < 0) p = 0; else if (p > 1) p = 1;
-      /* de +18vh (topo) a -18vh (fim): as nuvens sobem devagar */
-      var y = (0.5 - p) * 0.36 * vh;
-      ceu.style.transform = 'translate3d(0,' + y.toFixed(1) + 'px,0)';
+      if (ceu){
+        var max = document.documentElement.scrollHeight - vh;
+        var p = max > 0 ? window.scrollY / max : 0;
+        if (p < 0) p = 0; else if (p > 1) p = 1;
+        /* de +18vh (topo) a -18vh (fim): as nuvens sobem devagar */
+        var y = (0.5 - p) * 0.36 * vh;
+        ceu.style.transform = 'translate3d(0,' + y.toFixed(1) + 'px,0)';
+      }
+      /* Parallax da faixa da oferta: a foto anda conforme a posição DA
+         FAIXA na tela, não conforme o scroll absoluto — assim o
+         deslocamento é sempre limitado e inverte ao subir. O teto é
+         menor que a sobra de 8% da .band__shift. */
+      if (faixa && faixaShift){
+        var r = faixa.getBoundingClientRect();
+        if (r.bottom > -300 && r.top < vh + 300){
+          var q = (vh/2 - (r.top + r.height/2)) / (vh/2 + r.height/2);
+          if (q < -1) q = -1; else if (q > 1) q = 1;
+          faixaShift.style.transform =
+            'translate3d(0,' + (q * 46).toFixed(1) + 'px,0)';
+        }
+      }
     }
     function aoRolar(){
       if (!agendado){ agendado = true; requestAnimationFrame(posicionar); }
