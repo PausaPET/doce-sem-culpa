@@ -420,13 +420,20 @@ b,strong{font-weight:600}
    são percentuais: ancorado à viewport, ele descolaria da fotografia em
    ultrawide, onde a faixa é mais estreita que a tela. Ancorado à faixa,
    a mesma regra vale de 320px a 5120px. */
+/* MOBILE — o véu virou uma FAIXA, não uma cortina do topo.
+   A arte mobile agora é RGBA: só a comida é opaca, o resto é
+   transparente para as nuvens e o degradê aparecerem através dela. Um
+   véu começando no topo (como era) pintaria rosa por cima justamente
+   dessa área e tornaria a nuvem invisível no hero.
+   A faixa cobre só onde comida e texto se cruzam (~62%–80%). */
 .hero__media::after{
   content:"";position:absolute;inset:0;
   background:linear-gradient(180deg,
-    rgba(250,210,211,.98) 0%,
-    rgba(250,210,211,.96) 50%,
-    rgba(250,210,211,.72) 60%,
-    rgba(250,210,211,0)   68%);
+    rgba(250,210,211,0)   0%,
+    rgba(250,210,211,0)   58%,
+    rgba(250,210,211,.88) 70%,
+    rgba(250,210,211,.72) 80%,
+    rgba(250,210,211,0)   92%);
 }
 .hero__content{
   position:relative;z-index:2;
@@ -968,9 +975,44 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
   background:var(--rose-pale);color:var(--rose-deep);
   font-size:11.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;
 }
+/* ─── CELULAR ESTREITO / TELA BAIXA ─────────────────────────────
+   A tela encolhe mas o conteúdo do hero não: a 320px ele terminava a
+   84,4% da altura do hero, contra 76,8% a 375px — e a comida da arte
+   começa a 70%. Resultado: 98px de texto em cima dos doces (medido:
+   "Compra segura" caía para 1,52:1).
+   Aqui os respiros do hero encolhem para a proporção voltar a bater. */
+@media (max-width:360px),(max-height:700px){
+  .hero__content{padding-block:16px 20px}
+  .hero__title{font-size:clamp(21px,6.6vw,34px)}
+  .hero__sub{margin-top:10px}
+  .hero .btn{margin-top:20px}
+  .hero__stats{margin-top:15px}
+  .hero__trust{margin-top:13px;gap:8px 14px}
+  .hero__badge{margin-bottom:14px}
+}
+
 @media (max-width:479px){
   .sig{border-radius:20px;flex-wrap:wrap}
   .sig__ig{width:100%;justify-content:center}
+
+  /* ─── CARD DE OFERTA MAIS COMPACTO NO CELULAR ───────────────
+     O card da oferta final media 1047px numa tela de 812px — não
+     cabia inteiro, e é isso que o faz parecer "grande demais". Ele
+     JÁ é centralizado (22px de cada lado); o problema era a altura.
+     Aqui os espaçamentos e o corpo do preço encolhem, sem mexer no
+     tamanho do texto de leitura nem nos alvos de toque. */
+  .offer__head{padding:20px 18px}
+  .offer__body{padding:20px 18px}
+  .offer__list{gap:9px;margin-bottom:18px}
+  .offer__list li{font-size:15px}
+  .price{margin-bottom:18px}
+  .price__val{font-size:clamp(50px,13.5vw,62px)}
+  .price__cur{font-size:20px;margin-top:10px}
+  .price__cents{font-size:23px;margin-top:6px}
+  .price__pay{margin-top:10px;padding:7px 13px}
+  .urgency{padding:13px;margin-bottom:18px;border-radius:14px}
+  .trust{gap:6px;margin-top:16px}
+  .trust li{padding:11px 5px;gap:5px}
 }
 
 /* ─── PROVA: a autora com o livro ───────────────────────────── */
