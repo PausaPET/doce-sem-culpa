@@ -515,6 +515,18 @@ b,strong{font-weight:600}.kicker,.topbar,.topbar b,.hero__badge,.offer__tag,.pri
   font-size:clamp(19px,4.8vw,26px);line-height:1.35;
   font-weight:600;color:var(--ink);
 }
+/* Só a frase da identificação ("E se, dessa vez...") — a classe
+   .closing é compartilhada com o fecho da seção 03 ("Talvez o
+   problema..."), que não foi pedido e não deve mudar. No desktop já
+   fecha em 1 linha sozinha (26px); só o mobile quebrava em 2.
+   ⚠️ 320px é fisicamente inviável para 1 linha só com tamanho legível
+   (o "cabe" ali é ~12,5px, pequeno demais para ficar elegante) — fica
+   com o tamanho padrão nessa largura extrema (2 linhas, sem piorar).
+   A partir de 360px, 13.5px cabe com folga em qualquer largura até
+   720px (medido: precisa de ≤14px a 360px). */
+@media (min-width:360px) and (max-width:719px){
+  #identificacao .closing{font-size:13.5px}
+}
 
 /* ─── 6.4 CHECKLIST ─────────────────────────────────────────── */
 
@@ -1005,13 +1017,19 @@ footer{background-color:var(--blush);color:var(--ink-soft);padding:38px 0 28px;f
    crescer a ponto de disputar com o h2. */
 .lead--par{
   font-weight:500;line-height:1.45;
-  color:var(--ink-soft);max-width:22ch;
+  color:var(--ink-soft);
+  /* Cada <br> do HTML já separa as duas frases — o max-width só
+     precisa ser largo o bastante para NENHUMA delas quebrar sozinha.
+     22ch cortava "Para cada vontade, uma opção." no meio (medido:
+     precisa de 256px, o bloco tinha 241px) e virava 3 linhas em vez
+     de 2. 28ch cobre a mais longa das duas com folga, em qualquer
+     largura testada. */
+  max-width:28ch;
   /* max-width sem isto deixa o BLOCO grudado na borda esquerda da
      coluna — text-align:center só centra o texto por dentro dele.
      Mesma dupla usada no .hero__sub. */
   margin-inline:auto;
 }
-@media (min-width:900px){ .lead--par{max-width:24ch} }
 .cat__sw{
   position:relative;display:flex;gap:4px;padding:5px;
   width:max-content;max-width:100%;
