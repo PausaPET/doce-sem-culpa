@@ -255,29 +255,40 @@ ul{padding:0;list-style:none}
 /* As duas seções do e-book: mesmo azul, com a tinta do produto. */
 .sec--ebook{background-color:var(--baby-blue);color:var(--petrol)}
 
-/* ─── NUVENS ────────────────────────────────────────────────────
-   Porte estático do shader "Cloudscape" (fbm de 6 oitavas). O
-   componente original era React/WebGL com rAF eterno — não cabe num
-   HTML estático nem numa página de tráfego pago. Aqui é UMA textura
-   RGBA de 49 KB, cacheada, servindo todas as seções.
+/* ─── CÉU: fundo contínuo da página ─────────────────────────────
+   Antes cada seção pintava a própria cor e a própria textura. Isso
+   criava DUAS emendas em cada troca de seção: uma linha reta de cor e
+   um salto no desenho da nuvem (a textura reiniciava a cada bloco).
 
-   Por que uma só serve em rosa, blush, azul e off-white: a nuvem é
-   uma camada TRANSPARENTE por cima da cor sólida da seção. O
-   componente forte dela é BRANCO, e branco sobre fundo claro só
-   clareia — ou seja, só aumenta o contraste do texto escuro. A sombra
-   existe para dar volume, mas tem teto de 10% de alfa.
+   Agora são duas camadas que atravessam a página inteira:
+     1. o degradê em `body`, com uma parada ancorada no CENTRO de cada
+        seção — assim a transição entre duas cores ocupa metade de uma
+        seção mais metade da outra, e não existe borda em lugar nenhum;
+     2. `.ceu`, uma camada fixa com a textura de nuvens, que deriva
+        devagar conforme a rolagem.
+   As seções ficam transparentes e só carregam o texto.
 
-   O hero e a .band ficam de fora: os dois já têm fotografia. */
-.sec,footer{
-  background-image:url("img/nuvens.webp");
-  background-size:cover;
-  /* --nuvem-y é atualizado no scroll (parallax). Sem JS ele vale 0 e
-     a textura simplesmente fica parada — nada quebra. */
-  background-position:center calc(50% + var(--nuvem-y,0px));
+   Progressive enhancement: as cores sólidas continuam no CSS e só são
+   apagadas quando o JS confirma que montou o degradê (classe
+   `.ceu-on`). Sem JS, a página volta ao comportamento anterior. */
+.ceu{
+  position:fixed;
+  /* mais alto que a viewport: a folga é o que o parallax consome sem
+     nunca deixar a borda da textura entrar em quadro */
+  top:-22vh;bottom:-22vh;left:0;right:0;
+  z-index:-1;pointer-events:none;
+  background:url("img/nuvens.webp") center/cover no-repeat;
+  will-change:transform;
 }
-.hero,.band{background-image:none}
+.ceu-on .sec--soft,
+.ceu-on .sec--blush,
+.ceu-on .sec--babyblue,
+.ceu-on .sec--ebook,
+.ceu-on footer{background-color:transparent}
+/* O hero e a .band têm fotografia própria: continuam opacos e cobrem
+   o céu, que é justamente o que se quer. */
 @media (prefers-reduced-motion:reduce){
-  .sec,footer{background-position:center}
+  .ceu{transform:none!important}
 }
 .sec-head{margin-bottom:clamp(30px,7vw,52px)}
 .sec-head .kicker{margin-bottom:16px}
@@ -1129,6 +1140,10 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 </head>
 
 <body>
+
+<!-- Camada de nuvens: uma só para a página inteira, para que o desenho
+     não reinicie a cada seção. Fica atrás do conteúdo (z-index:-1). -->
+<div class="ceu" aria-hidden="true"></div>
 
 <!-- ══════════════════════════════════════════════════════════════
      BIBLIOTECA DE ÍCONES (SVG inline, 1x no DOM, reuso via <use>)
@@ -2042,40 +2057,95 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
     });
   };
 
-  /* ─── Parallax das nuvens ─────────────────────────────────────
-     Cada seção desloca a própria textura conforme a posição DELA na
-     tela, não conforme o scroll absoluto. Isso importa: com o scroll
-     absoluto o deslocamento cresceria sem limite e no fim da página a
-     textura teria saído de quadro. Aqui o valor é sempre limitado a
-     ±AMPLITUDE e inverte sozinho quando se rola para cima.
-
-     Só recalcula enquanto há rolagem (rAF), e só para as seções
-     visíveis. Parado, custo zero. */
+  /* ─── CÉU: degradê contínuo + deriva das nuvens ───────────────
+     O degradê é montado a partir da posição REAL de cada seção: uma
+     parada de cor no centro de cada uma. Entre dois centros o
+     navegador interpola sozinho, então a troca de cor ocupa metade de
+     uma seção mais metade da outra — é isso que faz a emenda sumir.
+     Ancorar no centro (e não na borda) é o ponto todo: parada na borda
+     reproduziria a linha reta que existia antes. */
   (function(){
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    var alvos = $$('.sec, footer');
-    if (!alvos.length) return;
-    var AMPLITUDE = 22;      // px — deslocamento máximo, para cada lado
-    var agendado = false;
+    var ceu = $('.ceu');
+    /* Cor de cada seção. Fora desta lista: hero e oferta-final, que têm
+       fotografia própria e continuam opacas por cima do céu. */
+    var PLANO = [
+      ['identificacao','--offwhite'],  ['custo','--rose-pale'],
+      ['produto','--baby-blue'],       ['autora','--offwhite'],
+      ['oferta','--blush'],            ['dentro','--baby-blue'],
+      ['dinheiro','--offwhite'],       ['credibilidade','--rose-pale'],
+      ['oferta-final','--blush'],      ['garantia','--offwhite'],
+      ['faq','--baby-blue']
+    ];
+    var raiz = getComputedStyle(document.documentElement);
+    function cor(token){ return raiz.getPropertyValue(token).trim(); }
+
+    function montarDegrade(){
+      var hero = $('.hero'), rodape = $('footer');
+      var paradas = [], doc = document.documentElement.scrollHeight;
+      /* Começa no pé do hero, com o rosa dele: assim a passagem do hero
+         para a 1ª seção também é contínua. */
+      if (hero){
+        var rh = hero.getBoundingClientRect().bottom + window.scrollY;
+        paradas.push(cor('--hero-pink') + ' ' + Math.round(rh) + 'px');
+      }
+      for (var i = 0; i < PLANO.length; i++){
+        var el = document.getElementById(PLANO[i][0]);
+        if (!el) continue;
+        var r = el.getBoundingClientRect();
+        var centro = r.top + window.scrollY + r.height/2;
+        paradas.push(cor(PLANO[i][1]) + ' ' + Math.round(centro) + 'px');
+      }
+      if (rodape){
+        var rr = rodape.getBoundingClientRect();
+        paradas.push(cor('--blush') + ' ' +
+                     Math.round(rr.top + window.scrollY + rr.height/2) + 'px');
+      }
+      if (paradas.length < 3) return false;
+      document.body.style.backgroundImage =
+        'linear-gradient(180deg,' + paradas.join(',') + ')';
+      document.body.style.backgroundRepeat = 'no-repeat';
+      /* trava o degradê na altura do documento, senão ele reescala */
+      document.body.style.backgroundSize = '100% ' + doc + 'px';
+      return true;
+    }
+
+    if (montarDegrade()) document.documentElement.classList.add('ceu-on');
+
+    /* Deriva das nuvens: proporcional ao progresso TOTAL da rolagem, e
+       limitada à folga da camada (ela é 144vh de altura). Assim nunca
+       falta textura, e o movimento acompanha subida e descida. */
+    var agendado = false, reduzir =
+      matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     function posicionar(){
       agendado = false;
+      if (!ceu) return;
       var vh = window.innerHeight;
-      for (var i = 0; i < alvos.length; i++){
-        var el = alvos[i], r = el.getBoundingClientRect();
-        if (r.bottom < -200 || r.top > vh + 200) continue;   // fora de vista
-        /* -1 = seção entrando por baixo, +1 = saindo por cima */
-        var p = (vh/2 - (r.top + r.height/2)) / (vh/2 + r.height/2);
-        if (p < -1) p = -1; else if (p > 1) p = 1;
-        el.style.setProperty('--nuvem-y', (p * AMPLITUDE).toFixed(1) + 'px');
-      }
+      var max = document.documentElement.scrollHeight - vh;
+      var p = max > 0 ? window.scrollY / max : 0;
+      if (p < 0) p = 0; else if (p > 1) p = 1;
+      /* de +18vh (topo) a -18vh (fim): as nuvens sobem devagar */
+      var y = (0.5 - p) * 0.36 * vh;
+      ceu.style.transform = 'translate3d(0,' + y.toFixed(1) + 'px,0)';
     }
     function aoRolar(){
       if (!agendado){ agendado = true; requestAnimationFrame(posicionar); }
     }
-    addEventListener('scroll', aoRolar, {passive:true});
-    addEventListener('resize', aoRolar, {passive:true});
-    posicionar();
+    function aoRedimensionar(){
+      montarDegrade();
+      aoRolar();
+    }
+    if (!reduzir){
+      addEventListener('scroll', aoRolar, {passive:true});
+      posicionar();
+    }
+    addEventListener('resize', aoRedimensionar, {passive:true});
+    /* O conteúdo muda de altura quando abas/accordion abrem: o degradê
+       precisa ser remontado, senão as paradas ficam fora de lugar. */
+    if (window.ResizeObserver){
+      var ro = new ResizeObserver(function(){ montarDegrade(); });
+      ro.observe(document.body);
+    }
   })();
 
 })();
