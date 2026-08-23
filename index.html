@@ -554,25 +554,22 @@ ul{padding:0;list-style:none}
   position:relative;isolation:isolate;overflow:hidden;
   background-color:var(--blush);color:var(--ink);
 }
-/* A foto DISSOLVE nas duas pontas em vez de terminar cortada. Sem isso
-   a faixa vira um retângulo de borda dura por cima do degradê contínuo
-   — era a emenda que sobrava na entrada e na saída da oferta final. */
-.band__img{
-  position:absolute;inset:0;z-index:-2;width:100%;height:100%;object-fit:cover;
-  -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 120px,
-                     #000 calc(100% - 120px),transparent 100%);
-          mask-image:linear-gradient(180deg,transparent 0,#000 120px,
-                     #000 calc(100% - 120px),transparent 100%);
+/* Foto + véu no MESMO contêiner, mascarados JUNTOS — mesma estrutura do
+   hero. Mascarar só a foto e desvanecer o véu em separado não funciona:
+   onde o véu já enfraqueceu mas a foto ainda não sumiu, a foto crua
+   vaza e aparece uma faixa escura. Como um bloco só, o que dissolve é
+   a imagem JÁ velada, e o que surge por baixo é o degradê da página. */
+.band__media{
+  position:absolute;inset:0;z-index:-2;
+  -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 130px,
+                     #000 calc(100% - 130px),transparent 100%);
+          mask-image:linear-gradient(180deg,transparent 0,#000 130px,
+                     #000 calc(100% - 130px),transparent 100%);
 }
-/* O véu acompanha: se ele continuasse opaco nas pontas, o retângulo
-   voltaria a aparecer mesmo com a foto mascarada. */
-.band::after{
-  content:"";position:absolute;inset:0;z-index:-1;
-  background:linear-gradient(180deg,
-    transparent 0,
-    rgba(247,220,230,.93) 120px,
-    rgba(247,220,230,.88) calc(100% - 120px),
-    transparent 100%);
+.band__img{display:block;width:100%;height:100%;object-fit:cover}
+.band__media::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(247,220,230,.93),rgba(247,220,230,.88));
 }
 
 /* ─── 6.13 GARANTIA ─────────────────────────────────────────── */
@@ -1676,8 +1673,13 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
      11. OFERTA FINAL — faixa com foto
      ══════════════════════════════════════════════════════════════ -->
 <section class="sec band" id="oferta-final">
-  <img class="band__img" src="img/oferta.webp" width="1050" height="620"
-       loading="lazy" decoding="async" alt="">
+  <!-- A foto e o véu vivem no MESMO contêiner para serem mascarados
+       juntos (igual ao hero). Separados, eles desapareciam em ritmos
+       diferentes e a foto crua vazava na transição. -->
+  <div class="band__media" aria-hidden="true">
+    <img class="band__img" src="img/oferta.webp" width="1050" height="620"
+         loading="lazy" decoding="async" alt="">
+  </div>
   <div class="wrap">
     <div class="sec-head center reveal">
       <h2 class="serif d2">Você pode continuar procurando receitas...</h2>
