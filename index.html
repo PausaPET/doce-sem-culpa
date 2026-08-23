@@ -249,21 +249,35 @@ ul{padding:0;list-style:none}
    são só os botões e os pequenos destaques. As classes .sec--rose e
    .sec--deep (fundos fortes) foram removidas junto com todas as regras
    que existiam só para inverter texto sobre elas. */
-.sec--soft{background:var(--rose-pale)}
-.sec--blush{background:var(--blush)}
-.sec--babyblue{background:var(--baby-blue)}
-/* As duas seções do e-book: mesmo azul, com a tinta do produto.
-   A textura de nuvens é o shader "Cloudscape" (fbm de 6 oitavas) gerado
-   UMA VEZ como imagem — o componente original era React/WebGL animado,
-   que não cabe num HTML estático nem na direção "leve" da página. Aqui
-   ele custa 5 KB e zero runtime. A cor sólida fica por baixo como
-   fallback: se a imagem falhar, a seção continua azul bebê. */
-.sec--ebook{
-  background-color:var(--baby-blue);
-  background-image:url("img/nuvens-ebook.webp");
+.sec--soft{background-color:var(--rose-pale)}
+.sec--blush{background-color:var(--blush)}
+.sec--babyblue{background-color:var(--baby-blue)}
+/* As duas seções do e-book: mesmo azul, com a tinta do produto. */
+.sec--ebook{background-color:var(--baby-blue);color:var(--petrol)}
+
+/* ─── NUVENS ────────────────────────────────────────────────────
+   Porte estático do shader "Cloudscape" (fbm de 6 oitavas). O
+   componente original era React/WebGL com rAF eterno — não cabe num
+   HTML estático nem numa página de tráfego pago. Aqui é UMA textura
+   RGBA de 49 KB, cacheada, servindo todas as seções.
+
+   Por que uma só serve em rosa, blush, azul e off-white: a nuvem é
+   uma camada TRANSPARENTE por cima da cor sólida da seção. O
+   componente forte dela é BRANCO, e branco sobre fundo claro só
+   clareia — ou seja, só aumenta o contraste do texto escuro. A sombra
+   existe para dar volume, mas tem teto de 10% de alfa.
+
+   O hero e a .band ficam de fora: os dois já têm fotografia. */
+.sec,footer{
+  background-image:url("img/nuvens.webp");
   background-size:cover;
-  background-position:center;
-  color:var(--petrol);
+  /* --nuvem-y é atualizado no scroll (parallax). Sem JS ele vale 0 e
+     a textura simplesmente fica parada — nada quebra. */
+  background-position:center calc(50% + var(--nuvem-y,0px));
+}
+.hero,.band{background-image:none}
+@media (prefers-reduced-motion:reduce){
+  .sec,footer{background-position:center}
 }
 .sec-head{margin-bottom:clamp(30px,7vw,52px)}
 .sec-head .kicker{margin-bottom:16px}
@@ -556,7 +570,9 @@ details[open] .faq-a{animation:fade .24s ease}
 @keyframes fade{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
 
 /* ─── 6.15 RODAPÉ ───────────────────────────────────────────── */
-footer{background:var(--blush);color:var(--ink-soft);padding:56px 0 40px;font-size:13.5px}
+/* background-COLOR, não o atalho `background`: o atalho zeraria o
+   background-image das nuvens definido lá em cima. */
+footer{background-color:var(--blush);color:var(--ink-soft);padding:56px 0 40px;font-size:13.5px}
 .foot-logo{font-size:23px;color:var(--ink);margin-bottom:10px}
 .foot-links{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 20px;margin:26px 0 22px}
 .foot-links a{
@@ -2025,6 +2041,42 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
       value: typeof valor === 'number' ? valor : 27.90, currency:'BRL'
     });
   };
+
+  /* ─── Parallax das nuvens ─────────────────────────────────────
+     Cada seção desloca a própria textura conforme a posição DELA na
+     tela, não conforme o scroll absoluto. Isso importa: com o scroll
+     absoluto o deslocamento cresceria sem limite e no fim da página a
+     textura teria saído de quadro. Aqui o valor é sempre limitado a
+     ±AMPLITUDE e inverte sozinho quando se rola para cima.
+
+     Só recalcula enquanto há rolagem (rAF), e só para as seções
+     visíveis. Parado, custo zero. */
+  (function(){
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var alvos = $$('.sec, footer');
+    if (!alvos.length) return;
+    var AMPLITUDE = 22;      // px — deslocamento máximo, para cada lado
+    var agendado = false;
+
+    function posicionar(){
+      agendado = false;
+      var vh = window.innerHeight;
+      for (var i = 0; i < alvos.length; i++){
+        var el = alvos[i], r = el.getBoundingClientRect();
+        if (r.bottom < -200 || r.top > vh + 200) continue;   // fora de vista
+        /* -1 = seção entrando por baixo, +1 = saindo por cima */
+        var p = (vh/2 - (r.top + r.height/2)) / (vh/2 + r.height/2);
+        if (p < -1) p = -1; else if (p > 1) p = 1;
+        el.style.setProperty('--nuvem-y', (p * AMPLITUDE).toFixed(1) + 'px');
+      }
+    }
+    function aoRolar(){
+      if (!agendado){ agendado = true; requestAnimationFrame(posicionar); }
+    }
+    addEventListener('scroll', aoRolar, {passive:true});
+    addEventListener('resize', aoRolar, {passive:true});
+    posicionar();
+  })();
 
 })();
 </script>
