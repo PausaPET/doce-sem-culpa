@@ -360,13 +360,13 @@ summary,
 .ceu-on .band,
 .ceu-on .hero,
 .ceu-on footer{background-color:transparent}
-/* O hero e a .band também ficam transparentes: as fotos deles são
-   mascaradas nas bordas, e é o degradê da página que precisa aparecer
-   por baixo. Mantê-los opacos recriaria a borda dura. */
-.hero__media{
-  -webkit-mask-image:linear-gradient(180deg,#000 calc(100% - 130px),transparent 100%);
-          mask-image:linear-gradient(180deg,#000 calc(100% - 130px),transparent 100%);
-}
+/* .hero fica transparente em QUALQUER largura — no mobile isso deixa o
+   degradê/nuvens aparecerem atrás do texto abaixo do cartão da foto,
+   igual a todas as outras seções da página. A foto em si não é afetada
+   (é opaca, dentro da própria caixa). A .band (faixa com foto) segue a
+   mesma lógica, com a foto mascarada nas bordas para dissolver nela. A
+   máscara do .hero__media só existe no desktop (lá embaixo): no mobile
+   a foto é um CARTÃO contido, não um pano de fundo de seção. */
 @media (prefers-reduced-motion:reduce){
   .ceu{transform:none!important}
 }
@@ -388,64 +388,31 @@ summary,
 .topbar b{color:var(--rose-strong);font-weight:800}
 
 /* ─── 6.1 HERO ──────────────────────────────────────────────────
-   Fotografia CLARA com área negativa própria: o texto é escuro e
-   ocupa esse vazio, sem escurecer a comida. O véu agora é um painel
-   CURTO e definido — antes a transição se estendia por boa parte da
-   largura/altura e deixava uma faixa "lavada" no meio, sem servir
-   nem de texto nem de foto. Aqui a leitura fica sólida perto do
-   texto e a comida aparece vívida logo em seguida.
-   Tipografia em Poppins, título em minúsculas/maiúsculas mistas
-   (não caixa-alta): mais editorial, hierarquia por peso e tamanho
-   em vez de "grito". Menos blocos empilhados, respiro crescente
-   entre eles — badge e título ficam próximos (mesma ideia), título
-   e subtítulo formam a "mensagem", CTA é a virada, estatísticas
-   fecham como prova.
-     • mobile  → véu no topo, comida ocupando a metade de baixo
-     • desktop → texto na faixa esquerda, comida à direita           */
+   MOBILE-FIRST DE VERDADE: a foto deixou de ser fundo atrás do texto
+   e virou um CARTÃO no topo, em fluxo normal — a ordem visual é
+   imagem → badge/headline → subtítulo → indicadores → CTA. Isso é
+   HTML puro (.hero__media já vem antes de .hero__content no DOM); a
+   mudança toda está em não mais tirar a foto do fluxo com
+   position:absolute no mobile.
+
+   Só no desktop (≥900px, lá embaixo) a foto volta a ser pano de fundo
+   em tela cheia com o texto sobreposto à esquerda — layout DIFERENTE
+   do mobile, não um empilhamento do mesmo layout. */
 .hero{
   position:relative;isolation:isolate;overflow:hidden;
-  display:grid;align-items:start;
-  min-height:calc(100svh - 42px);
   /* Mesmo rosa do fundo da fotografia: se a imagem falhar, o hero
      continua sendo o campo rosa em vez de piscar off-white. */
   background:var(--hero-pink);color:var(--ink);
 }
-/* A faixa da foto é centralizada e limitada por --hero-band. Fora dela
-   fica o --hero-pink do .hero, que é EXATAMENTE o rosa do fundo da arte,
-   então em ultrawide não se vê onde a foto termina. */
 .hero__media{
-  position:absolute;top:0;bottom:0;left:50%;transform:translateX(-50%);
-  width:min(100%,var(--hero-band));z-index:-2;
+  position:relative;width:100%;overflow:hidden;
+  aspect-ratio:4/3;               /* == a proporção real do arquivo mobile */
 }
 .hero__media picture{display:block;width:100%;height:100%}
 .hero__media img{display:block;width:100%;height:100%;object-fit:cover}
-/* O véu é o PRÓPRIO rosa do fundo da foto (amostrado: #FAD2D3). Sobre a
-   área vazia da arte ele é invisível; sobre a comida, dissolve para o
-   mesmo rosa. Por isso não existe emenda entre foto e área de texto.
-   MOBILE: a comida começa a 63% da altura da imagem, então o véu segura
-   até ~50% e some antes disso. */
-/* O véu vive DENTRO da faixa da foto (não no .hero) porque suas paradas
-   são percentuais: ancorado à viewport, ele descolaria da fotografia em
-   ultrawide, onde a faixa é mais estreita que a tela. Ancorado à faixa,
-   a mesma regra vale de 320px a 5120px. */
-/* MOBILE — o véu virou uma FAIXA, não uma cortina do topo.
-   A arte mobile agora é RGBA: só a comida é opaca, o resto é
-   transparente para as nuvens e o degradê aparecerem através dela. Um
-   véu começando no topo (como era) pintaria rosa por cima justamente
-   dessa área e tornaria a nuvem invisível no hero.
-   A faixa cobre só onde comida e texto se cruzam (~62%–80%). */
-.hero__media::after{
-  content:"";position:absolute;inset:0;
-  background:linear-gradient(180deg,
-    rgba(250,210,211,0)   0%,
-    rgba(250,210,211,0)   58%,
-    rgba(250,210,211,.88) 70%,
-    rgba(250,210,211,.72) 80%,
-    rgba(250,210,211,0)   92%);
-}
 .hero__content{
-  position:relative;z-index:2;
-  padding-block:clamp(26px,4.5vh,44px) clamp(30px,6vh,56px);
+  position:relative;
+  padding-block:clamp(22px,4.5vh,34px) clamp(28px,6vh,48px);
 }
 .hero__badge{
   display:inline-flex;align-items:center;gap:8px;
@@ -918,19 +885,29 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
   .recipes{grid-template-columns:1fr 1fr;max-width:720px}
 }
 /* ─── CELULAR ESTREITO / TELA BAIXA ─────────────────────────────
-   A tela encolhe mas o conteúdo do hero não: a 320px ele terminava a
-   84,4% da altura do hero, contra 76,8% a 375px — e a comida da arte
-   começa a 70%. Resultado: 98px de texto em cima dos doces (medido:
-   "Compra segura" caía para 1,52:1).
-   Aqui os respiros do hero encolhem para a proporção voltar a bater. */
+   Herança do layout antigo (foto atrás do texto): hoje a foto é um
+   bloco EM FLUXO acima do texto, então o risco não é mais contraste
+   sobre a comida — é o CTA cair fora da primeira dobra em aparelhos
+   baixos (medido: 375×667 sobrava 65px; 320×568 sobrava 151px).
+   Aqui a foto e os respiros do texto encolhem juntos para recuperar
+   essa dobra sem cortar conteúdo. */
 @media (max-width:360px),(max-height:700px){
-  .hero__content{padding-block:16px 20px}
+  .hero__media{aspect-ratio:3/2}
+  .hero__content{padding-block:10px 16px}
+  .hero__badge{margin-bottom:9px}
   .hero__title{font-size:clamp(21px,6.6vw,34px)}
-  .hero__sub{margin-top:10px}
-  .hero .btn{margin-top:20px}
-  .hero__stats{margin-top:15px}
-  .hero__trust{margin-top:13px;gap:8px 14px}
-  .hero__badge{margin-bottom:14px}
+  .hero__sub{margin-top:7px;font-size:14.5px}
+  .hero .btn{margin-top:10px}
+  .hero__stats{margin-top:10px}
+  .hero__trust{margin-top:9px;gap:7px 14px}
+}
+/* Tela realmente baixa (ex.: iPhone SE 1ª ger., 320×568): mais um
+   corte, agora também nos números e no rodapé de confiança. */
+@media (max-height:600px){
+  .hero__media{aspect-ratio:2/1}
+  .hero__stats b{font-size:18px}
+  .hero__stats span{font-size:9.5px}
+  .hero__trust{font-size:9.5px}
 }
 
 @media (max-width:479px){
@@ -1116,16 +1093,34 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
   .hero .btn{min-width:320px}
   .trust li{font-size:12px}
 }
-/* DESKTOP: o texto ocupa a faixa rosa vazia da própria fotografia, à
-   esquerda. O véu segura em 95% até 44% da largura porque é ATÉ AÍ que a
-   coluna de texto chega (~620px de 1425) — a comida da arte começa antes
+/* DESKTOP (≥900px): layout DIFERENTE do mobile, não o mesmo empilhado.
+   A foto volta a ser pano de fundo em tela cheia, com o texto ocupando
+   a faixa rosa vazia da própria fotografia, à esquerda — igual à versão
+   anterior a esta rodada de reordenação do hero mobile.
+
+   O véu segura em 95% até 44% da largura porque é ATÉ AÍ que a coluna
+   de texto chega (~620px de 1425) — a comida da arte começa antes
    disso, em ~499px, e sem esse alcance a subheadline caía para 2,2:1 em
    cima dos cookies (medido por amostragem de pixel). A dissolução longa
    até 66% é o que dá a transição suave entre texto e fotografia, em vez
    de uma divisória rígida. */
 @media (min-width:900px){
-  .hero{align-items:center;min-height:calc(100svh - 46px)}
+  .hero{display:grid;align-items:center;min-height:calc(100svh - 46px)}
+  /* A faixa da foto é centralizada e limitada por --hero-band. Fora
+     dela fica o --hero-pink do .hero — o mesmo rosa do fundo da arte —
+     então em ultrawide não se vê onde a foto termina. */
+  .hero__media{
+    position:absolute;inset:0 auto;top:0;bottom:0;left:50%;
+    transform:translateX(-50%);
+    width:min(100%,var(--hero-band));aspect-ratio:auto;z-index:-2;
+    /* A borda de baixo dissolve no degradê contínuo da página — só faz
+       sentido aqui, onde a foto É o fundo da seção inteira. No mobile
+       ela é um cartão contido, sem essa máscara. */
+    -webkit-mask-image:linear-gradient(180deg,#000 calc(100% - 130px),transparent 100%);
+            mask-image:linear-gradient(180deg,#000 calc(100% - 130px),transparent 100%);
+  }
   .hero__media::after{
+    content:"";position:absolute;inset:0;
     background:linear-gradient(90deg,
       rgba(250,210,211,.98) 0%,
       rgba(250,210,211,.96) 50%,
@@ -1133,6 +1128,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
       rgba(250,210,211,0)   72%);
   }
   .hero__content{
+    z-index:2;
     width:var(--shell);margin-inline:auto;padding-inline:0;
   }
   /* A coluna precisa caber a MAIOR linha da headline ("SEM ABANDONAR
@@ -1238,7 +1234,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
       <source media="(min-width:900px)"
               srcset="img/hero-desktop.webp 1x, img/hero-desktop@2x.webp 2x"
               width="1672" height="941">
-      <img src="img/hero-mobile.webp" width="1170" height="2095"
+      <img src="img/hero-mobile.webp" width="1200" height="900"
            fetchpriority="high" decoding="async"
            alt="Mesa rosa vista de cima com cheesecake de frutas vermelhas, torta de limão, pudim, picolés, cookies, panquecas e outros doces do Doce Sem Culpa">
     </picture>
@@ -1272,16 +1268,18 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
         vontade de comer doce e facilitar sua alimentação até nos dias mais corridos.
       </p>
 
-      <a class="btn btn--cta" data-checkout href="#oferta-final" rel="nofollow noopener">
-        Quero o Doce Sem Culpa
-        <svg width="20" height="20" viewBox="0 0 24 24"><use href="#i-arrow"/></svg>
-      </a>
-
+      <!-- Indicadores ANTES do CTA de propósito: primeiro a prova de
+           escala (50/25/25), depois o botão como consequência natural. -->
       <ul class="hero__stats" aria-label="O que você recebe">
         <li><b><svg class="ico" width="19" height="19" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chef"/></svg>50</b><span>Receitas</span></li>
         <li><b><svg class="ico" width="19" height="19" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-cake"/></svg>25</b><span>Doces</span></li>
         <li><b><svg class="ico" width="19" height="19" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-stack"/></svg>25</b><span>Lanches</span></li>
       </ul>
+
+      <a class="btn btn--cta" data-checkout href="#oferta-final" rel="nofollow noopener">
+        Quero o Doce Sem Culpa
+        <svg width="20" height="20" viewBox="0 0 24 24"><use href="#i-arrow"/></svg>
+      </a>
 
       <ul class="hero__trust">
         <li><svg class="ico" width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bolt"/></svg>Acesso imediato</li>
