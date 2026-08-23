@@ -960,7 +960,10 @@ footer{background-color:var(--blush);color:var(--ink-soft);padding:38px 0 28px;f
 .offer__sub{
   margin-top:8px;
   font-size:clamp(13px,3.3vw,14.5px);font-weight:500;
-  color:rgba(255,255,255,.82);
+  /* ⚠️ O cabeçalho do card é AZUL BEBÊ CLARO com tinta petróleo — não
+     é um bloco escuro. Branco a 82% media 1,22:1 aqui, praticamente
+     invisível. A tinta do próprio cabeçalho, suavizada, resolve. */
+  color:rgba(27,53,64,.76);
 }
 .offer__list li span b{
   display:block;font-weight:700;color:var(--ink);margin-bottom:2px;
@@ -988,6 +991,194 @@ footer{background-color:var(--blush);color:var(--ink-soft);padding:38px 0 28px;f
 .sticky-bar__info b{display:block;font-size:19px;color:var(--ink);font-weight:800}
 .sticky-bar__info i{display:block;font-size:9.5px;font-style:normal;color:var(--ink-mute)}
 .sticky-bar .btn{min-height:52px;padding:14px 20px;font-size:14px}
+
+/* ═══════════════════════════════════════════════════════════════
+   MOTION — linguagem única da página
+   Só transform / opacity / clip-path: tudo roda no compositor.
+   Tudo é gated por .js-anim, que o script só adiciona quando há JS
+   E o usuário NÃO pediu menos movimento. Sem isso, a página aparece
+   inteira e parada — nunca escondida.
+   ═══════════════════════════════════════════════════════════════ */
+:root{
+  --ease-out:cubic-bezier(.22,.61,.36,1);
+}
+
+/* ─── ENTRADA DO HERO ───────────────────────────────────────────
+   Não é scroll reveal: o hero já nasce na tela. É disparado por uma
+   classe `.is-live` que o script põe no primeiro quadro. */
+/* Sobra vertical para o parallax consumir: sem ela o deslocamento
+   abriria fresta no topo ou no pe da foto. Amplitude 0.03 => no maximo
+   ~30px numa tela de 844px, contra 55px de folga de cada lado. */
+.js-anim .hero__media picture{
+  position:relative;height:calc(100% + 110px);top:-55px;
+}
+.js-anim .hero__media img{
+  opacity:0;transform:scale(1.04);
+  transition:opacity .9s ease,transform 1.5s var(--ease-out);
+}
+.js-anim .hero.is-live .hero__media img{opacity:1;transform:none}
+
+/* Text reveal por LINHA: cada linha da headline sobe de dentro da
+   própria caixa. O clip aberto tem folga vertical (-18%) porque a
+   caixa alta com acento (Á, Ú) passa do topo da linha. */
+.js-anim .hero__title > span{
+  clip-path:inset(0 0 108% 0);
+  transform:translateY(.16em);
+  transition:clip-path .9s var(--ease-out),transform .9s var(--ease-out);
+}
+.js-anim .hero.is-live .hero__title > span{
+  clip-path:inset(-18% -6% -18% -6%);transform:none;
+}
+.js-anim .hero.is-live .hero__title > span:nth-child(1){transition-delay:.20s}
+.js-anim .hero.is-live .hero__title > span:nth-child(2){transition-delay:.31s}
+.js-anim .hero.is-live .hero__title > span:nth-child(3){transition-delay:.42s}
+.js-anim .hero.is-live .hero__title > span:nth-child(4){transition-delay:.53s}
+
+.js-anim .hero__badge,
+.js-anim .hero__sub,
+.js-anim .hero__stats > li,
+.js-anim .hero .btn--cta,
+.js-anim .hero__trust{
+  opacity:0;transform:translateY(14px);
+  transition:opacity .7s var(--ease-out),transform .7s var(--ease-out);
+}
+.js-anim .hero.is-live .hero__badge,
+.js-anim .hero.is-live .hero__sub,
+.js-anim .hero.is-live .hero__stats > li,
+.js-anim .hero.is-live .hero .btn--cta,
+.js-anim .hero.is-live .btn--cta,
+.js-anim .hero.is-live .hero__trust{opacity:1;transform:none}
+/* A ordem é a da leitura: selo, subtítulo, os três números em
+   cascata, e o botão POR ÚLTIMO — ele é o convite, entra depois de
+   o argumento estar montado. */
+.js-anim .hero.is-live .hero__badge   {transition-delay:.08s}
+.js-anim .hero.is-live .hero__sub     {transition-delay:.66s}
+.js-anim .hero.is-live .hero__stats > li:nth-child(1){transition-delay:.78s}
+.js-anim .hero.is-live .hero__stats > li:nth-child(2){transition-delay:.86s}
+.js-anim .hero.is-live .hero__stats > li:nth-child(3){transition-delay:.94s}
+.js-anim .hero.is-live .btn--cta      {transition-delay:1.06s}
+.js-anim .hero.is-live .hero__trust   {transition-delay:1.18s}
+
+/* ⚠️ REDE DE SEGURANÇA — o estado inicial ESCONDE, então ele nunca
+   pode ficar preso. Transição de CSS só avança enquanto o navegador
+   compõe quadros; em webview que não compõe (o embutido do WhatsApp
+   já fez isso nesta página) o elemento ficaria em opacity:0 para
+   sempre. Um temporizador põe `.motion-pronto` e isto aqui força o
+   estado final sem depender de quadro nenhum. */
+.js-anim .motion-pronto .hero__media img,
+.js-anim .motion-pronto .hero__title > span,
+.js-anim .motion-pronto .hero__badge,
+.js-anim .motion-pronto .hero__sub,
+.js-anim .motion-pronto .hero__stats > li,
+.js-anim .motion-pronto .btn--cta,
+.js-anim .motion-pronto .hero__trust,
+.js-anim .motion-pronto .offer__head,
+.js-anim .motion-pronto .offer__list,
+.js-anim .motion-pronto .price,
+.js-anim .motion-pronto .btn-note,
+.js-anim .motion-pronto.aut__foto{
+  opacity:1!important;transform:none!important;
+  clip-path:none!important;transition:none!important;
+}
+
+/* ─── PARALLAX ──────────────────────────────────────────────────
+   Um único motor no JS escreve translate3d em quem tiver [data-par].
+   Sem listener por elemento e sem animar background-position. */
+[data-par]{will-change:transform}
+
+/* Elementos flutuantes: formas orgânicas pastel, desfocadas, que
+   derivam em ritmos diferentes.
+   ⚠️ São FORMAS, não frutas recortadas: não existe asset com fundo
+   transparente de morango/limão no projeto, e recortar da arte
+   chapada geraria borda dura. Se vierem PNGs com alfa, é só trocar
+   o background destes elementos. */
+.flo{
+  position:absolute;border-radius:50%;pointer-events:none;
+  filter:blur(26px);opacity:.5;z-index:0;
+}
+.flo--rose{background:radial-gradient(circle at 35% 35%,#F7C9D8,#F2A9C0 70%,transparent 72%)}
+.flo--blue{background:radial-gradient(circle at 35% 35%,#CFE3F2,#AFCFE8 70%,transparent 72%)}
+.flo--cream{background:radial-gradient(circle at 35% 35%,#FBEEDF,#F3DCC4 70%,transparent 72%)}
+/* No celular o campo é estreito: menos peças e mais discretas, para
+   não competir com o texto nem custar pintura. */
+@media (max-width:719px){
+  .flo{opacity:.34;filter:blur(20px)}
+  .flo--extra{display:none}
+}
+.sec--flo{position:relative;isolation:isolate;overflow:hidden}
+.sec--flo > .wrap{position:relative;z-index:1}
+
+/* ─── SEÇÃO 06 — troca de categoria ─────────────────────────────*/
+.cat__p{transition:opacity .3s ease,transform .3s ease}
+.cat__p.is-saindo{opacity:0;transform:scale(.98)}
+.cat__p.is-entrando{animation:cat-entra .5s var(--ease-out) both}
+@keyframes cat-entra{
+  from{opacity:0;transform:scale(1.03)}
+  to{opacity:1;transform:none}
+}
+
+/* ─── SEÇÃO 08 — card da oferta ─────────────────────────────────*/
+.offer{transition:transform .32s var(--ease-out),box-shadow .32s var(--ease-out)}
+/* hover:hover exclui o toque: no celular o :hover "gruda" depois do
+   tap e o card ficaria levantado para sempre. */
+@media (hover:hover) and (pointer:fine){
+  .offer:hover{transform:translateY(-4px);box-shadow:0 26px 60px rgba(27,53,64,.30)}
+}
+.js-anim .offer__head,
+.js-anim .offer__list,
+.js-anim .price,
+.js-anim .offer .btn--cta,
+.js-anim .offer .btn-note{
+  opacity:0;transform:translateY(12px);
+  transition:opacity .6s var(--ease-out),transform .6s var(--ease-out);
+}
+.js-anim .offer.is-in .offer__head,
+.js-anim .offer.is-in .offer__list,
+.js-anim .offer.is-in .price,
+.js-anim .offer.is-in .btn--cta,
+.js-anim .offer.is-in .btn-note{opacity:1;transform:none}
+.js-anim .offer.is-in .offer__head{transition-delay:.10s}
+.js-anim .offer.is-in .offer__list{transition-delay:.20s}
+.js-anim .offer.is-in .price      {transition-delay:.30s}
+.js-anim .offer.is-in .btn--cta   {transition-delay:.40s}
+.js-anim .offer.is-in .btn-note   {transition-delay:.48s}
+
+/* Luz suave atravessando a fotografia da faixa — dá profundidade
+   sem mexer em nenhum elemento da foto (é um JPEG chapado; deslocar
+   morango por morango exigiria recorte ou vídeo). */
+.band__luz{
+  position:absolute;inset:-10% -20%;pointer-events:none;z-index:1;
+  background:radial-gradient(ellipse 45% 60% at 30% 40%,
+             rgba(255,255,255,.30),transparent 70%);
+  will-change:transform;
+}
+
+/* ─── SEÇÃO 07 — foto da autora ─────────────────────────────────*/
+.js-anim .aut__foto{transform:scale(.96);transition:transform .9s var(--ease-out),opacity .7s ease}
+.js-anim .aut__foto.is-in{transform:none}
+
+/* ─── SEÇÃO 09 — FAQ ────────────────────────────────────────────
+   A altura é animada em px pelo JS (details não anima sozinho: o
+   navegador simplesmente para de renderizar o conteúdo fechado). */
+.faq-w{overflow:hidden;transition:height .36s var(--ease-out)}
+.faq details{
+  border-bottom:1px solid rgba(61,36,48,.12);
+  border-radius:12px;
+  padding-inline:14px;margin-inline:-14px;
+  transition:background-color .3s ease;
+}
+.faq details[open]{background-color:rgba(251,234,240,.55)}
+.js-anim .faq-a{opacity:0;transform:translateY(-6px);transition:opacity .34s ease .06s,transform .34s var(--ease-out) .06s}
+.js-anim details[open] .faq-a{opacity:1;transform:none}
+
+/* ─── MENOS MOVIMENTO ───────────────────────────────────────────
+   Com reduced motion o script nem adiciona .js-anim, então nada
+   acima chega a valer. Estas regras cuidam do que é CSS puro. */
+@media (prefers-reduced-motion:reduce){
+  .flo{display:none}
+  .band__luz{display:none}
+  .faq-w{transition:none}
+}
 
 /* ─── 8. ANIMAÇÃO DE ENTRADA ────────────────────────────────── */
 /* O conteúdo é visível por padrão. O estado oculto só é aplicado sob
@@ -1241,7 +1432,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
   <!-- Duas fotos da MESMA campanha, uma por dispositivo. Nenhum texto
        está queimado na imagem: headline, CTA e selos são HTML/CSS. -->
   <div class="hero__media">
-    <picture>
+    <picture data-par="0.03">
       <!-- 2x só para telas de alta densidade: o Lanczos não cria detalhe
            novo, mas entrega o dobro de pixels em vez de deixar o
            navegador ampliar sozinho. Telas 1x não baixam esse arquivo. -->
@@ -1481,7 +1672,10 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
      Por que está aqui: depois de VER o material, o leitor precisa
      dimensionar o que leva. Números grandes em vez de grade de cards.
      ══════════════════════════════════════════════════════════════ -->
-<section class="sec" id="tudo">
+<section class="sec sec--flo" id="tudo">
+  <span class="flo flo--rose"  data-par="-0.07" style="width:210px;height:210px;top:6%;left:-6%"   aria-hidden="true"></span>
+  <span class="flo flo--cream" data-par="0.05"  style="width:170px;height:170px;top:56%;right:-5%"  aria-hidden="true"></span>
+  <span class="flo flo--blue flo--extra" data-par="-0.04" style="width:140px;height:140px;bottom:4%;left:12%" aria-hidden="true"></span>
   <div class="wrap">
     <div class="sec-head center reveal">
       <h2 class="serif d2">Tudo o que você precisa,<br>em um só lugar.</h2>
@@ -1573,7 +1767,10 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
      pacientes ou resultados. Ela é apresentada como autora e
      apresentadora do produto — que é o que se pode afirmar.
      ══════════════════════════════════════════════════════════════ -->
-<section class="sec" id="autora">
+<section class="sec sec--flo" id="autora">
+  <span class="flo flo--rose"  data-par="-0.06" style="width:240px;height:240px;top:-4%;right:-7%"  aria-hidden="true"></span>
+  <span class="flo flo--cream" data-par="0.045" style="width:180px;height:180px;bottom:2%;left:-6%"  aria-hidden="true"></span>
+  <span class="flo flo--blue flo--extra" data-par="-0.035" style="width:130px;height:130px;top:44%;right:16%" aria-hidden="true"></span>
   <div class="wrap wrap--wide">
     <div class="aut">
       <div class="aut__foto reveal">
@@ -1606,6 +1803,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
      ══════════════════════════════════════════════════════════════ -->
 <section class="sec band" id="oferta-final">
   <div class="band__media" aria-hidden="true">
+    <span class="band__luz" data-par="-0.05" aria-hidden="true"></span>
     <div class="band__shift">
       <img class="band__img" src="img/oferta.webp" width="1600" height="893"
            loading="lazy" decoding="async" alt="">
@@ -1679,23 +1877,23 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
     <div class="faq">
       <details class="reveal">
         <summary>O Doce Sem Culpa é digital ou físico?<span class="chev"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chev"/></svg></span></summary>
-        <div class="faq-a">É 100% digital. Você não recebe nada em casa e não paga frete — o material fica disponível para acesso e download logo após a confirmação do pagamento.</div>
+        <div class="faq-w"><div class="faq-a">É 100% digital. Você não recebe nada em casa e não paga frete — o material fica disponível para acesso e download logo após a confirmação do pagamento.</div></div>
       </details>
       <details class="reveal">
         <summary>Como recebo o acesso após a compra?<span class="chev"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chev"/></svg></span></summary>
-        <div class="faq-a">Assim que o pagamento for aprovado, o acesso chega no seu e-mail com o link para baixar o ebook e os bônus. Com Pix ou cartão, isso costuma levar poucos minutos.</div>
+        <div class="faq-w"><div class="faq-a">Assim que o pagamento for aprovado, o acesso chega no seu e-mail com o link para baixar o ebook e os bônus. Com Pix ou cartão, isso costuma levar poucos minutos.</div></div>
       </details>
       <details class="reveal">
         <summary>Posso acessar pelo celular?<span class="chev"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chev"/></svg></span></summary>
-        <div class="faq-a">Sim. O ebook foi feito para ser lido no celular — dá para consultar a receita direto na cozinha ou a lista de compras no mercado. Também abre no tablet e no computador.</div>
+        <div class="faq-w"><div class="faq-a">Sim. O ebook foi feito para ser lido no celular — dá para consultar a receita direto na cozinha ou a lista de compras no mercado. Também abre no tablet e no computador.</div></div>
       </details>
       <details class="reveal">
         <summary>O que eu recebo ao comprar?<span class="chev"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chev"/></svg></span></summary>
-        <div class="faq-a">O ebook com 50 receitas — 25 doces e 25 lanches salgados rápidos — mais os 3 materiais de apoio: lista de compras, cardápio de 7 dias e guia de substituições. Tudo digital, no mesmo acesso.</div>
+        <div class="faq-w"><div class="faq-a">O ebook com 50 receitas — 25 doces e 25 lanches salgados rápidos — mais os 3 materiais de apoio: lista de compras, cardápio de 7 dias e guia de substituições. Tudo digital, no mesmo acesso.</div></div>
       </details>
       <details class="reveal">
         <summary>Como funciona o direito de arrependimento?<span class="chev"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chev"/></svg></span></summary>
-        <div class="faq-a">Você tem 7 dias a partir da compra para desistir, como prevê o Código de Defesa do Consumidor para compras feitas pela internet. Basta pedir dentro do prazo e o valor é devolvido integralmente.</div>
+        <div class="faq-w"><div class="faq-a">Você tem 7 dias a partir da compra para desistir, como prevê o Código de Defesa do Consumidor para compras feitas pela internet. Basta pedir dentro do prazo e o valor é devolvido integralmente.</div></div>
       </details>
     </div>
 
@@ -1861,16 +2059,139 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
     revealAll();
   }
 
-  /* 5. FAQ: mantém apenas uma resposta aberta por vez */
+  /* 5. FAQ: uma resposta por vez, com a altura ANIMADA.
+        <details> não anima sozinho — fechado, o navegador simplesmente
+        para de renderizar o conteúdo, então não há altura para
+        transicionar. Aqui a altura é escrita em px no wrapper e
+        devolvida a `auto` no fim, para a resposta continuar
+        acompanhando reflow (rotação de tela, fonte maior). */
   var faqs = $$('.faq details');
+  var animandoFaq = false;
+  var menosMovimento = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ⚠️ `transitionend` NÃO é garantido: em aba oculta ou webview que
+     não compõe quadros a transição não avança e o evento nunca vem.
+     Aqui o fechamento depende dele para marcar open=false — sem o
+     temporizador de escape a pergunta ficaria presa aberta. Este
+     helper roda o desfecho UMA vez, pelo que chegar primeiro. */
+  function aoFim(el, ms, fn){
+    var feito = false;
+    function uma(){
+      if (feito) return; feito = true;
+      el.removeEventListener('transitionend', uma);
+      clearTimeout(t); fn();
+    }
+    var t = setTimeout(uma, ms);
+    el.addEventListener('transitionend', uma);
+  }
+
+  function faqAbrir(d){
+    var w = $('.faq-w', d); if (!w) { d.open = true; return; }
+    d.open = true;
+    if (menosMovimento) return;
+    w.style.height = '0px';
+    void w.offsetHeight;                       /* reflow: fixa o ponto de partida */
+    w.style.height = w.scrollHeight + 'px';
+    aoFim(w, 520, function(){ w.style.height = 'auto'; });
+  }
+  function faqFechar(d, aoTerminar){
+    var w = $('.faq-w', d);
+    if (!w || menosMovimento){ d.open = false; if (aoTerminar) aoTerminar(); return; }
+    w.style.height = w.scrollHeight + 'px';
+    void w.offsetHeight;
+    w.style.height = '0px';
+    aoFim(w, 520, function(){
+      d.open = false; w.style.height = '';
+      if (aoTerminar) aoTerminar();
+    });
+  }
   faqs.forEach(function(d){
-    d.addEventListener('toggle', function(){
-      if (d.open) faqs.forEach(function(o){ if (o !== d) o.open = false; });
+    var sum = $('summary', d); if (!sum) return;
+    sum.addEventListener('click', function(e){
+      e.preventDefault();                      /* o toggle passa a ser nosso */
+      if (animandoFaq) return;
+      if (d.open){ faqFechar(d); return; }
+      var aberta = faqs.filter(function(o){ return o !== d && o.open; })[0];
+      if (aberta){
+        animandoFaq = true;
+        faqFechar(aberta, function(){ animandoFaq = false; faqAbrir(d); });
+      } else {
+        faqAbrir(d);
+      }
     });
   });
 
   /* 6. Ano do copyright sempre atualizado */
   var ano = $('#ano'); if (ano) ano.textContent = new Date().getFullYear();
+
+  /* 6b. ENTRADA DO HERO — a única sequência que não é disparada por
+         scroll (o hero já nasce na tela). A classe `.is-live` solta a
+         cascata inteira, que é descrita em CSS.
+         Espera a fotografia decodificar: entrar com a caixa vazia e a
+         foto aparecer depois é pior que esperar 200ms. Com teto, para
+         a headline nunca ficar refém de uma imagem que não carrega. */
+  (function(){
+    var hero = $('.hero'); if (!hero) return;
+    if (!document.documentElement.classList.contains('js-anim')){
+      hero.classList.add('is-live'); return;
+    }
+    var img = $('.hero__media img', hero);
+    var soltou = false;
+    function soltar(){
+      if (soltou) return; soltou = true;
+      /* ⚠️ Reflow síncrono, NÃO requestAnimationFrame. O rAF não
+         dispara em webview que não está compondo quadros (o navegador
+         embutido do WhatsApp já fez isso nesta página) — e ali o hero
+         inteiro ficaria invisível, porque o estado inicial do CSS o
+         esconde. O reflow fixa o ponto de partida sem depender de
+         quadro nenhum. */
+      void hero.offsetHeight;
+      hero.classList.add('is-live');
+      /* Depois da sequencia inteira (~1,9s), garante o estado final
+         mesmo que nenhuma transicao tenha chegado a rodar. */
+      setTimeout(function(){ hero.classList.add('motion-pronto'); }, 2600);
+    }
+    if (img && !img.complete) img.addEventListener('load', soltar);
+    if (img && img.complete) soltar();
+    setTimeout(soltar, 900);           /* teto de segurança */
+  })();
+
+  /* 6c. Card da oferta: sequência própria (selo → lista → preço → CTA),
+         disparada quando o card entra na tela. */
+  (function(){
+    var card = $('.offer'); if (!card) return;
+    if (!('IntersectionObserver' in window) ||
+        !document.documentElement.classList.contains('js-anim')){
+      card.classList.add('is-in'); return;
+    }
+    var ob = new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if (e.isIntersecting){
+          card.classList.add('is-in'); ob.disconnect();
+          setTimeout(function(){ card.classList.add('motion-pronto'); }, 1400);
+        }
+      });
+    }, {threshold:0.16});
+    ob.observe(card);
+    /* rede de segurança: se o observer não disparar, mostra assim mesmo */
+    setTimeout(function(){ card.classList.add('is-in','motion-pronto'); }, 4000);
+  })();
+
+  /* 6d. Foto da autora: escala de 0.96 para 1 ao entrar. */
+  (function(){
+    var foto = $('.aut__foto'); if (!foto) return;
+    if (!('IntersectionObserver' in window)){ foto.classList.add('is-in'); return; }
+    var ob = new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if (e.isIntersecting){
+          foto.classList.add('is-in'); ob.disconnect();
+          setTimeout(function(){ foto.classList.add('motion-pronto'); }, 1400);
+        }
+      });
+    }, {threshold:0.2});
+    ob.observe(foto);
+    setTimeout(function(){ foto.classList.add('is-in','motion-pronto'); }, 4000);
+  })();
 
   /* 9. Cards do custo invisível.
         A resposta não é escondida com [hidden]: ela precisa de transição,
@@ -1907,23 +2228,44 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
       ind.style.width = t.offsetWidth + 'px';
       ind.style.transform = 'translateX(' + (t.offsetLeft - sw.clientLeft - 5) + 'px)';
     }
+    var trocando = false;
+    function mostrar(p){
+      p.hidden = false;
+      p.classList.remove('is-saindo');
+      p.classList.add('is-entrando');
+      /* reinicia a cascata dos nomes a cada troca */
+      $$('.cat__list li', p).forEach(function(li){
+        li.style.animation = 'none'; void li.offsetWidth; li.style.animation = '';
+      });
+      setTimeout(function(){ p.classList.remove('is-entrando'); }, 520);
+    }
     function abrir(t){
+      if (trocando) return;
+      var alvo = $('#' + t.getAttribute('aria-controls'));
+      var atual = tabs.map(function(o){ return $('#' + o.getAttribute('aria-controls')); })
+                      .filter(function(p){ return p && !p.hidden; })[0];
       tabs.forEach(function(o){
-        var sel = o === t;
-        o.setAttribute('aria-selected', sel ? 'true' : 'false');
-        var p = $('#' + o.getAttribute('aria-controls'));
-        if (!p) return;
-        if (sel){
-          p.hidden = false;
-          /* reinicia a cascata dos nomes a cada troca */
-          $$('.cat__list li', p).forEach(function(li){
-            li.style.animation = 'none'; void li.offsetWidth; li.style.animation = '';
-          });
-        } else {
-          p.hidden = true;
-        }
+        o.setAttribute('aria-selected', o === t ? 'true' : 'false');
       });
       moverInd(t);
+      if (!alvo || alvo === atual) return;
+
+      /* Crossfade: a saída some com uma redução mínima, a entrada vem
+         de 1.03 para 1. Sem menosMovimento o navegador ignora as
+         transições e a troca vira instantânea — que é o desejado. */
+      if (menosMovimento || !atual){
+        if (atual) atual.hidden = true;
+        mostrar(alvo);
+        return;
+      }
+      trocando = true;
+      atual.classList.add('is-saindo');
+      setTimeout(function(){
+        atual.hidden = true;
+        atual.classList.remove('is-saindo');
+        mostrar(alvo);
+        trocando = false;
+      }, 300);
     }
     tabs.forEach(function(t){
       t.addEventListener('click', function(){ abrir(t); });
@@ -2138,6 +2480,9 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
       matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     var faixa = $('.band'), faixaShift = $('.band__shift');
+    /* Todas as camadas com parallax, lidas UMA vez. O hero é
+       [data-par] como qualquer outra: não há caso especial. */
+    var camadas = $$('[data-par]');
 
     function posicionar(){
       agendado = false;
@@ -2162,6 +2507,26 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
           faixaShift.style.transform =
             'translate3d(0,' + (q * 46).toFixed(1) + 'px,0)';
         }
+      }
+
+      /* MOTOR DE PARALLAX — um só, para todos os [data-par].
+         O deslocamento vem da posição do elemento NA TELA (não do
+         scroll absoluto): assim é sempre limitado, inverte ao subir e
+         vale igual em qualquer altura de página. Só escreve em quem
+         está por perto da viewport — fora dela não há o que pintar. */
+      for (var i = 0; i < camadas.length; i++){
+        var el = camadas[i], rr = el.getBoundingClientRect();
+        /* width 0 = display:none (as peças `--extra` somem no celular).
+           Sem esta guarda o retângulo zerado passa no teste de
+           proximidade e a gente pinta transform em quem nem existe. */
+        if (!rr.width) continue;
+        if (rr.bottom < -200 || rr.top > vh + 200) continue;
+        var centro = rr.top + rr.height/2;
+        var prog = (vh/2 - centro) / vh;          /* -1 .. 1 aprox */
+        if (prog < -1.2) prog = -1.2; else if (prog > 1.2) prog = 1.2;
+        var amp = parseFloat(el.getAttribute('data-par')) || 0;
+        el.style.transform =
+          'translate3d(0,' + (prog * amp * vh).toFixed(1) + 'px,0)';
       }
     }
     function aoRolar(){
