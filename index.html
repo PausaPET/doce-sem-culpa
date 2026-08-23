@@ -400,7 +400,13 @@ b,strong{font-weight:600}.kicker,.topbar,.topbar b,.hero__badge,.offer__tag,.pri
   padding-block:clamp(22px,4.5vh,34px) clamp(28px,6vh,48px);
 }
 .hero__badge{
-  display:inline-flex;align-items:center;gap:8px;
+  /* flex (bloco) + width:fit-content + margin-inline:auto para
+     centralizar o selo sem depender do alinhamento da headline, que
+     continua à esquerda de propósito (é o que evita as linhas
+     `nowrap` transbordando por cima da comida). inline-flex não
+     centraliza com margin:auto — é caixa em linha, não de bloco. */
+  display:flex;width:fit-content;align-items:center;gap:8px;
+  margin-inline:auto;
   padding:8px 15px;margin-bottom:22px;
   /* Sobre o rosa do hero: --rose-strong dava 3,95:1 e --rose-deep parava
      exatamente em 4,50 (na fronteira do AA, sem folga). O tom mais escuro
@@ -431,6 +437,11 @@ b,strong{font-weight:600}.kicker,.topbar,.topbar b,.hero__badge,.offer__tag,.pri
   font-weight:400;                 /* Inter Regular */
   font-size:clamp(15.5px,3.9vw,18px);line-height:1.6;
   color:var(--ink-soft);max-width:30ch;
+  /* Centralizada sob a headline (que segue à esquerda). margin:auto
+     centra o BLOCO dentro da coluna; text-align centra as linhas
+     dentro dele — precisa das duas, senão o bloco fica centrado mas
+     o texto por dentro continua rente à esquerda. */
+  margin-inline:auto;text-align:center;
 }
 /* --rose-strong dava 3,95:1 sobre o rosa do hero. Como este texto tem
    18px/600, ele NÃO conta como "texto grande" (precisa 18,66px + 700),
