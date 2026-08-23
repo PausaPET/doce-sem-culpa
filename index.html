@@ -914,11 +914,22 @@ footer{background-color:var(--blush);color:var(--ink-soft);padding:38px 0 28px;f
 }
 @media (min-width:900px){
   .cat{
-    grid-template-columns:minmax(0,1.02fr) minmax(0,1fr);
+    /* Coluna de texto um pouco mais larga: a headline tem duas metades
+       com quebra explícita, e cada uma precisa caber em UMA linha. Em
+       proporção 1:1 elas transbordavam e a manchete virava quatro
+       linhas irregulares. */
+    grid-template-columns:minmax(0,1.16fr) minmax(0,1fr);
     grid-template-areas:"head foto" "lista foto";
     gap:clamp(28px,3.4vw,54px);
     align-items:start;
   }
+  /* A foto é quadrada e a coluna de texto é mais alta que ela. Centrada
+     na própria faixa, a sobra fica dividida em cima e embaixo e lê como
+     respiro editorial; alinhada ao topo, virava um vão só no pé. */
+  .cat__foto{align-self:center}
+  /* Teto próprio: no `d2` cheio (até 50px) as metades da manchete não
+     cabiam na coluna. Medido — em 38px cada uma ocupa uma linha. */
+  .cat__head h2{font-size:clamp(28px,3.1vw,38px)}
 }
 .cat__head{grid-area:head}
 /* O painel só existe para a semântica de aba: quem entra no grid são
@@ -927,7 +938,25 @@ footer{background-color:var(--blush);color:var(--ink-soft);padding:38px 0 28px;f
 .cat__foto{grid-area:foto;margin:0}
 .cat__lista{grid-area:lista}
 
+/* A manchete tem duas metades com quebra explícita. Em tela estreita
+   cada metade ainda quebra, e sem `balance` o navegador deixava uma
+   palavra órfã sozinha na linha ("doce."). O `balance` distribui as
+   linhas por igual; onde não houver suporte, o texto só volta a
+   quebrar do jeito antigo. */
+.cat__head h2{
+  font-size:clamp(25px,6.4vw,38px);
+  text-wrap:balance;
+}
 .cat__head .lead{margin-top:16px}
+/* Frase de estrutura PARALELA (duas linhas espelhadas), não uma
+   subheadline explicativa: ganha um pouco mais de corpo e um respiro
+   entre linhas maior, para as duas metades se lerem como par. Sem
+   crescer a ponto de disputar com o h2. */
+.lead--par{
+  font-weight:500;line-height:1.45;
+  color:var(--ink-soft);max-width:22ch;
+}
+@media (min-width:900px){ .lead--par{max-width:24ch} }
 .cat__sw{
   position:relative;display:flex;gap:4px;padding:5px;
   width:max-content;max-width:100%;
@@ -1881,9 +1910,12 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
                     inverso. -->
     <div class="cat">
       <div class="cat__head">
-        <h2 class="serif d2 reveal" style="--i:0">Para a vontade de doce.<br>Para a fome do dia.</h2>
-        <p class="lead reveal" style="--i:1">50 opções para você não depender da mesma escolha toda
-          vez que a rotina aperta.</p>
+        <!-- Caixa de frase, não caixa alta: a página inteira usa
+             sentença nos h2 de seção (só o hero e a frase da Helena são
+             maiúsculas). O briefing escreve tudo em caixa alta por
+             convenção de documento, não como especificação tipográfica. -->
+        <h2 class="serif d2 reveal" style="--i:0">A vontade pede doce.<br>A rotina pede praticidade.</h2>
+        <p class="lead lead--par reveal" style="--i:1">Para cada vontade, uma opção.<br>Para cada dia, uma escolha.</p>
 
         <div class="cat__sw reveal reveal--pop" style="--i:2" role="tablist" aria-label="Categoria de receita">
           <button type="button" class="cat__tab" role="tab" id="tabDoces"
