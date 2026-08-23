@@ -1091,6 +1091,14 @@ footer{background-color:var(--blush);color:var(--ink-soft);padding:38px 0 28px;f
     align-items:center;justify-items:start;text-align:left;
     max-width:none;gap:clamp(36px,5vw,64px);
   }
+  /* Mesmo padrão do hero e da seção 06: texto centralizado dentro da
+     PRÓPRIA coluna (a coluna continua à direita da foto — só o que
+     está dentro dela centra). justify-items:start faz o item encolher
+     ao conteúdo mais largo (o kicker); sem width:100% aqui, o bloco
+     ficaria só tão largo quanto a linha maior e as linhas curtas
+     (nome, CTA) não teriam onde centralizar de verdade. */
+  .aut__txt{width:100%;text-align:center}
+  .aut__txt .btn{margin-inline:auto}
 }
 /* Peso visual pareado com a foto da seção 06: 4:5 em 400px no desktop
    nas duas — mesma proporção, mesmas dimensões, em qualquer largura
@@ -1106,10 +1114,6 @@ footer{background-color:var(--blush);color:var(--ink-soft);padding:38px 0 28px;f
 }
 @media (min-width:860px){
   .aut__foto{width:100%;max-width:400px;margin-inline:0}
-  /* .btn nasce com margin-inline:auto (centralizado). Na coluna de
-     texto alinhada à esquerda isso deixava o botão 76px fora do
-     prumo do nome e da frase. */
-  .aut__txt .btn{margin-inline:0}
 }
 .aut__foto__i{display:block;width:100%;height:100%}
 .aut__foto img{
