@@ -977,6 +977,14 @@ footer{background-color:var(--blush);color:var(--ink-soft);padding:38px 0 28px;f
   font-size:clamp(25px,6.4vw,38px);
   text-wrap:balance;
 }
+/* Mesmo padrão do hero: manchete e subheadline centralizadas dentro
+   da própria coluna (aqui, a coluna de texto — não a página inteira).
+   Especificidade de duas classes (.cat__head h2 / .cat__head .lead)
+   vence o `.cat__head{text-align:left}` do desktop abaixo sem
+   precisar mexer nele; seletor e lista de receitas continuam à
+   esquerda, fora do escopo deste pedido. */
+.cat__head h2,
+.cat__head .lead{text-align:center}
 .cat__head .lead{margin-top:16px}
 /* Frase de estrutura PARALELA (duas linhas espelhadas), não uma
    subheadline explicativa: ganha um pouco mais de corpo e um respiro
@@ -985,6 +993,10 @@ footer{background-color:var(--blush);color:var(--ink-soft);padding:38px 0 28px;f
 .lead--par{
   font-weight:500;line-height:1.45;
   color:var(--ink-soft);max-width:22ch;
+  /* max-width sem isto deixa o BLOCO grudado na borda esquerda da
+     coluna — text-align:center só centra o texto por dentro dele.
+     Mesma dupla usada no .hero__sub. */
+  margin-inline:auto;
 }
 @media (min-width:900px){ .lead--par{max-width:24ch} }
 .cat__sw{
