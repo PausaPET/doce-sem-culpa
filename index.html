@@ -421,6 +421,11 @@ b,strong{font-weight:600}.kicker,.topbar,.topbar b,.hero__badge,.offer__tag,.pri
   font-family:var(--font-head);
   font-weight:800;                 /* Poppins ExtraBold */
   text-transform:uppercase;
+  /* TESTE: centralizar o texto inteiro do hero, headline incluída.
+     Cada linha é um <span> de bloco que já ocupa a largura inteira da
+     coluna — text-align:center aqui centra o TEXTO dentro de cada
+     span, sem mudar onde cada span começa/termina. */
+  text-align:center;
   /* Caixa alta pede tracking menos negativo que caixa baixa: em -.025em
      as maiúsculas colavam. */
   letter-spacing:-.005em;
@@ -447,12 +452,17 @@ b,strong{font-weight:600}.kicker,.topbar,.topbar b,.hero__badge,.offer__tag,.pri
    18px/600, ele NÃO conta como "texto grande" (precisa 18,66px + 700),
    então o limite é 4,5 e não 3. O tom mais escuro resolve. */
 .hero__sub strong{color:var(--rose-deep);font-weight:600}
-.hero .btn{margin-inline:0;margin-top:30px}
+/* TESTE: no mobile o .btn já é width:100% (preenche a coluna, "lê"
+   como centralizado). No desktop (≥720px) o .btn genérico já centra
+   por margin-inline:auto — aqui o override que mantinha o CTA do hero
+   rente à esquerda foi trocado para repetir esse auto, propositalmente
+   redundante para deixar a intenção explícita nesta seção. */
+.hero .btn{margin-inline:auto;margin-top:30px}
 
 /* Trio de números: substitui a antiga legenda de uma linha em
    caixa-alta minúscula — mesma informação (50 · 25 · 25), com peso
    tipográfico de verdade em vez de apagada no rodapé do bloco. */
-.hero__stats{display:flex;margin-top:clamp(22px,3.4vw,32px)}
+.hero__stats{display:flex;justify-content:center;margin-top:clamp(22px,3.4vw,32px)}
 .hero__stats li{
   padding-inline:clamp(12px,1.4vw,20px);
   border-left:1px solid rgba(61,36,48,.15);
@@ -476,7 +486,7 @@ b,strong{font-weight:600}.kicker,.topbar,.topbar b,.hero__badge,.offer__tag,.pri
 /* Reforços abaixo do CTA (nunca acima: acima o botão cai para fora
    da primeira dobra num aparelho de 812px). */
 .hero__trust{
-  display:flex;flex-wrap:wrap;gap:10px clamp(14px,1.6vw,22px);
+  display:flex;flex-wrap:wrap;justify-content:center;gap:10px clamp(14px,1.6vw,22px);
   margin-top:clamp(20px,2.8vw,28px);
   font-size:clamp(10px,2.4vw,11.5px);
   font-weight:500;                    /* Inter Medium */
