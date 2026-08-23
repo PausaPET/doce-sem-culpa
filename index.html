@@ -407,6 +407,20 @@ summary,
 .hero__media{
   position:relative;width:100%;overflow:hidden;
   aspect-ratio:4/3;               /* == a proporção real do arquivo mobile */
+  /* A borda de baixo dissolve no degradê da página, como no desktop —
+     sem isso a foto termina numa linha reta e o hero vira uma "caixa"
+     colada no resto, que é justamente o que o degradê contínuo existe
+     para evitar.
+     ⚠️ Em PORCENTAGEM, não em px. A arte mobile não tem margem rosa
+     (medido: a comida vai até a última linha do arquivo), então os
+     130px do desktop — 44% deste cartão — apagariam pratos inteiros.
+     15% é a MESMA PROPORÇÃO que o desktop dissolve (130px de ~854px),
+     e acompanha o cartão quando ele encolhe em tela baixa.
+     O destino da dissolução é o rosa do próprio fundo da fotografia
+     (--hero-pink), que é também a primeira parada do degradê da
+     página: por isso a foto parece se dissolver no papel, não sumir. */
+  -webkit-mask-image:linear-gradient(180deg,#000 85%,transparent 100%);
+          mask-image:linear-gradient(180deg,#000 85%,transparent 100%);
 }
 .hero__media picture{display:block;width:100%;height:100%}
 .hero__media img{display:block;width:100%;height:100%;object-fit:cover}
