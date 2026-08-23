@@ -591,9 +591,19 @@ b,strong{font-weight:600}.kicker,.topbar,.topbar b,.hero__badge,.offer__tag,.pri
 /* ─── CTA FINAL ─────────────────────────────────────────────────
    Fecha a página sem reapresentar o produto: só o convite e o botão.
    Antes daqui havia apenas um botão solto no fim do FAQ. */
-.fim{text-align:center;max-width:26em;margin-inline:auto}
+.fim{
+  text-align:center;max-width:26em;margin-inline:auto;
+  /* Medido: o bloco encostava com 0px na borda da última pergunta —
+     a headline lia como resposta do FAQ, não como encerramento. */
+  margin-top:clamp(52px,8vw,88px);
+}
 .fim h2{margin-bottom:12px}
 .fim .lead{margin-bottom:26px}
+/* O encerramento JÁ fecha a página. Somar o respiro inteiro da seção
+   (120px no desktop) ao do rodapé abria 138px de vão vazio embaixo do
+   último texto. Aqui a seção fecha mais curto; o rodapé continua com
+   o respiro dele. */
+.sec--fecha{padding-bottom:clamp(36px,5vw,56px)}
 
 /* ─── 6.14 FAQ ──────────────────────────────────────────────── */
 .faq{display:grid;gap:0;max-width:620px;margin-inline:auto}
@@ -1867,7 +1877,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 <!-- ══════════════════════════════════════════════════════════════
      09. FAQ + CTA FINAL — objeções e decisão
      ══════════════════════════════════════════════════════════════ -->
-<section class="sec sec--babyblue" id="faq">
+<section class="sec sec--babyblue sec--fecha" id="faq">
   <div class="wrap">
     <div class="sec-head center reveal">
       <p class="kicker">Dúvidas frequentes</p>
