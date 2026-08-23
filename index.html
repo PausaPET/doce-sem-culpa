@@ -44,7 +44,6 @@
      Enquanto estiverem vazios a página funciona normalmente:
        • sem CHECKOUT_URL  → os botões de compra rolam até a oferta
        • sem META_PIXEL_ID → o pixel nem carrega (não suja seus dados)
-       • sem LAUNCH_DEADLINE → o contador NÃO aparece (nada de prazo falso)
      ══════════════════════════════════════════════════════════════ -->
 <script>
 window.LP = {
@@ -54,10 +53,9 @@ window.LP = {
   /* ID numérico do seu pixel da Meta. Ex: '1234567890123456' */
   META_PIXEL_ID: '',
 
-  /* Fim REAL da condição de lançamento, em ISO-8601 com fuso.
-     Ex: '2026-08-31T23:59:59-03:00'
-     Deixe null enquanto não houver data definida de verdade. */
-  LAUNCH_DEADLINE: null
+  /* LAUNCH_DEADLINE foi removido: o contador saiu da página nesta
+     rodada de poda. Sem data real de encerramento, ele não deve
+     existir — e um contador quebrado era o pior dos mundos. */
 };
 </script>
 
@@ -207,17 +205,10 @@ ul{padding:0;list-style:none}
   font-size:11.5px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;
   color:var(--rose-deep);
 }
-.kicker--light{color:var(--rose-deep)}
 .lead{font-size:clamp(17px,4.2vw,20px);line-height:1.55;color:var(--ink-soft)}
 .lead--light{color:var(--ink-soft)}
 .center{text-align:center}
 .hl{color:var(--rose-strong)}
-.hl-mark{
-  /* Sublinhado fino em caramelo, não tarja. Uma faixa alta e opaca sobre
-     foto escura lê como censura e rouba o contraste do texto branco. */
-  background:linear-gradient(transparent 86%,rgba(214,110,147,.9) 86%);
-  padding:0 .04em;
-}
 
 /* ─── CORREÇÃO DE PESO TIPOGRÁFICO ──────────────────────────────
    43 regras pediam font-weight 700/800 sem declarar família, caindo
@@ -237,16 +228,33 @@ ul{padding:0;list-style:none}
    que o Inter aqui não tem. 600 é o semibold real, sem síntese. As
    regras de classe abaixo têm especificidade maior e mantêm seus
    próprios pesos. */
-b,strong{font-weight:600}
-
-.kicker,.topbar,.topbar b,.hero__badge,.beats li.is-key,
-.offer__tag,.price__cur,.price__val,.price__cents,.price__pay,
-.trust li,.urgency__label,.countdown b,.countdown span,
-.seal b,.seal span,summary,.sticky-bar__info s,.sticky-bar__info b,
-.poll__opt,.poll__fix,.versus__lbl,.facts li,
-.prep__steps li,.pages figcaption,.autora__mono,.autora__papel,
-.tab,.recipes .n,.sig__mono,.sig__ig,.mock__selo b,.mock__selo span,
-.mock__pg figcaption,.mat-nums b,.mat-nums span{
+b,strong{font-weight:600}.kicker,
+.topbar,
+.topbar b,
+.hero__badge,
+.beats li.is-key,
+.offer__tag,
+.price__cur,
+.price__val,
+.price__cents,
+.price__pay,
+.trust li,
+.seal b,
+.seal span,
+summary,
+.sticky-bar__info s,
+.sticky-bar__info b,
+.poll__opt,
+.versus__lbl,
+.pages figcaption,
+.autora__mono,
+.autora__papel,
+.tab,
+.recipes .n,
+.mock__selo b,
+.mock__selo span,
+.mat-nums b,
+.mat-nums span{
   font-family:var(--font-head);
 }
 
@@ -598,29 +606,6 @@ b,strong{font-weight:600}
 }
 .trust .ico{color:var(--rose-deep)}
 
-/* urgência real — o contador só aparece com LAUNCH_DEADLINE configurado */
-.urgency{
-  background:var(--rose-pale);border:1px solid var(--rose-light);
-  border-radius:16px;padding:18px;margin-bottom:26px;text-align:center;
-}
-.urgency__label{
-  display:inline-flex;align-items:center;gap:8px;
-  font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--rose-deep);
-}
-.urgency p{margin-top:8px;font-size:13.5px;color:var(--ink-soft);line-height:1.45}
-.countdown[hidden]{display:none}
-.countdown{display:flex;justify-content:center;gap:8px;margin-top:15px}
-.countdown div{
-  min-width:60px;background:var(--petrol);color:var(--white);
-  border-radius:12px;padding:10px 6px;
-}
-.countdown b{display:block;font-size:23px;font-weight:800;line-height:1}
-.countdown span{
-  display:block;margin-top:4px;font-size:9.5px;font-weight:700;
-  letter-spacing:.09em;text-transform:uppercase;color:var(--petrol-light);
-}
-
 /* ─── 6.11 BENEFÍCIOS ───────────────────────────────────────── */
 
 /* ─── 6.12 FAIXA COM FOTO ───────────────────────────────────── */
@@ -678,6 +663,13 @@ b,strong{font-weight:600}
 }
 /* Sobre a fotografia, o tom secundário não aguenta — vira tinta cheia. */
 .band .lead--light{color:var(--ink)}
+
+/* ─── CTA FINAL ─────────────────────────────────────────────────
+   Fecha a página sem reapresentar o produto: só o convite e o botão.
+   Antes daqui havia apenas um botão solto no fim do FAQ. */
+.fim{text-align:center;max-width:26em;margin-inline:auto}
+.fim h2{margin-bottom:12px}
+.fim .lead{margin-bottom:26px}
 
 /* ─── 6.13 GARANTIA ─────────────────────────────────────────── */
 .guarantee{text-align:center;max-width:480px;margin-inline:auto}
@@ -805,10 +797,6 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
   border-radius:var(--radius);text-align:center;
 }
 .poll__msg{font-size:16.5px;line-height:1.5;color:var(--ink-soft)}
-.poll__fix{
-  margin-top:16px;padding-top:16px;border-top:1px solid rgba(61,36,48,.12);
-  font-size:19px;font-weight:700;color:var(--ink);line-height:1.35;
-}
 .poll__out .btn{margin-top:20px}
 
 /* ─── COMPARAÇÃO sem / com planejamento ─────────────────────── */
@@ -832,27 +820,6 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 .versus__col--good li::before{
   content:"\2713";position:absolute;left:0;top:10px;
   font-size:15px;font-weight:800;color:var(--rose-deep);
-}
-.facts{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;max-width:700px;margin:30px auto 0}
-.facts li{
-  padding:9px 16px;background:var(--rose-pale);border-radius:999px;
-  font-size:13px;font-weight:700;color:var(--ink);
-}
-
-/* ─── QUAL É O SEU MOMENTO ──────────────────────────────────── */
-
-/* ─── PREPARO DE 60 MINUTOS ─────────────────────────────────── */
-.prep__steps{display:grid;gap:10px;max-width:460px;margin:24px auto 0;counter-reset:s}
-.prep__steps li{
-  counter-increment:s;display:flex;align-items:center;gap:16px;
-  padding:15px 18px;background:rgba(255,255,255,.07);
-  border:1px solid rgba(255,255,255,.14);border-radius:14px;
-  font-size:16px;font-weight:700;color:var(--white);
-}
-.prep__steps li::before{
-  content:counter(s);flex:none;width:30px;height:30px;border-radius:50%;
-  background:var(--rose-strong);color:var(--white);  /* contraste AA em 13px */
-  font-size:13px;font-weight:800;display:grid;place-items:center;
 }
 
 /* ─── QUIZ DE QUALIFICAÇÃO ──────────────────────────────────── */
@@ -950,31 +917,6 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 @media (min-width:720px){
   .recipes{grid-template-columns:1fr 1fr;max-width:720px}
 }
-
-/* ─── ASSINATURA DA AUTORA (nas seções sobre o livro) ───────── */
-.sig{
-  display:flex;align-items:center;gap:14px;
-  max-width:530px;margin:34px auto 0;padding:14px 16px;
-  background:var(--white);border:1px solid #F0DDE5;border-radius:999px;
-  box-shadow:var(--shadow-sm);
-}
-.sig__foto{
-  position:relative;flex:none;width:54px;height:54px;border-radius:50%;
-  overflow:hidden;background:var(--rose-pale);display:grid;place-items:center;
-}
-/* a foto (injetada pelo script) cobre o monograma que fica atras */
-.sig__foto img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
-/* injetada pelo script quando img/autora.webp existir */
-.sig__mono{font-size:17px;font-weight:800;color:var(--rose-deep);letter-spacing:.02em}
-.sig__txt{flex:1;min-width:0;line-height:1.32}
-.sig__txt b{display:block;font-size:15px;color:var(--petrol)}
-.sig__txt span{font-size:12.5px;color:var(--ink-soft)}
-.sig__ig{
-  flex:none;display:inline-flex;align-items:center;min-height:44px;
-  padding:9px 15px;border-radius:999px;text-decoration:none;
-  background:var(--rose-pale);color:var(--rose-deep);
-  font-size:11.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;
-}
 /* ─── CELULAR ESTREITO / TELA BAIXA ─────────────────────────────
    A tela encolhe mas o conteúdo do hero não: a 320px ele terminava a
    84,4% da altura do hero, contra 76,8% a 375px — e a comida da arte
@@ -992,8 +934,6 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 }
 
 @media (max-width:479px){
-  .sig{border-radius:20px;flex-wrap:wrap}
-  .sig__ig{width:100%;justify-content:center}
 
   /* ─── CARD DE OFERTA MAIS COMPACTO NO CELULAR ───────────────
      O card da oferta final media 1047px numa tela de 812px — não
@@ -1010,22 +950,9 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
   .price__cur{font-size:20px;margin-top:10px}
   .price__cents{font-size:23px;margin-top:6px}
   .price__pay{margin-top:10px;padding:7px 13px}
-  .urgency{padding:13px;margin-bottom:18px;border-radius:14px}
   .trust{gap:6px;margin-top:16px}
   .trust li{padding:11px 5px;gap:5px}
 }
-
-/* ─── PROVA: a autora com o livro ───────────────────────────── */
-.prova{
-  display:grid;gap:20px;align-items:center;
-  max-width:640px;margin:34px auto 0;
-}
-.prova img{
-  width:100%;height:auto;aspect-ratio:760/950;object-fit:cover;
-  border-radius:var(--radius);box-shadow:var(--shadow-lg);
-}
-.prova figcaption{font-size:16px;line-height:1.5;color:var(--ink-soft);text-align:center}
-.prova figcaption b{display:block;color:var(--ink);font-size:18px;margin-bottom:6px}
 
 /* ─── SEÇÃO DA AUTORA ───────────────────────────────────────── */
 .autora{display:grid;gap:26px;justify-items:center;text-align:center;max-width:620px;margin:0 auto}
@@ -1049,23 +976,6 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 .btn--ig{
   background:var(--rose-deep);
   box-shadow:0 10px 26px rgba(173,49,89,.30);
-}
-/* faixa com a autora na cozinha, logo abaixo do retrato */
-.autora__faixa{
-  width:100%;max-width:620px;border-radius:var(--radius);overflow:hidden;
-  box-shadow:var(--shadow-md);
-}
-.autora__faixa img{width:100%;height:auto;aspect-ratio:900/600;object-fit:cover;display:block}
-
-/* passos dos 60 min sobre fundo claro */
-.prep__steps--claro{max-width:420px;margin-inline:auto}
-.prep__steps--claro li{
-  background:var(--rose-pale);border-color:#F0DDE5;color:var(--ink);
-}
-
-@media (min-width:720px){
-  .prova{grid-template-columns:1fr 1fr;gap:26px;max-width:760px}
-  .prova figcaption{text-align:left}
 }
 
 /* ─── O MATERIAL: mockup editorial com a capa real ──────────── */
@@ -1117,22 +1027,6 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
   letter-spacing:.14em;text-transform:uppercase;color:var(--white);
 }
 
-/* páginas internas */
-.mock__pgs{
-  display:grid;grid-template-columns:1fr 1fr;gap:12px;
-  width:100%;margin-top:30px;
-}
-.mock__pg{margin:0;position:relative}
-.mock__pg img{
-  width:100%;height:auto;aspect-ratio:620/928;object-fit:cover;
-  border-radius:8px;background:var(--white);
-  box-shadow:0 10px 26px rgba(27,53,64,.16);
-}
-.mock__pg figcaption{
-  margin-top:8px;text-align:center;font-size:10.5px;font-weight:800;
-  letter-spacing:.09em;text-transform:uppercase;color:var(--rose-deep);
-}
-
 /* ─── destaques 50 / 25 / 25 ────────────────────────────────── */
 .mat-nums{
   display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
@@ -1170,14 +1064,6 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
     width:262px;
     transform:perspective(1400px) rotateY(-16deg) rotateX(3deg);
   }
-  .mock__pgs{display:block;margin:0;height:520px}
-  .mock__pg{position:absolute;width:158px}
-  .mock__pg img{box-shadow:0 16px 34px rgba(27,53,64,.20)}
-  .mock__pg--1{left:2px;   top:26px;  transform:rotate(-7deg)}
-  .mock__pg--2{left:126px; top:214px; transform:rotate(-3deg)}
-  .mock__pg--3{right:126px;top:214px; transform:rotate(3deg)}
-  .mock__pg--4{right:2px;  top:26px;  transform:rotate(7deg)}
-  .mock__pg figcaption{font-size:9.5px}
   .mat-feats{grid-template-columns:1fr 1fr;max-width:660px}
 }
 
@@ -1386,7 +1272,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
         vontade de comer doce e facilitar sua alimentação até nos dias mais corridos.
       </p>
 
-      <a class="btn btn--cta" data-checkout href="#oferta" rel="nofollow noopener">
+      <a class="btn btn--cta" data-checkout href="#oferta-final" rel="nofollow noopener">
         Quero o Doce Sem Culpa
         <svg width="20" height="20" viewBox="0 0 24 24"><use href="#i-arrow"/></svg>
       </a>
@@ -1420,11 +1306,8 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
     </div>
 
     <ul class="beats reveal">
-      <li>Você acorda.</li>
-      <li>O dia corre. Trabalho, estudos, compromissos.</li>
-      <li>Pouco tempo.</li>
-      <li>A fome aparece.</li>
-      <li class="is-key">A vontade de doce aparece junto.</li>
+      <li>O dia corre. Pouco tempo.</li>
+      <li class="is-key">A vontade de doce aparece.</li>
       <li>E você escolhe o que está mais fácil.</li>
       <li class="is-quote">“Hoje vai. Amanhã eu compenso.”</li>
     </ul>
@@ -1457,8 +1340,6 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 
     <div class="poll__out reveal" id="pollOut" hidden>
       <p class="poll__msg" id="pollMsg"></p>
-      <p class="poll__fix serif">Quanto mais sua alimentação depende do improviso,
-        mais difícil fica controlar tempo, escolhas e gastos.</p>
       <a class="btn btn--ghost" href="#produto">Quero ver como funciona
         <svg width="19" height="19" viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
     </div>
@@ -1493,29 +1374,18 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
         <span class="mock__selo" aria-hidden="true"><b class="serif">50</b><span>Receitas</span></span>
       </div>
 
-      <div class="mock__pgs">
-      <figure class="mock__pg mock__pg--1">
-        <img src="img/pg-indice.webp" width="620" height="928" loading="lazy"
-             decoding="async" alt="Página de índice com as 50 receitas">
-        <figcaption>Índice</figcaption>
-      </figure>
-      <figure class="mock__pg mock__pg--2">
-        <img src="img/pg-doce.webp" width="620" height="928" loading="lazy"
-             decoding="async" alt="Página da receita de brigadeiro proteico de chocolate">
-        <figcaption>Receita doce</figcaption>
-      </figure>
-      <figure class="mock__pg mock__pg--3">
-        <img src="img/pg-salgado.webp" width="620" height="928" loading="lazy"
-             decoding="async" alt="Página da receita de pão de queijo proteico">
-        <figcaption>Receita salgada</figcaption>
-      </figure>
-      <figure class="mock__pg mock__pg--4">
-        <img src="img/pg-lista.webp" width="620" height="928" loading="lazy"
-             decoding="async" alt="Página do bônus com a lista de compras organizada">
-        <figcaption>Lista de compras</figcaption>
-      </figure>
-      </div>
     </div>
+
+    <!-- Carrossel de páginas REAIS: veio da antiga seção "Por dentro do
+         ebook", que dizia a mesma coisa que esta. As duas viraram uma. -->
+    <div class="pages reveal">
+      <figure><img src="img/pg-capa.webp" width="620" height="928" loading="lazy" decoding="async" alt="Capa do ebook Doce Sem Culpa"><figcaption>Capa</figcaption></figure>
+      <figure><img src="img/pg-indice.webp" width="620" height="928" loading="lazy" decoding="async" alt="Índice com as 50 receitas"><figcaption>Índice clicável</figcaption></figure>
+      <figure><img src="img/pg-doce.webp" width="620" height="928" loading="lazy" decoding="async" alt="Receita de brigadeiro proteico de chocolate"><figcaption>Receita doce</figcaption></figure>
+      <figure><img src="img/pg-salgado.webp" width="620" height="928" loading="lazy" decoding="async" alt="Receita de pão de queijo proteico"><figcaption>Receita salgada</figcaption></figure>
+      <figure><img src="img/pg-bonus.webp" width="620" height="928" loading="lazy" decoding="async" alt="Cardápio de 7 dias, um dos bônus"><figcaption>Bônus</figcaption></figure>
+    </div>
+    <p class="pages__hint">Arraste para o lado para ver mais páginas →</p>
 
     <p class="mat-frase serif reveal">Você sabe exatamente o que está levando.</p>
 
@@ -1527,9 +1397,9 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 
     <ul class="mat-feats reveal">
       <li><svg class="ico" width="19" height="19" viewBox="0 0 24 24"><use href="#i-check"/></svg>Ingredientes acessíveis</li>
-      <li><svg class="ico" width="19" height="19" viewBox="0 0 24 24"><use href="#i-check"/></svg>Passo a passo simples</li>
       <li><svg class="ico" width="19" height="19" viewBox="0 0 24 24"><use href="#i-check"/></svg>Tempo e dificuldade indicados</li>
-      <li><svg class="ico" width="19" height="19" viewBox="0 0 24 24"><use href="#i-check"/></svg>Pensado para rotina corrida</li>
+      <li><svg class="ico" width="19" height="19" viewBox="0 0 24 24"><use href="#i-check"/></svg>Índice clicável, para usar na cozinha</li>
+      <li><svg class="ico" width="19" height="19" viewBox="0 0 24 24"><use href="#i-check"/></svg>3 bônus: lista, cardápio e substituições</li>
     </ul>
 
     <!-- Receitas reais do ebook (páginas 10-52). Não inventar nomes aqui. -->
@@ -1572,20 +1442,9 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
       <p class="recipes__more">…e mais 19 lanches salgados no ebook.</p>
     </div>
 
-    <div class="sig reveal">
-      <span class="sig__foto">
-        <span class="sig__mono serif" aria-hidden="true">HA</span>
-      </span>
-      <span class="sig__txt">
-        <b>Dra. Helena Azevedo</b>
-        <span>Autora do ebook Doce Sem Culpa</span>
-      </span>
-      <a class="sig__ig" href="https://www.instagram.com/dra.helenaazevedo/" target="_blank" rel="noopener noreferrer">Ver Instagram</a>
-    </div>
-
     <div class="btn-wrap reveal">
-      <a class="btn btn--petrol" data-checkout href="#oferta" rel="nofollow noopener">
-        Quero o Doce Sem Culpa
+      <a class="btn btn--petrol" data-checkout href="#oferta-final" rel="nofollow noopener">
+        Quero agora
         <svg width="20" height="20" viewBox="0 0 24 24"><use href="#i-arrow"/></svg>
       </a>
     </div>
@@ -1614,21 +1473,11 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 
       <p class="autora__frase serif">“Doce não é o inimigo. Sem opção prática à mão, é.”</p>
 
-      <p>Foi ela quem selecionou e organizou as 50 receitas, definiu o limite de
-        8 ingredientes por preparo e montou o cardápio, a lista de compras e o
-        guia de substituições. O material tem curadoria — e tem dona.</p>
-
-      <div class="autora__faixa">
-        <img src="img/autora-cozinha.webp" width="900" height="600"
-             loading="lazy" decoding="async"
-             alt="Dra. Helena Azevedo na cozinha, apoiada na bancada com frutas frescas">
-      </div>
-
-      <p style="font-weight:600;color:var(--rose-deep)">
-        Veja os conteúdos, as dicas e os bastidores no Instagram dela.</p>
+      <p>Foi ela quem selecionou e organizou as 50 receitas. O material tem
+        curadoria — e tem dona.</p>
 
       <a class="btn btn--ig" href="https://www.instagram.com/dra.helenaazevedo/" target="_blank" rel="noopener noreferrer">
-        Conheça a Dra. Helena Azevedo
+        Conheça no Instagram
         <svg width="19" height="19" viewBox="0 0 24 24"><use href="#i-arrow"/></svg>
       </a>
 
@@ -1636,148 +1485,39 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
   </div>
 </section>
 
-<!-- ══════════════════════════════════════════════════════════════
-     8. PRIMEIRA OFERTA
-     ══════════════════════════════════════════════════════════════ -->
-<section class="sec sec--blush" id="oferta">
-  <div class="wrap">
-    <div class="sec-head center reveal">
-      <p class="kicker">Sem enrolação</p>
-      <h2 class="serif d2">Comece hoje.</h2>
-    </div>
 
-    <div class="offer reveal">
-      <div class="offer__head">
-        <span class="offer__tag">Oferta de lançamento</span>
-        <h3 class="serif d3">Doce Sem Culpa</h3>
-      </div>
-
-      <div class="offer__body">
-        <ul class="offer__list">
-          <li><svg class="ico" width="19" height="19" viewBox="0 0 24 24"><use href="#i-check"/></svg><span><b>50 receitas</b> práticas</span></li>
-          <li><svg class="ico" width="19" height="19" viewBox="0 0 24 24"><use href="#i-check"/></svg><span>25 doces + 25 lanches rápidos</span></li>
-          <li><svg class="ico" width="19" height="19" viewBox="0 0 24 24"><use href="#i-check"/></svg><span>Acesso digital imediato</span></li>
-        </ul>
-
-        <div class="price">
-          <span class="price__from">Por apenas</span>
-          <span class="price__now serif">
-            <span class="price__cur">R$</span><span class="price__val">27</span><span class="price__cents">,90</span>
-          </span>
-          <span class="price__pay">Pagamento único • Pix, cartão ou boleto</span>
-        </div>
-
-        <a class="btn btn--petrol" data-checkout href="#oferta-final" rel="nofollow noopener">
-          Quero começar agora
-          <svg width="20" height="20" viewBox="0 0 24 24"><use href="#i-arrow"/></svg>
-        </a>
-        <p class="btn-note">
-          <svg width="15" height="15" viewBox="0 0 24 24"><use href="#i-lock"/></svg>
-          Compra segura • Acesso imediato
-        </p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════════════════════════
-     9b. POR DENTRO DO EBOOK (páginas reais)
-     ══════════════════════════════════════════════════════════════ -->
-<section class="sec sec--ebook" id="dentro">
-  <div class="wrap">
-    <div class="sec-head center reveal">
-      <p class="kicker kicker--light">Transparência</p>
-      <h2 class="serif d2">Por dentro do ebook</h2>
-      <p class="lead lead--light">Estas são páginas reais do material.
-        Você sabe exatamente o que está levando antes de comprar.</p>
-    </div>
-  </div>
-
-  <div class="wrap">
-    <div class="pages reveal">
-      <figure><img src="img/pg-capa.webp" width="620" height="928" loading="lazy" decoding="async" alt="Capa do ebook Doce Sem Culpa"><figcaption>Capa</figcaption></figure>
-      <figure><img src="img/pg-indice.webp" width="620" height="928" loading="lazy" decoding="async" alt="Índice com as 50 receitas"><figcaption>Índice clicável</figcaption></figure>
-      <figure><img src="img/pg-metodo.webp" width="620" height="928" loading="lazy" decoding="async" alt="Página do método, com os três pilares"><figcaption>O método</figcaption></figure>
-      <figure><img src="img/pg-doce.webp" width="620" height="928" loading="lazy" decoding="async" alt="Receita de brigadeiro proteico de chocolate"><figcaption>Receita doce</figcaption></figure>
-      <figure><img src="img/pg-salgado.webp" width="620" height="928" loading="lazy" decoding="async" alt="Receita de pão de queijo proteico"><figcaption>Receita salgada</figcaption></figure>
-      <figure><img src="img/pg-bonus.webp" width="620" height="928" loading="lazy" decoding="async" alt="Cardápio de 7 dias, um dos bônus"><figcaption>Bônus</figcaption></figure>
-    </div>
-    <p class="pages__hint">Arraste para o lado para ver mais páginas →</p>
-    <figure class="prova reveal">
-      <img src="img/autora-livro.webp" width="760" height="950" loading="lazy"
-           decoding="async"
-           alt="Dra. Helena Azevedo folheando o livro Viva Leve Doce Sem Culpa na cozinha">
-      <figcaption><b>O material existe e tem dona.</b>
-        Quem selecionou as 50 receitas é quem aparece aqui.</figcaption>
-    </figure>
-    <div class="sig reveal">
-      <span class="sig__foto">
-        <span class="sig__mono serif" aria-hidden="true">HA</span>
-      </span>
-      <span class="sig__txt">
-        <b>Dra. Helena Azevedo</b>
-        <span>Autora do material que você está vendo</span>
-      </span>
-      <a class="sig__ig" href="https://www.instagram.com/dra.helenaazevedo/" target="_blank" rel="noopener noreferrer">Ver Instagram</a>
-    </div>
-  </div>
-</section>
 
 <!-- ══════════════════════════════════════════════════════════════
      3c. GASTAR MELHOR
      ══════════════════════════════════════════════════════════════ -->
-<section class="sec" id="dinheiro">
+<section class="sec sec--blush" id="dinheiro">
   <div class="wrap wrap--wide">
     <div class="sec-head center reveal">
       <p class="kicker">Sobre dinheiro</p>
-      <h2 class="serif d2">Comer melhor não precisa significar gastar mais.</h2>
+      <h2 class="serif d2">Coma melhor. Gaste melhor.</h2>
     </div>
 
     <div class="versus">
       <div class="versus__col versus__col--bad reveal">
         <span class="versus__lbl">Sem planejamento</span>
         <ul>
-          <li>“Vou comprar alguma coisa pronta.”</li>
-          <li>“Nem sei o que fazer hoje.”</li>
-          <li>“Vou no mercado e pego o que aparecer.”</li>
-          <li>“Depois vejo o que faço.”</li>
+          <li>Compro pronto.</li>
+          <li>Decido na hora.</li>
+          <li>Vou ao mercado sem saber.</li>
         </ul>
       </div>
       <div class="versus__col versus__col--good reveal">
         <span class="versus__lbl">Com o Doce Sem Culpa</span>
         <ul>
-          <li>“Já sei o que preparar.”</li>
-          <li>“Já sei o que comprar.”</li>
-          <li>“Tenho receitas para consultar.”</li>
-          <li>“Posso me organizar antes.”</li>
+          <li>Sei o que preparar.</li>
+          <li>Sei o que comprar.</li>
+          <li>Tenho opções à mão.</li>
         </ul>
       </div>
     </div>
 
-    <!-- Todos os números abaixo vêm do método do próprio ebook (pág. 4-5). -->
-    <ul class="facts reveal">
-      <li>Máximo de 8 ingredientes por receita</li>
-      <li>Preparos de 5 a 50 minutos, sempre declarados</li>
-      <li>Ingredientes de supermercado comum</li>
-      <li>Lista de compras organizada por categoria</li>
-      <li>Indicação do que pode ser congelado</li>
-    </ul>
-
-    <div class="reveal" style="margin-top:34px;text-align:center">
-      <p class="lead" style="max-width:24em;margin:0 auto 18px">
-        O ebook sugere reservar <strong>60 minutos no domingo</strong> para deixar
-        parte da semana pronta.</p>
-      <button type="button" class="btn btn--ghost" id="prepBtn"
-              aria-expanded="false" aria-controls="prepSteps">Tenho 60 minutos</button>
-      <div id="prepSteps" hidden>
-        <ol class="prep__steps prep__steps--claro">
-          <li>Escolha</li><li>Compre</li><li>Prepare</li><li>Porcione</li><li>Guarde</li>
-        </ol>
-      </div>
-    </div>
-
-    <p class="closing serif center reveal" style="max-width:22em;margin-inline:auto">
-      Não é gastar menos a qualquer custo. É gastar melhor quando você decide antes.
+    <p class="closing serif center reveal" style="max-width:20em;margin-inline:auto">
+      O problema não é gastar. É gastar sem planejar.
     </p>
   </div>
 </section>
@@ -1789,24 +1529,18 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
   <div class="wrap wrap--wide">
     <div class="sec-head center reveal">
       <p class="kicker">Sem promessa vazia</p>
-      <h2 class="serif d2">Por que confiar no Doce Sem Culpa?</h2>
-      <p class="lead">Tudo abaixo é verificável abrindo o material —
-        nada aqui depende de acreditar na nossa palavra.</p>
+      <h2 class="serif d2">Você sabe exatamente o que está comprando.</h2>
+      <p class="lead">Nada de promessa vaga. Veja o que realmente está
+        dentro do material.</p>
     </div>
 
     <ul class="trustlist reveal">
       <li><svg class="ico" width="20" height="20" viewBox="0 0 24 24"><use href="#i-check"/></svg><div><b>50 receitas</b><span>25 doces e 25 lanches salgados</span></div></li>
-      <li><svg class="ico" width="20" height="20" viewBox="0 0 24 24"><use href="#i-check"/></svg><div><b>Tempo e dificuldade declarados</b><span>Em cada receita, logo abaixo do título</span></div></li>
-      <li><svg class="ico" width="20" height="20" viewBox="0 0 24 24"><use href="#i-check"/></svg><div><b>Máximo de 8 ingredientes</b><span>De supermercado comum</span></div></li>
-      <li><svg class="ico" width="20" height="20" viewBox="0 0 24 24"><use href="#i-check"/></svg><div><b>Índice clicável</b><span>Feito para usar no celular enquanto cozinha</span></div></li>
-      <li><svg class="ico" width="20" height="20" viewBox="0 0 24 24"><use href="#i-check"/></svg><div><b>Lista de compras e cardápio</b><span>Organizados por categoria e por dia</span></div></li>
-      <li><svg class="ico" width="20" height="20" viewBox="0 0 24 24"><use href="#i-check"/></svg><div><b>Guia de substituições</b><span>Para quando faltar um ingrediente</span></div></li>
-      <li><svg class="ico" width="20" height="20" viewBox="0 0 24 24"><use href="#i-check"/></svg><div><b>Autora identificada</b><span>Com Instagram público</span></div></li>
+      <li><svg class="ico" width="20" height="20" viewBox="0 0 24 24"><use href="#i-check"/></svg><div><b>Ingredientes acessíveis</b><span>De supermercado comum</span></div></li>
+      <li><svg class="ico" width="20" height="20" viewBox="0 0 24 24"><use href="#i-check"/></svg><div><b>Tempo e dificuldade</b><span>Declarados em cada receita</span></div></li>
+      <li><svg class="ico" width="20" height="20" viewBox="0 0 24 24"><use href="#i-check"/></svg><div><b>Índice clicável</b><span>Para usar no celular enquanto cozinha</span></div></li>
+      <li><svg class="ico" width="20" height="20" viewBox="0 0 24 24"><use href="#i-check"/></svg><div><b>3 bônus</b><span>Lista de compras, cardápio e substituições</span></div></li>
       <li><svg class="ico" width="20" height="20" viewBox="0 0 24 24"><use href="#i-check"/></svg><div><b>7 dias de garantia</b><span>Reembolso integral dentro do prazo</span></div></li>
-    </ul>
-    <ul class="facts reveal" style="margin-top:30px">
-      <li>Mais opções</li><li>Mais praticidade</li><li>Menos tempo na cozinha</li>
-      <li>Mais variedade</li><li>Doce para a vontade</li><li>Lanche para o dia curto</li>
     </ul>
   </div>
 </section>
@@ -1829,8 +1563,9 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
   </div>
   <div class="wrap">
     <div class="sec-head center reveal">
-      <h2 class="serif d2">Você pode continuar procurando receitas...</h2>
-      <p class="lead lead--light">...ou pode começar hoje com tudo reunido em um só lugar.</p>
+      <h2 class="serif d2">Você não precisa de mais uma receita.</h2>
+      <p class="lead lead--light">Precisa parar de improvisar toda vez que a
+        vontade aparece.</p>
     </div>
 
     <div class="offer reveal">
@@ -1840,28 +1575,10 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
       </div>
 
       <div class="offer__body">
-        <!-- Urgência REAL: o contador só aparece se LAUNCH_DEADLINE estiver
-             preenchido no topo do arquivo. Sem data, sem contador. -->
-        <div class="urgency">
-          <p class="urgency__label">
-            <svg width="14" height="14" viewBox="0 0 24 24"><use href="#i-timer"/></svg>
-            Condição especial de lançamento
-          </p>
-          <p>Válida durante o período de lançamento.</p>
-          <div class="countdown" id="countdown" hidden aria-live="polite">
-            <div><b data-cd="d">--</b><span>dias</span></div>
-            <div><b data-cd="h">--</b><span>horas</span></div>
-            <div><b data-cd="m">--</b><span>min</span></div>
-            <div><b data-cd="s">--</b><span>seg</span></div>
-          </div>
-        </div>
-
         <ul class="offer__list">
-          <li><svg class="ico" width="19" height="19" viewBox="0 0 24 24"><use href="#i-check"/></svg><span><b>50 receitas</b> — 25 doces + 25 lanches</span></li>
-          <li><svg class="ico" width="19" height="19" viewBox="0 0 24 24"><use href="#i-check"/></svg><span>3 bônus: lista de compras, cardápio de 7 dias e guia de substituições</span></li>
-          <li><svg class="ico" width="19" height="19" viewBox="0 0 24 24"><use href="#i-check"/></svg><span>Índice clicável, feito para usar no celular enquanto cozinha</span></li>
-          <li><svg class="ico" width="19" height="19" viewBox="0 0 24 24"><use href="#i-check"/></svg><span>Máximo de 8 ingredientes e preparos de 5 a 50 minutos</span></li>
-          <li><svg class="ico" width="19" height="19" viewBox="0 0 24 24"><use href="#i-check"/></svg><span>Acesso imediato, direto no celular</span></li>
+          <li><svg class="ico" width="19" height="19" viewBox="0 0 24 24"><use href="#i-check"/></svg><span><b>50 receitas</b> + 3 bônus</span></li>
+          <li><svg class="ico" width="19" height="19" viewBox="0 0 24 24"><use href="#i-check"/></svg><span>25 doces + 25 lanches rápidos</span></li>
+          <li><svg class="ico" width="19" height="19" viewBox="0 0 24 24"><use href="#i-check"/></svg><span>Acesso digital imediato</span></li>
         </ul>
 
         <div class="price">
@@ -1873,7 +1590,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
         </div>
 
         <a class="btn btn--cta" data-checkout href="#oferta-final" rel="nofollow noopener">
-          Sim. Quero o Doce Sem Culpa
+          Quero agora
           <svg width="20" height="20" viewBox="0 0 24 24"><use href="#i-arrow"/></svg>
         </a>
         <p class="btn-note">
@@ -1901,10 +1618,10 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
         <div class="center"><b>7</b><span>dias</span></div>
       </div>
       <p class="kicker" style="margin-bottom:14px">Compre com tranquilidade</p>
-      <h2 class="serif d3">Você tem 7 dias para conhecer o material.</h2>
+      <h2 class="serif d3">7 dias para testar.</h2>
       <p class="lead" style="margin-top:16px">
-        Acesse tudo com calma e veja se faz sentido para a sua rotina. Se não for
-        para você, é só pedir o reembolso dentro do prazo e devolvemos o valor integral.
+        Acesse o material e decida dentro do prazo. Se não for para você,
+        devolvemos o valor integral.
       </p>
     </div>
   </div>
@@ -1934,20 +1651,8 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
         <div class="faq-a">Sim. O ebook foi feito para ser lido no celular — dá para consultar a receita direto na cozinha ou a lista de compras no mercado. Também abre no tablet e no computador.</div>
       </details>
       <details class="reveal">
-        <summary>Preciso saber cozinhar?<span class="chev"><svg width="16" height="16" viewBox="0 0 24 24"><use href="#i-chev"/></svg></span></summary>
-        <div class="faq-a">Não. As receitas foram escritas passo a passo, com linguagem simples e ingredientes fáceis de encontrar. Se você nunca cozinhou, consegue fazer.</div>
-      </details>
-      <details class="reveal">
-        <summary>As receitas são rápidas?<span class="chev"><svg width="16" height="16" viewBox="0 0 24 24"><use href="#i-chev"/></svg></span></summary>
-        <div class="faq-a">Sim — esse foi o critério para escolher cada uma. São preparos curtos, com poucos passos e poucos ingredientes, pensados para quem tem rotina corrida.</div>
-      </details>
-      <details class="reveal">
         <summary>O que está incluído?<span class="chev"><svg width="16" height="16" viewBox="0 0 24 24"><use href="#i-chev"/></svg></span></summary>
         <div class="faq-a">O ebook com 50 receitas — 25 doces fitness e 25 lanches salgados rápidos — mais os 3 materiais de apoio. Tudo digital, no mesmo acesso.</div>
-      </details>
-      <details class="reveal">
-        <summary>Quais são os bônus?<span class="chev"><svg width="16" height="16" viewBox="0 0 24 24"><use href="#i-chev"/></svg></span></summary>
-        <div class="faq-a">São três, todos inclusos: a <b>lista de compras</b> organizada por seção do mercado, o <b>cardápio de 7 dias</b> já montado e o <b>guia de substituições</b> para quando faltar um ingrediente.</div>
       </details>
       <details class="reveal">
         <summary>Como funciona a garantia?<span class="chev"><svg width="16" height="16" viewBox="0 0 24 24"><use href="#i-chev"/></svg></span></summary>
@@ -1955,9 +1660,12 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
       </details>
     </div>
 
-    <div class="btn-wrap reveal">
-      <a class="btn" href="#oferta-final">
-        Quero o Doce Sem Culpa
+    <div class="fim reveal">
+      <h2 class="serif d3">Comece hoje.</h2>
+      <p class="lead">Tenha suas próximas opções de doce e lanche reunidas
+        em um só lugar.</p>
+      <a class="btn btn--cta" data-checkout href="#oferta-final" rel="nofollow noopener">
+        Quero agora
         <svg width="20" height="20" viewBox="0 0 24 24"><use href="#i-arrow"/></svg>
       </a>
     </div>
@@ -1995,7 +1703,6 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
   <div class="sticky-bar__info">
     <s>Doce Sem Culpa</s>
     <b>R$27,90</b>
-    <i>🔒 Acesso imediato</i>
   </div>
   <a class="btn" data-checkout href="#oferta-final" rel="nofollow noopener">Quero agora</a>
 </aside>
@@ -2110,39 +1817,6 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
   /* 6. Ano do copyright sempre atualizado */
   var ano = $('#ano'); if (ano) ano.textContent = new Date().getFullYear();
 
-  /* 7. Contador de lançamento — SÓ existe se houver data real configurada.
-        Sem LAUNCH_DEADLINE, o bloco continua com [hidden] e a página mostra
-        apenas o texto da condição. Nenhum prazo é inventado. */
-  (function(){
-    var el = $('#countdown');
-    if (!el || !CFG.LAUNCH_DEADLINE) return;
-
-    var fim = new Date(CFG.LAUNCH_DEADLINE).getTime();
-    if (isNaN(fim)) {
-      if (window.console) console.warn('[DOCE SEM CULPA] LAUNCH_DEADLINE inválida:',
-                                       CFG.LAUNCH_DEADLINE);
-      return;
-    }
-    if (fim <= Date.now()) return;        // prazo já passou: não mostra nada
-
-    var campos = {};
-    ['d','h','m','s'].forEach(function(k){ campos[k] = $('[data-cd="'+k+'"]', el); });
-    var pad = function(n){ return n < 10 ? '0' + n : String(n); };
-
-    function tick(){
-      var resta = fim - Date.now();
-      if (resta <= 0){ el.hidden = true; clearInterval(timer); return; }
-      var s = Math.floor(resta / 1000);
-      campos.d.textContent = pad(Math.floor(s / 86400));
-      campos.h.textContent = pad(Math.floor(s % 86400 / 3600));
-      campos.m.textContent = pad(Math.floor(s % 3600 / 60));
-      campos.s.textContent = pad(s % 60);
-    }
-    tick();
-    el.hidden = false;
-    var timer = setInterval(tick, 1000);
-  })();
-
   /* 9. Enquete "quanto sua rotina te custa" */
   (function(){
     var box = $('#poll'); if (!box) return;
@@ -2154,17 +1828,6 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
         msg.textContent = b.dataset.msg;
         out.hidden = false;
       });
-    });
-  })();
-
-  /* 11. Preparo de 60 minutos */
-  (function(){
-    var b = $('#prepBtn'), alvo = $('#prepSteps'); if (!b || !alvo) return;
-    b.addEventListener('click', function(){
-      var aberto = b.getAttribute('aria-expanded') === 'true';
-      b.setAttribute('aria-expanded', aberto ? 'false' : 'true');
-      alvo.hidden = aberto;
-      if (!aberto) b.textContent = 'Perfeito. É só seguir os 5 passos.';
     });
   })();
 
@@ -2245,8 +1908,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
     var PLANO = [
       ['identificacao','--offwhite'],  ['custo','--rose-pale'],
       ['produto','--baby-blue'],       ['autora','--offwhite'],
-      ['oferta','--blush'],            ['dentro','--baby-blue'],
-      ['dinheiro','--offwhite'],       ['credibilidade','--rose-pale'],
+      ['dinheiro','--blush'],          ['credibilidade','--rose-pale'],
       ['oferta-final','--blush'],      ['garantia','--offwhite'],
       ['faq','--baby-blue']
     ];
