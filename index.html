@@ -515,6 +515,14 @@ b,strong{font-weight:600}.kicker,.topbar,.topbar b,.hero__badge,.offer__tag,.pri
   font-size:clamp(19px,4.8vw,26px);line-height:1.35;
   font-weight:600;color:var(--ink);
 }
+/* Só o fecho da identificação: medido, 38px acima (a régua dos atos)
+   contra 240px abaixo (padding-bottom desta seção + padding-top da
+   seguinte, ambos o --gap-sec compartilhado — não mexido, para não
+   desalinhar o ritmo do resto da página). A frase ficava "grudada"
+   perto de cima, sobrando um vazio grande embaixo. Empurra a frase
+   para baixo, consumindo parte desse vazio, sem tocar nos paddings
+   das seções. */
+.closing--desce{margin-top:clamp(80px,7vw,140px)}
 /* Só a frase da identificação ("E se, dessa vez...") — a classe
    .closing é compartilhada com o fecho da seção 03 ("Talvez o
    problema..."), que não foi pedido e não deve mudar. No desktop já
@@ -1836,7 +1844,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
       </li>
     </ol>
 
-    <p class="closing serif reveal reveal--mask">E se, dessa vez, você já soubesse o que fazer?</p>
+    <p class="closing closing--desce serif reveal reveal--mask">E se, dessa vez, você já soubesse o que fazer?</p>
   </div>
 </section>
 
@@ -1886,7 +1894,9 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
       <p class="opts__msg" id="pollMsg"></p>
     </div>
 
-    <p class="closing serif reveal reveal--mask">Talvez o problema não seja falta de vontade.
+    <!-- Mesmo padrão de centralização das outras seções (hero,
+         identificação, material, autora) — só faltava aplicar aqui. -->
+    <p class="closing center serif reveal reveal--mask">Talvez o problema não seja falta de vontade.
       Talvez seja <span class="hl">falta de opção</span>.</p>
     <p class="ponte reveal">E se você já soubesse o que preparar antes da
       vontade aparecer?</p>
