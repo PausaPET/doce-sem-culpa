@@ -901,11 +901,42 @@ footer{background-color:var(--blush);color:var(--ink-soft);padding:38px 0 28px;f
   }
 }
 
-/* ─── 6.7 SELETOR DE CATEGORIA (doces / lanches) ────────────────*/
+/* ─── 6.7 SELETOR DE CATEGORIA (doces / lanches) ────────────────
+   Grid NOMEADO: um DOM, duas composições.
+     celular → cabeça · foto · lista
+     desktop → texto à esquerda, foto à direita nas duas linhas
+   É o contraponto da seção da Helena, que é o inverso — as duas lidas
+   em sequência devem parecer duas páginas de uma mesma revista. */
+.cat{
+  display:grid;gap:clamp(22px,4vw,34px);
+  grid-template-columns:1fr;
+  grid-template-areas:"head" "foto" "lista";
+}
+@media (min-width:900px){
+  .cat{
+    grid-template-columns:minmax(0,1.02fr) minmax(0,1fr);
+    grid-template-areas:"head foto" "lista foto";
+    gap:clamp(28px,3.4vw,54px);
+    align-items:start;
+  }
+}
+.cat__head{grid-area:head}
+/* O painel só existe para a semântica de aba: quem entra no grid são
+   os filhos dele. */
+.cat__p{display:contents}
+.cat__foto{grid-area:foto;margin:0}
+.cat__lista{grid-area:lista}
+
+.cat__head .lead{margin-top:16px}
 .cat__sw{
   position:relative;display:flex;gap:4px;padding:5px;
-  width:max-content;margin:0 auto clamp(24px,5vw,34px);
+  width:max-content;max-width:100%;
+  margin:clamp(24px,4vw,32px) auto 0;
   background:var(--white);border-radius:999px;box-shadow:var(--shadow-sm);
+}
+@media (min-width:900px){
+  .cat__head{text-align:left}
+  .cat__sw{margin-inline:0}
 }
 .cat__tab{
   position:relative;z-index:1;
@@ -923,28 +954,27 @@ footer{background-color:var(--blush);color:var(--ink-soft);padding:38px 0 28px;f
   border-radius:999px;background:var(--rose-strong);
   transition:transform .38s cubic-bezier(.22,.61,.36,1),width .38s cubic-bezier(.22,.61,.36,1);
 }
-.cat__box{position:relative}
-.cat__p{
-  display:grid;gap:clamp(20px,4vw,34px);
-  grid-template-columns:1fr;align-items:center;
-}
-@media (min-width:820px){
-  .cat__p{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(30px,4vw,52px)}
-}
-.cat__p[hidden]{display:none}
+
+/* ⚠️ QUADRADA, e é isso que equilibra a seção. A arte é retrato
+   (760x950): solta, ela ficava muito mais alta que a fotografia da
+   Helena na seção seguinte e as duas páginas perdiam o par. */
 .cat__foto{
+  aspect-ratio:1/1;
+  width:100%;max-width:min(100%,430px);
+  margin-inline:auto;
   border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-lg);
-  transition:opacity .35s ease,transform .35s ease;
 }
-.cat__foto img{display:block;width:100%;height:auto}
-/* A arte é retrato (760x950). Em coluna única ela tomava quase a tela
-   inteira e empurrava os nomes das receitas para fora — que são o
-   argumento da seção. Recorte em paisagem no celular; no desktop, onde
-   ela fica ao lado do texto, o retrato volta. */
-@media (max-width:819px){
-  .cat__foto img{aspect-ratio:4/3;height:auto;object-fit:cover}
+@media (min-width:900px){
+  .cat__foto{max-width:none;margin-inline:0}
 }
-.cat__txt{transition:opacity .35s ease,transform .35s ease}
+.cat__foto__i{display:block;width:100%;height:100%}
+.cat__foto img{
+  display:block;width:100%;height:100%;object-fit:cover;
+  /* O prato fica na metade de baixo da arte; sem isto o recorte
+     quadrado cortaria justamente a comida. */
+  object-position:center 58%;
+}
+
 .cat__list{list-style:none;display:grid;gap:10px}
 .cat__list li{
   display:flex;align-items:center;gap:12px;
@@ -960,6 +990,9 @@ footer{background-color:var(--blush);color:var(--ink-soft);padding:38px 0 28px;f
 .cat__more{
   margin-top:18px;text-align:center;
   font-size:clamp(14px,3.6vw,15.5px);color:var(--ink-soft);
+}
+@media (min-width:900px){
+  .cat__more{text-align:left}
 }
 .cat__more b{
   font-size:clamp(19px,4.6vw,23px);font-weight:800;color:var(--rose-strong);
@@ -979,18 +1012,28 @@ footer{background-color:var(--blush);color:var(--ink-soft);padding:38px 0 28px;f
     max-width:none;gap:clamp(36px,5vw,64px);
   }
 }
+/* Peso visual pareado com a foto da seção 06 (quadrada, 430px):
+   4/5 em 380px dá ~180.500px² contra ~184.900px² — praticamente a
+   mesma mancha. Antes esta foto tinha 260px e a outra era retrato
+   solto: uma parecia miniatura ao lado da outra. */
 .aut__foto{
-  width:min(78%,260px);border-radius:var(--r-lg);overflow:hidden;
+  width:min(92%,380px);aspect-ratio:4/5;
+  margin-inline:auto;
+  border-radius:var(--r-lg);overflow:hidden;
   box-shadow:var(--shadow-lg);
 }
 @media (min-width:860px){
-  .aut__foto{width:100%;max-width:380px}
+  .aut__foto{width:100%;max-width:400px;margin-inline:0}
   /* .btn nasce com margin-inline:auto (centralizado). Na coluna de
      texto alinhada à esquerda isso deixava o botão 76px fora do
      prumo do nome e da frase. */
   .aut__txt .btn{margin-inline:0}
 }
-.aut__foto img{display:block;width:100%;height:auto}
+.aut__foto__i{display:block;width:100%;height:100%}
+.aut__foto img{
+  display:block;width:100%;height:100%;object-fit:cover;
+  object-position:center 22%;   /* mantém o rosto no enquadramento */
+}
 .aut__nome{margin-bottom:6px}
 .aut__papel{
   font-family:var(--font-head);
@@ -1160,6 +1203,7 @@ footer{background-color:var(--blush);color:var(--ink-soft);padding:38px 0 28px;f
 .js-anim .motion-pronto .offer__list,
 .js-anim .motion-pronto .price,
 .js-anim .motion-pronto .btn-note,
+.js-anim .motion-pronto.aut__foto__i,
 .js-anim .motion-pronto.aut__foto{
   opacity:1!important;transform:none!important;
   clip-path:none!important;transition:none!important;
@@ -1195,10 +1239,15 @@ footer{background-color:var(--blush);color:var(--ink-soft);padding:38px 0 28px;f
 .sec--flo{position:relative;isolation:isolate;overflow:hidden}
 .sec--flo > .wrap{position:relative;z-index:1}
 
-/* ─── SEÇÃO 06 — troca de categoria ─────────────────────────────*/
-.cat__p{transition:opacity .3s ease,transform .3s ease}
-.cat__p.is-saindo{opacity:0;transform:scale(.98)}
-.cat__p.is-entrando{animation:cat-entra .5s var(--ease-out) both}
+/* ─── SEÇÃO 06 — troca de categoria ─────────────────────────────
+   ⚠️ O efeito vive nos FILHOS, não no .cat__p: ele é display:contents,
+   e transform/opacity simplesmente não se aplicam a uma caixa que não
+   existe. Foto e lista fazem a travessia juntas. */
+.cat__foto img,.cat__lista{transition:opacity .3s ease,transform .3s ease}
+.cat__p.is-saindo .cat__foto img,
+.cat__p.is-saindo .cat__lista{opacity:0;transform:scale(.98)}
+.cat__p.is-entrando .cat__foto img,
+.cat__p.is-entrando .cat__lista{animation:cat-entra .5s var(--ease-out) both}
 @keyframes cat-entra{
   from{opacity:0;transform:scale(1.03)}
   to{opacity:1;transform:none}
@@ -1251,8 +1300,8 @@ footer{background-color:var(--blush);color:var(--ink-soft);padding:38px 0 28px;f
 }
 
 /* ─── SEÇÃO 07 — foto da autora ─────────────────────────────────*/
-.js-anim .aut__foto{transform:scale(.96);transition:transform .9s var(--ease-out),opacity .7s ease}
-.js-anim .aut__foto.is-in{transform:none}
+/* A entrada mudou de elemento: a figura agora carrega o parallax do
+   scroll, então quem escala é a camada de dentro (.reveal--foto). */
 
 /* ─── SEÇÃO 09 — FAQ ────────────────────────────────────────────
    A altura é animada em px pelo JS (details não anima sozinho: o
@@ -1291,11 +1340,27 @@ footer{background-color:var(--blush);color:var(--ink-soft);padding:38px 0 28px;f
   transition-delay:calc(var(--i,0) * 90ms);
 }
 .js-anim .reveal.is-in{opacity:1;transform:none}
+/* Entradas com assinatura própria — o pedido era que cada bloco
+   tivesse um gesto, não fade atrás de fade.
+     --pop  : o seletor "assenta" (0.96 -> 1)
+     --foto : a fotografia entra respirando (1.04 -> 1)
+   As duas caem no fade simples sob prefers-reduced-motion, porque a
+   regra global zera transform e transição. */
+.js-anim .reveal--pop{transform:scale(.96)}
+.js-anim .reveal--pop.is-in{transform:none}
+.js-anim .reveal--foto{transform:scale(1.04)}
+.js-anim .reveal--foto.is-in{transform:none}
+
 /* Mask reveal: a frase surge de baixo para cima dentro da própria
    caixa, sem deslocar layout. Reservado para as frases de impacto. */
 .js-anim .reveal--mask{opacity:1;transform:none;clip-path:inset(0 0 100% 0)}
 .js-anim .reveal--mask.is-in{clip-path:inset(0 0 0 0)}
-.reveal--mask{transition:clip-path .85s cubic-bezier(.22,.61,.36,1)}
+/* O atraso da cascata tem de vir junto: a regra do --mask troca a
+   transição inteira e, sem repetir o delay, a frase furava a fila. */
+.reveal--mask{
+  transition:clip-path .85s cubic-bezier(.22,.61,.36,1);
+  transition-delay:calc(var(--i,0) * 90ms);
+}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{animation:none!important;transition:none!important}
@@ -1804,54 +1869,76 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
      ⚠️ Só 4 destaques por categoria. A lista completa é o produto —
      mostrá-la aqui transformaria a seção em índice e mataria o desejo.
      ══════════════════════════════════════════════════════════════ -->
-<section class="sec sec--blush" id="variedade">
+<section class="sec sec--blush sec--flo" id="variedade">
+  <span class="flo flo--cream" data-par="-0.05" style="width:230px;height:230px;top:2%;left:-7%" aria-hidden="true"></span>
+  <span class="flo flo--blue flo--extra" data-par="0.04" style="width:160px;height:160px;bottom:6%;right:-5%" aria-hidden="true"></span>
   <div class="wrap wrap--wide">
-    <div class="sec-head center reveal">
-      <h2 class="serif d2">Para a vontade de doce.<br>Para a fome do dia.</h2>
-      <p class="lead">50 opções para você não depender da mesma escolha toda
-        vez que a rotina aperta.</p>
-    </div>
+    <!-- Grid nomeado: o MESMO DOM dá as duas composições.
+         Celular  → cabeça · foto · lista (a foto entra entre o seletor
+                    e os nomes, que é a ordem de leitura pedida).
+         Desktop  → texto à esquerda, foto à direita, ocupando as duas
+                    linhas — o contraponto da seção da Helena, que é o
+                    inverso. -->
+    <div class="cat">
+      <div class="cat__head">
+        <h2 class="serif d2 reveal" style="--i:0">Para a vontade de doce.<br>Para a fome do dia.</h2>
+        <p class="lead reveal" style="--i:1">50 opções para você não depender da mesma escolha toda
+          vez que a rotina aperta.</p>
 
-    <div class="cat reveal">
-      <div class="cat__sw" role="tablist" aria-label="Categoria de receita">
-        <button type="button" class="cat__tab" role="tab" id="tabDoces"
-                aria-selected="true" aria-controls="painelDoces">25 doces</button>
-        <button type="button" class="cat__tab" role="tab" id="tabLanches"
-                aria-selected="false" aria-controls="painelLanches">25 lanches</button>
-        <span class="cat__ind" aria-hidden="true"></span>
+        <div class="cat__sw reveal reveal--pop" style="--i:2" role="tablist" aria-label="Categoria de receita">
+          <button type="button" class="cat__tab" role="tab" id="tabDoces"
+                  aria-selected="true" aria-controls="painelDoces">25 doces</button>
+          <button type="button" class="cat__tab" role="tab" id="tabLanches"
+                  aria-selected="false" aria-controls="painelLanches">25 lanches</button>
+          <span class="cat__ind" aria-hidden="true"></span>
+        </div>
       </div>
 
-      <div class="cat__box" id="catBox">
-        <div class="cat__p is-on" id="painelDoces" role="tabpanel" aria-labelledby="tabDoces">
-          <div class="cat__foto">
+      <!-- display:contents — o painel existe para a leitura de tela
+           (role/aria), mas quem entra no grid são os filhos. -->
+      <div class="cat__p" id="painelDoces" role="tabpanel" aria-labelledby="tabDoces">
+        <!-- Três níveis, UM transform em cada: o inline do parallax
+             apagaria os outros se dividissem o mesmo elemento.
+               figure → parallax do scroll (JS)
+               span   → entrada (escala 1.04 → 1)
+               img    → travessia da troca de categoria -->
+        <figure class="cat__foto" data-par="0.0142">
+          <span class="cat__foto__i reveal reveal--foto" style="--i:3">
             <img src="img/doces.webp" width="760" height="950" loading="lazy"
                  decoding="async" alt="Morangos cobertos com chocolate, exemplo de receita doce do ebook">
-          </div>
-          <div class="cat__txt">
-            <ul class="cat__list">
-              <li style="--i:0">Cheesecake Fit de Frutas Vermelhas</li>
-              <li style="--i:1">Mousse Proteico de Chocolate</li>
-              <li style="--i:2">Picolé Proteico de Morango</li>
-              <li style="--i:3">Panqueca Doce Proteica</li>
-            </ul>
-            <p class="cat__more"><b class="serif">+21</b> receitas doces no ebook</p>
-          </div>
+          </span>
+        </figure>
+        <div class="cat__lista">
+          <ul class="cat__list">
+            <li style="--i:0">Cheesecake Fit de Frutas Vermelhas</li>
+            <li style="--i:1">Mousse Proteico de Chocolate</li>
+            <li style="--i:2">Picolé Proteico de Morango</li>
+            <li style="--i:3">Panqueca Doce Proteica</li>
+          </ul>
+          <p class="cat__more"><b class="serif">+21</b> receitas doces no ebook</p>
         </div>
+      </div>
 
-        <div class="cat__p" id="painelLanches" role="tabpanel" aria-labelledby="tabLanches" hidden>
-          <div class="cat__foto">
+      <div class="cat__p" id="painelLanches" role="tabpanel" aria-labelledby="tabLanches" hidden>
+        <!-- Três níveis, UM transform em cada: o inline do parallax
+             apagaria os outros se dividissem o mesmo elemento.
+               figure → parallax do scroll (JS)
+               span   → entrada (escala 1.04 → 1)
+               img    → travessia da troca de categoria -->
+        <figure class="cat__foto" data-par="0.0142">
+          <span class="cat__foto__i reveal reveal--foto" style="--i:3">
             <img src="img/lanches.webp" width="760" height="950" loading="lazy"
                  decoding="async" alt="Tapioca recheada, exemplo de lanche salgado do ebook">
-          </div>
-          <div class="cat__txt">
-            <ul class="cat__list">
-              <li style="--i:0">Coxinha Fitness de Frango</li>
-              <li style="--i:1">Pão de Queijo Proteico</li>
-              <li style="--i:2">Pizza Fitness de Frigideira</li>
-              <li style="--i:3">Wrap Proteico</li>
-            </ul>
-            <p class="cat__more"><b class="serif">+21</b> lanches salgados no ebook</p>
-          </div>
+          </span>
+        </figure>
+        <div class="cat__lista">
+          <ul class="cat__list">
+            <li style="--i:0">Coxinha Fitness de Frango</li>
+            <li style="--i:1">Pão de Queijo Proteico</li>
+            <li style="--i:2">Pizza Fitness de Frigideira</li>
+            <li style="--i:3">Wrap Proteico</li>
+          </ul>
+          <p class="cat__more"><b class="serif">+21</b> lanches salgados no ebook</p>
         </div>
       </div>
     </div>
@@ -1871,10 +1958,14 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
   <span class="flo flo--blue flo--extra" data-par="-0.035" style="width:130px;height:130px;top:44%;right:16%" aria-hidden="true"></span>
   <div class="wrap wrap--wide">
     <div class="aut">
-      <div class="aut__foto reveal">
-        <img src="img/autora-retrato.webp" width="700" height="875"
-             loading="lazy" decoding="async"
-             alt="Retrato da Dra. Helena Azevedo, autora do Doce Sem Culpa">
+      <!-- Mesma divisão de camadas da foto da seção 06: a figura leva
+           o parallax do scroll, a camada de dentro leva a entrada. -->
+      <div class="aut__foto" data-par="0.0166">
+        <span class="aut__foto__i reveal reveal--foto" style="--i:0">
+          <img src="img/autora-retrato.webp" width="700" height="875"
+               loading="lazy" decoding="async"
+               alt="Retrato da Dra. Helena Azevedo, autora do Doce Sem Culpa">
+        </span>
       </div>
 
       <div class="aut__txt">
@@ -2392,21 +2483,8 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
     nums.forEach(function(n){ ob.observe(n); });
   })();
 
-  /* 6d. Foto da autora: escala de 0.96 para 1 ao entrar. */
-  (function(){
-    var foto = $('.aut__foto'); if (!foto) return;
-    if (!('IntersectionObserver' in window)){ foto.classList.add('is-in'); return; }
-    var ob = new IntersectionObserver(function(es){
-      es.forEach(function(e){
-        if (e.isIntersecting){
-          foto.classList.add('is-in'); ob.disconnect();
-          setTimeout(function(){ foto.classList.add('motion-pronto'); }, 1400);
-        }
-      });
-    }, {threshold:0.2});
-    ob.observe(foto);
-    setTimeout(function(){ foto.classList.add('is-in','motion-pronto'); }, 4000);
-  })();
+  /* 6d. A foto da autora entra pelo observer geral de .reveal —
+         a camada interna leva a classe. Não precisa de bloco próprio. */
 
   /* 9. Cards do custo invisível.
         A resposta não é escondida com [hidden]: ela precisa de transição,
