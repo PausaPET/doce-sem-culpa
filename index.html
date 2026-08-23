@@ -271,14 +271,43 @@ ul{padding:0;list-style:none}
    Progressive enhancement: as cores sólidas continuam no CSS e só são
    apagadas quando o JS confirma que montou o degradê (classe
    `.ceu-on`). Sem JS, a página volta ao comportamento anterior. */
+/* DUAS camadas de propósito: a rolagem e a deriva contínua são os dois
+   `transform`, e um sobrescreveria o outro na mesma camada.
+   .ceu (fora) = parallax da rolagem, escrito pelo JS.
+   .ceu__i (dentro) = deriva permanente, 100% CSS. */
 .ceu{
   position:fixed;
   /* mais alto que a viewport: a folga é o que o parallax consome sem
      nunca deixar a borda da textura entrar em quadro */
   top:-22vh;bottom:-22vh;left:0;right:0;
-  z-index:-1;pointer-events:none;
+  z-index:-1;pointer-events:none;overflow:hidden;
+}
+.ceu__i{
+  position:absolute;
+  /* Sobra em volta: é ela que a deriva consome, então a borda da
+     textura nunca entra em quadro. O caso apertado é o MOBILE — a
+     camada tem só ~375px de largura, e a sobra é percentual. Medido a
+     375px: 62px de folga no ponto mais crítico do percurso. */
+  inset:-20%;
   background:url("img/nuvens.webp") center/cover no-repeat;
+  /* Animação de TRANSFORM: roda no compositor, fora da thread
+     principal, e o navegador congela sozinho com a aba oculta.
+     Um ciclo de 2 minutos — a intenção é perceber o movimento só
+     quando se para para olhar. */
+  animation:deriva-nuvens 120s linear infinite;
   will-change:transform;
+}
+/* Percurso FECHADO (o 100% repete o 0%): o laço reinicia sem salto e
+   sem inverter a direção, que é o que faria parecer um vaivém. */
+@keyframes deriva-nuvens{
+  0%   {transform:translate3d(-3.6%,-2.0%,0)}
+  25%  {transform:translate3d( 1.2%,-3.0%,0)}
+  50%  {transform:translate3d( 3.4%, 1.8%,0)}
+  75%  {transform:translate3d(-1.4%, 3.0%,0)}
+  100% {transform:translate3d(-3.6%,-2.0%,0)}
+}
+@media (prefers-reduced-motion:reduce){
+  .ceu__i{animation:none}
 }
 .ceu-on .sec--soft,
 .ceu-on .sec--blush,
@@ -1165,7 +1194,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 
 <!-- Camada de nuvens: uma só para a página inteira, para que o desenho
      não reinicie a cada seção. Fica atrás do conteúdo (z-index:-1). -->
-<div class="ceu" aria-hidden="true"></div>
+<div class="ceu" aria-hidden="true"><div class="ceu__i"></div></div>
 
 <!-- ══════════════════════════════════════════════════════════════
      BIBLIOTECA DE ÍCONES (SVG inline, 1x no DOM, reuso via <use>)
