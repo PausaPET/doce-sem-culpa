@@ -918,9 +918,14 @@ footer{background-color:var(--blush);color:var(--ink-soft);padding:38px 0 28px;f
        com quebra explícita, e cada uma precisa caber em UMA linha. Em
        proporção 1:1 elas transbordavam e a manchete virava quatro
        linhas irregulares. */
-    grid-template-columns:minmax(0,1.16fr) minmax(0,1fr);
+    /* A foto e a fotografia da Helena precisam ler com a MESMA
+       presença. Antes: 440 de altura contra 500 dela (0,88) — a desta
+       seção parecia menor. Coluna e respiro reequilibrados para a
+       quadrada crescer sem espremer a manchete, que tem duas metades e
+       cada uma precisa caber em uma linha. */
+    grid-template-columns:minmax(0,1.09fr) minmax(0,1fr);
     grid-template-areas:"head foto" "lista foto";
-    gap:clamp(28px,3.4vw,54px);
+    gap:clamp(24px,2.6vw,40px);
     align-items:start;
   }
   /* A foto é quadrada e a coluna de texto é mais alta que ela. Centrada
@@ -929,7 +934,6 @@ footer{background-color:var(--blush);color:var(--ink-soft);padding:38px 0 28px;f
   .cat__foto{align-self:center}
   /* Teto próprio: no `d2` cheio (até 50px) as metades da manchete não
      cabiam na coluna. Medido — em 38px cada uma ocupa uma linha. */
-  .cat__head h2{font-size:clamp(28px,3.1vw,38px)}
 }
 .cat__head{grid-area:head}
 /* O painel só existe para a semântica de aba: quem entra no grid são
@@ -943,6 +947,11 @@ footer{background-color:var(--blush);color:var(--ink-soft);padding:38px 0 28px;f
    palavra órfã sozinha na linha ("doce."). O `balance` distribui as
    linhas por igual; onde não houver suporte, o texto só volta a
    quebrar do jeito antigo. */
+/* Uma clamp só cobre os dois extremos: 25px a 320px (onde cada metade
+   ainda quebra) e 38px no desktop (onde cada metade ocupa uma linha).
+   Não há regra por breakpoint — medido nos dois pontos.
+   `balance` distribui as linhas quando há quebra; sem ele o navegador
+   deixava uma palavra órfã sozinha ("doce."). */
 .cat__head h2{
   font-size:clamp(25px,6.4vw,38px);
   text-wrap:balance;
