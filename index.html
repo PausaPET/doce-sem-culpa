@@ -36,6 +36,7 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700;800&display=swap">
 <link rel="preload" as="image" href="img/hero-mobile.webp" media="(max-width:899px)" fetchpriority="high">
 <link rel="preload" as="image" href="img/hero-desktop.webp"
+      imagesrcset="img/hero-desktop.webp 1x, img/hero-desktop@2x.webp 2x"
       media="(min-width:900px)" fetchpriority="high">
 
 <!-- ══════════════════════════════════════════════════════════════
@@ -156,11 +157,12 @@ fbq('track', 'PageView');
      no bloco 9 (DESKTOP). */
   --shell-max:1240px;
   --shell:min(100% - (var(--pad) * 2), var(--shell-max));
-  /* Teto da FAIXA da fotografia do hero. A arte tem 1672px nativos:
-     esticá-la além de ~2000px vira upscale visível, então a faixa
-     trava aí e o resto da tela fica no mesmo rosa do fundo da foto
-     (--hero-pink), sem emenda perceptível. */
-  --hero-band:2000px;
+  /* Teto da FAIXA da fotografia do hero = a resolução NATIVA da arte
+     (1672px). Acima disso a imagem seria ampliada e perderia nitidez —
+     era o que acontecia com o teto anterior de 2000px. O resto da tela
+     fica no mesmo rosa do fundo da foto (--hero-pink), sem emenda
+     perceptível, então travar aqui não cria "espaço vazio". */
+  --hero-band:1672px;
   --gap-sec:clamp(64px,13vw,120px);   /* respiro entre seções */
   --sticky-h:0px;
 }
@@ -1080,7 +1082,9 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
   .hero__sub{font-size:19px}
 }
 @media (min-width:2560px){
-  :root{--shell-max:1560px;--hero-band:2000px}
+  /* --hero-band NÃO é alargado aqui: a arte tem 1672px nativos e
+     esticá-la para 2000px era justamente o que tirava a nitidez. */
+  :root{--shell-max:1560px}
   .hero__title{font-size:56px}
   .hero__sub{font-size:20px}
   .hero__stats b{font-size:30px}
@@ -1136,7 +1140,11 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
        está queimado na imagem: headline, CTA e selos são HTML/CSS. -->
   <div class="hero__media">
     <picture>
-      <source media="(min-width:900px)" srcset="img/hero-desktop.webp"
+      <!-- 2x só para telas de alta densidade: o Lanczos não cria detalhe
+           novo, mas entrega o dobro de pixels em vez de deixar o
+           navegador ampliar sozinho. Telas 1x não baixam esse arquivo. -->
+      <source media="(min-width:900px)"
+              srcset="img/hero-desktop.webp 1x, img/hero-desktop@2x.webp 2x"
               width="1672" height="941">
       <img src="img/hero-mobile.webp" width="1170" height="2095"
            fetchpriority="high" decoding="async"
