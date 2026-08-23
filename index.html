@@ -284,9 +284,16 @@ ul{padding:0;list-style:none}
 .ceu-on .sec--blush,
 .ceu-on .sec--babyblue,
 .ceu-on .sec--ebook,
+.ceu-on .band,
+.ceu-on .hero,
 .ceu-on footer{background-color:transparent}
-/* O hero e a .band têm fotografia própria: continuam opacos e cobrem
-   o céu, que é justamente o que se quer. */
+/* O hero e a .band também ficam transparentes: as fotos deles são
+   mascaradas nas bordas, e é o degradê da página que precisa aparecer
+   por baixo. Mantê-los opacos recriaria a borda dura. */
+.hero__media{
+  -webkit-mask-image:linear-gradient(180deg,#000 calc(100% - 130px),transparent 100%);
+          mask-image:linear-gradient(180deg,#000 calc(100% - 130px),transparent 100%);
+}
 @media (prefers-reduced-motion:reduce){
   .ceu{transform:none!important}
 }
@@ -393,7 +400,10 @@ ul{padding:0;list-style:none}
   font-size:clamp(15.5px,3.9vw,18px);line-height:1.6;
   color:var(--ink-soft);max-width:30ch;
 }
-.hero__sub strong{color:var(--rose-strong);font-weight:600}
+/* --rose-strong dava 3,95:1 sobre o rosa do hero. Como este texto tem
+   18px/600, ele NÃO conta como "texto grande" (precisa 18,66px + 700),
+   então o limite é 4,5 e não 3. O tom mais escuro resolve. */
+.hero__sub strong{color:var(--rose-deep);font-weight:600}
 .hero .btn{margin-inline:0;margin-top:30px}
 
 /* Trio de números: substitui a antiga legenda de uma linha em
@@ -542,12 +552,27 @@ ul{padding:0;list-style:none}
    o texto branco continua legível em vez de cair sobre o off-white. */
 .band{
   position:relative;isolation:isolate;overflow:hidden;
-  background:var(--blush);color:var(--ink);
+  background-color:var(--blush);color:var(--ink);
 }
-.band__img{position:absolute;inset:0;z-index:-2;width:100%;height:100%;object-fit:cover}
+/* A foto DISSOLVE nas duas pontas em vez de terminar cortada. Sem isso
+   a faixa vira um retângulo de borda dura por cima do degradê contínuo
+   — era a emenda que sobrava na entrada e na saída da oferta final. */
+.band__img{
+  position:absolute;inset:0;z-index:-2;width:100%;height:100%;object-fit:cover;
+  -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 120px,
+                     #000 calc(100% - 120px),transparent 100%);
+          mask-image:linear-gradient(180deg,transparent 0,#000 120px,
+                     #000 calc(100% - 120px),transparent 100%);
+}
+/* O véu acompanha: se ele continuasse opaco nas pontas, o retângulo
+   voltaria a aparecer mesmo com a foto mascarada. */
 .band::after{
   content:"";position:absolute;inset:0;z-index:-1;
-  background:linear-gradient(180deg,rgba(247,220,230,.93),rgba(247,220,230,.88));
+  background:linear-gradient(180deg,
+    transparent 0,
+    rgba(247,220,230,.93) 120px,
+    rgba(247,220,230,.88) calc(100% - 120px),
+    transparent 100%);
 }
 
 /* ─── 6.13 GARANTIA ─────────────────────────────────────────── */
