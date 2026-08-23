@@ -105,11 +105,12 @@ fbq('track', 'PageView');
 
   /* MARCA — rosa */
   --rose-darker:#7E2744;   /* topbar e rodapé — texto claro 8,66:1 */
-  --rose-deep:#AD3159;     /* rosa da marca. Bg c/ branco 6,25:1; como
-                              TEXTO: off-white 5,83:1, blush 4,86:1.
-                              (o #B23A63 dava 4,44:1 sobre blush e
-                              reprovava AA nos kickers da seção
-                              financeira — por isso este tom) */
+  /* Escurecido de #AD3159 (que já vinha de #B23A63). Com as nuvens
+     mais presentes, o pior fundo sob um kicker é rgb(237,207,211) — na
+     faixa rosa logo abaixo do hero — e ali o #AD3159 caía para 4,31:1.
+     Este dá 4,74:1. Como também é fundo de botão, branco sobre ele
+     melhorou junto (6,25 → ~6,9). */
+  --rose-deep:#A32D53;
   --rose-strong:#C42A63;   /* atenção: CTA e destaque da headline.
                               Bg c/ branco 5,44:1; texto/off-white 5,07:1.
                               (o #E23F76 da referência dava só 4,03:1
@@ -216,6 +217,37 @@ ul{padding:0;list-style:none}
      foto escura lê como censura e rouba o contraste do texto branco. */
   background:linear-gradient(transparent 86%,rgba(214,110,147,.9) 86%);
   padding:0 .04em;
+}
+
+/* ─── CORREÇÃO DE PESO TIPOGRÁFICO ──────────────────────────────
+   43 regras pediam font-weight 700/800 sem declarar família, caindo
+   no Inter — que aqui carrega só 400/500/600. O navegador então
+   SINTETIZAVA o negrito (faux bold), que empasta justamente nos
+   rótulos pequenos em caixa alta.
+
+   Em vez de baixar mais dois arquivos de fonte (Inter 700/800, ~40 KB
+   numa página de tráfego pago), estes elementos passam para Poppins,
+   que JÁ está carregado em 600/700/800. São todos rótulos, números,
+   badges e chamadas — display, não texto de leitura —, então a família
+   de display é a escolha certa para eles.
+
+   ⚠️ Se algum destes voltar para Inter, ou reaparece o negrito falso
+   ou é preciso adicionar os pesos na URL do Google Fonts. */
+/* Ênfase dentro de texto corrido: o negrito padrão do navegador é 700,
+   que o Inter aqui não tem. 600 é o semibold real, sem síntese. As
+   regras de classe abaixo têm especificidade maior e mantêm seus
+   próprios pesos. */
+b,strong{font-weight:600}
+
+.kicker,.topbar,.topbar b,.hero__badge,.beats li.is-key,
+.offer__tag,.price__cur,.price__val,.price__cents,.price__pay,
+.trust li,.urgency__label,.countdown b,.countdown span,
+.seal b,.seal span,summary,.sticky-bar__info s,.sticky-bar__info b,
+.poll__opt,.poll__fix,.versus__lbl,.facts li,
+.prep__steps li,.pages figcaption,.autora__mono,.autora__papel,
+.tab,.recipes .n,.sig__mono,.sig__ig,.mock__selo b,.mock__selo span,
+.mock__pg figcaption,.mat-nums b,.mat-nums span{
+  font-family:var(--font-head);
 }
 
 /* ─── 4. BOTÕES ─────────────────────────────────────────────── */
@@ -497,7 +529,11 @@ ul{padding:0;list-style:none}
 }
 .beats li.is-key{color:var(--ink);font-weight:700}
 .beats li.is-quote{
-  font-style:italic;color:var(--rose-strong);font-weight:600;
+  /* --rose-strong (cor de AÇÃO) dava 4,46:1 aqui: esta seção fica logo
+     abaixo do hero, onde o degradê está no seu ponto mais rosa — o
+     fundo mais escuro para um texto rosa. O tom da marca resolve sem
+     mexer na cor dos botões. */
+  font-style:italic;color:var(--rose-deep);font-weight:600;
 }
 
 /* ─── 6.4 CHECKLIST ─────────────────────────────────────────── */
@@ -1546,7 +1582,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
              alt="Dra. Helena Azevedo na cozinha, apoiada na bancada com frutas frescas">
       </div>
 
-      <p style="font-weight:700;color:var(--rose-deep)">
+      <p style="font-weight:600;color:var(--rose-deep)">
         Veja os conteúdos, as dicas e os bastidores no Instagram dela.</p>
 
       <a class="btn btn--ig" href="https://www.instagram.com/dra.helenaazevedo/" target="_blank" rel="noopener noreferrer">
