@@ -821,7 +821,37 @@ footer{background-color:var(--blush);color:var(--ink-soft);padding:38px 0 28px;f
    seção. Medida de leitura limitada mantém o miolo confortável. */
 .pergunta{
   font-size:clamp(23px,5.5vw,38px);
-  max-width:15em;margin-inline:auto;
+  margin-inline:auto;
+}
+/* ⚠️ Limite físico medido: a frase inteira (98 caracteres) não cabe em
+   2 linhas com fonte legível em NENHUM celular. No tamanho de fonte
+   deste headline, a metade mais longa precisaria de 620px — a maior
+   tela de celular testada (430px) só tem 386px disponíveis, e o
+   tamanho que caberia ali (14,5px) fica menor que o próprio texto de
+   corpo da página. Forçar 2 linhas a qualquer custo no mobile
+   quebraria a hierarquia tipográfica pra resolver uma questão só
+   visível no desktop.
+   Por isso a quebra em bloco só entra a partir de 640px, com o teto
+   do clamp baixado de 38 para 36px (medido: a 1440px a metade mais
+   longa cabia em 37px — 38 sobrava 1px e já derrubava a 2ª metade
+   para 2 linhas). Abaixo de 640px os <span> ficam em linha, como
+   texto corrido — o navegador escolhe onde quebrar, e
+   text-wrap:balance equilibra as linhas resultantes.
+   ⚠️ balance só pode valer no modo "texto corrido" (abaixo de 640px):
+   aplicado junto com os <span> em bloco, ele mexe na quebra DENTRO de
+   cada bloco de um jeito imprevisível (medido: uma 3ª linha aparecia
+   do nada mesmo com espaço de sobra). */
+@media (max-width:639px){
+  .pergunta{text-wrap:balance}
+}
+@media (min-width:640px){
+  /* Curva própria, medida ponto a ponto (não a mesma do clamp base):
+     640px cabe 22,5px, 900px cabe 30,5px, 1440px cabe 37px — a
+     progressão do clamp original (23px de piso, 38px de teto) ficava
+     ACIMA do que cabe logo no início da faixa. */
+  .pergunta{font-size:clamp(21px,3.3vw,34px)}
+  .pergunta > span{display:block}
+  .pergunta > span + span{margin-top:.1em}
 }
 .ponte{
   margin-top:14px;text-align:center;
@@ -1856,11 +1886,22 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
      reconhecimento da frequência. Não inventar número.
      ══════════════════════════════════════════════════════════════ -->
 <section class="sec sec--soft" id="custo">
-  <div class="wrap">
+  <!-- wrap--wide (não wrap): a pergunta é uma frase longa e precisa da
+       coluna mais larga pra caber em 2 linhas sem espremer a fonte. Os
+       cards abaixo (.opts) têm max-width PRÓPRIO e ficam centralizados
+       de qualquer forma — alargar aqui não estica o resto do bloco. -->
+  <div class="wrap wrap--wide">
     <div class="sec-head center reveal">
       <p class="kicker">O custo invisível</p>
-      <h2 class="serif d2 pergunta">Em uma semana corrida, quantas vezes você
-        acaba comprando algo pronto porque não tinha uma opção?</h2>
+      <!-- Quebra EXPLÍCITA em 2 linhas (mesma técnica das seções 02/hero):
+           corte no verbo+gerúndio ("acaba" / "comprando"), que mantém
+           cada metade como uma unidade gramatical completa e as duas
+           com comprimento parecido — não o navegador decidindo e
+           espalhando a frase em 4 linhas desiguais. -->
+      <h2 class="serif d2 pergunta">
+        <span>Em uma semana corrida, quantas vezes você acaba</span>
+        <span>comprando algo pronto porque não tinha uma opção?</span>
+      </h2>
     </div>
 
     <div class="opts reveal" id="poll" role="group" aria-label="Vezes por semana">
