@@ -1020,29 +1020,26 @@ footer{background-color:var(--blush);color:var(--ink-soft);padding:38px 0 28px;f
    explícito desta rodada; a versão anterior (1/1, largura própria)
    dava mesma ÁREA aproximada mas não as mesmas dimensões. */
 .cat__foto{
-  /* Mobile: quadrada e BEM menor — não é mais a mesma proporção 4:5
-     da Helena aqui embaixo de 900px. Duas coisas resolvidas de
-     propósito: (1) 4:5 mostrava a foto INTEIRA (a arte já é 4:5, cover
-     não tinha o que recortar) — no celular isso lia como "esticada",
-     alta demais para o que ela mostra; (2) 380px de largura numa tela
-     de ~390px é quase edge-to-edge, e ficava grande demais na tela.
-     Abaixo de 900px o par com a Helena é feito por TAMANHO igual
-     (mesma regra nas duas fotos), não por proporção igual. */
-  width:min(58%,220px);aspect-ratio:1/1;
+  /* CORRIGIDO: a versão quadrada (1:1) da rodada anterior foi um mal-
+     entendido — o pedido era diminuir o TAMANHO no celular, mantendo
+     a mesma proporção 4:5 (a arte fonte já É 4:5, então não há nada
+     para "recortar"; a dimensão de fato precisava só encolher um
+     pouco). Volta a 4:5 em todas as larguras; só o teto de largura no
+     mobile ficou menor: 380px → 300px (era grande demais na tela). */
+  width:min(80%,300px);aspect-ratio:4/5;
   margin-inline:auto;
   border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-lg);
 }
 @media (min-width:900px){
-  .cat__foto{width:100%;max-width:400px;aspect-ratio:4/5;margin-inline:0}
+  .cat__foto{width:100%;max-width:400px;margin-inline:0}
 }
 .cat__foto__i{display:block;width:100%;height:100%}
 .cat__foto img{
   display:block;width:100%;height:100%;object-fit:cover;
-  /* Recorte quadrado real abaixo de 900px (a caixa não é mais 4:5, é
-     1:1 — cover corta topo/base de verdade). O prato fica na metade de
-     baixo da arte original: sem este ponto, o corte cairia acima da
-     comida. Acima de 900px a caixa volta a 4:5 e, como a arte JÁ é
-     4:5, o valor para de fazer efeito (mostra a foto inteira). */
+  /* A arte fonte já é 760x950 — exatamente 4:5, a mesma proporção da
+     caixa em qualquer largura. Com as duas iguais, cover não recorta
+     nada: a foto aparece INTEIRA. object-position fica aqui só como
+     salvaguarda, caso uma arte futura não venha nessa proporção. */
   object-position:center 58%;
 }
 
@@ -1083,29 +1080,20 @@ footer{background-color:var(--blush);color:var(--ink-soft);padding:38px 0 28px;f
     max-width:none;gap:clamp(36px,5vw,64px);
   }
 }
-/* Peso visual pareado com a foto da seção 06 (quadrada, 430px):
-   4/5 em 380px dá ~180.500px² contra ~184.900px² — praticamente a
-   mesma mancha. Antes esta foto tinha 260px e a outra era retrato
-   solto: uma parecia miniatura ao lado da outra. */
-/* Mesmo tratamento e mesmo motivo da foto das receitas: abaixo de
-   860px (o breakpoint PRÓPRIO desta seção — o grid vira duas colunas
-   aqui, não em 900px como na seção 06), quadrada e menor. O par com a
-   foto da seção 06 é por TAMANHO igual (mesmos valores nas duas), não
-   por proporção 4:5 igual. A simetria exata (4:5 nos dois) continua
-   valendo só a partir do desktop, que é onde ela foi pedida
-   originalmente.
-   ⚠️ Tem de ser o MESMO breakpoint do grid duas-colunas logo abaixo
-   (860px) — usar 900px aqui abriria uma faixa de 860-899px com layout
-   de duas colunas mas foto ainda pequena/quadrada, sem espaço para
-   crescer na coluna. */
+/* Peso visual pareado com a foto da seção 06: 4:5 em 400px no desktop
+   nas duas — mesma proporção, mesmas dimensões, em qualquer largura
+   (mesmo motivo da .cat__foto: a arte fonte já é 4:5, então manter a
+   proporção não "estica" nada, é a leitura fiel da fotografia). No
+   mobile, mesmo raciocínio da 06: só o teto de largura encolheu um
+   pouco (380px → 300px), a proporção 4:5 nunca mudou. */
 .aut__foto{
-  width:min(58%,220px);aspect-ratio:1/1;
+  width:min(80%,300px);aspect-ratio:4/5;
   margin-inline:auto;
   border-radius:var(--r-lg);overflow:hidden;
   box-shadow:var(--shadow-lg);
 }
 @media (min-width:860px){
-  .aut__foto{width:100%;max-width:400px;aspect-ratio:4/5;margin-inline:0}
+  .aut__foto{width:100%;max-width:400px;margin-inline:0}
   /* .btn nasce com margin-inline:auto (centralizado). Na coluna de
      texto alinhada à esquerda isso deixava o botão 76px fora do
      prumo do nome e da frase. */
@@ -1114,10 +1102,8 @@ footer{background-color:var(--blush);color:var(--ink-soft);padding:38px 0 28px;f
 .aut__foto__i{display:block;width:100%;height:100%}
 .aut__foto img{
   display:block;width:100%;height:100%;object-fit:cover;
-  /* Faz efeito de verdade abaixo de 860px (caixa 1:1, corta topo/base
-     de fato) — mantém o rosto no enquadramento. A arte fonte já é
-     700x875 = 4:5 exata: a partir de 860px, quando a caixa volta a
-     4:5, cover não tem o que recortar e este valor não muda nada. */
+  /* A arte fonte já é 700x875 = 4:5 exata, a mesma proporção da caixa
+     em qualquer largura. object-position fica só como salvaguarda. */
   object-position:center 22%;
 }
 .aut__nome{margin-bottom:6px}
