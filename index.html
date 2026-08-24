@@ -770,34 +770,54 @@ footer{background-color:var(--blush);color:var(--ink-soft);padding:38px 0 28px;f
 }
 
 /* ─── 6.4 CARDS INTERATIVOS (custo invisível) ───────────────────
-   Mobile: pilha vertical de barras compactas — 4 cards altos
-   empurrariam o fechamento da seção para fora da tela.
-   Desktop: 2x2. */
+   2x2 em TODA largura. No celular a pilha vertical de 4 barras
+   empurrava o fecho da seção para fora da tela; em 2x2 o bloco fica
+   com metade da altura e os quatro ficam visíveis de uma vez — dá
+   para comparar as opções sem rolar. */
 .opts{
-  display:grid;gap:11px;grid-template-columns:1fr;
+  display:grid;gap:10px;grid-template-columns:1fr 1fr;
   max-width:460px;margin:0 auto;
 }
 @media (min-width:720px){
-  .opts{grid-template-columns:1fr 1fr;max-width:600px;gap:14px}
+  .opts{max-width:600px;gap:14px}
 }
 .opt{
-  display:flex;align-items:center;gap:12px;
-  min-height:62px;padding:14px 18px;
+  /* Coluna no celular (número em cima, unidade embaixo): lado a lado
+     em 2 colunas estreitas, "4–5" + "vezes" + check não cabiam na
+     mesma linha e o texto quebrava. */
+  display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px;
+  min-height:76px;padding:14px 16px;
   background:var(--white);color:var(--ink);
   border:2px solid transparent;border-radius:var(--r-lg);
   box-shadow:var(--shadow-sm);cursor:pointer;text-align:left;
-  font-family:inherit;
-  transition:border-color .25s ease,transform .25s ease,box-shadow .25s ease;
+  font-family:inherit;position:relative;
+  transition:border-color .25s ease,transform .25s ease,box-shadow .25s ease,background-color .25s ease;
   -webkit-tap-highlight-color:transparent;
 }
+@media (min-width:720px){
+  /* Desktop volta ao formato de barra (aprovado), em linha. */
+  .opt{flex-direction:row;align-items:center;gap:12px;min-height:62px;padding:14px 18px}
+}
 .opt__v{font-size:21px;font-weight:800;line-height:1;color:var(--ink)}
-.opt__u{flex:1;font-size:14px;font-weight:500;color:var(--ink-soft)}
+.opt__u{font-size:14px;font-weight:500;color:var(--ink-soft)}
+@media (min-width:720px){ .opt__u{flex:1} }
 .opt__ck{
+  /* No celular (card em coluna) o check vai para o canto superior
+     direito — no fluxo, ele cairia embaixo do texto e esticaria o
+     card. No desktop volta a ser um item da linha. */
+  position:absolute;top:12px;right:12px;
   flex:none;color:var(--rose-strong);
   opacity:0;transform:scale(.55);
   transition:opacity .25s ease,transform .25s ease;
 }
-.opt:hover{border-color:var(--rose-pale)}
+@media (min-width:720px){
+  .opt__ck{position:static}
+}
+/* hover só onde existe ponteiro de verdade: no toque ele "gruda"
+   depois do tap e o card fica com a borda acesa sem estar escolhido. */
+@media (hover:hover) and (pointer:fine){
+  .opt:hover{border-color:var(--rose-pale)}
+}
 .opt[aria-pressed="true"]{
   border-color:var(--rose-strong);
   background:#FFF8FB;
@@ -1594,6 +1614,18 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
   .hero__stats b{font-size:18px}
   .hero__stats span{font-size:9.5px}
   .hero__trust{font-size:9.5px}
+}
+/* CELULAR DEITADO — a altura vira o recurso escasso, não a largura.
+   ⚠️ aspect-ratio amarra a altura à LARGURA, que em landscape é
+   grande: medido a 844x390, mesmo no 2/1 (o mais achatado) a foto
+   dava 414px numa tela de 390 — ela sozinha tapava a tela inteira e
+   o texto só aparecia rolando. Aqui a altura passa a ser medida em
+   vh, que é o que realmente limita nesse caso.
+   Só abaixo de 900px: a partir daí o hero é o layout de desktop, com
+   a foto de fundo, e este problema não existe. */
+@media (max-width:899px) and (max-height:500px) and (orientation:landscape){
+  .hero__media{aspect-ratio:auto;height:42vh}
+  .hero__content{padding-block:14px 18px}
 }
 
 @media (max-width:479px){
@@ -3152,7 +3184,18 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
       /* No celular o movimento cai pela metade: a faixa é estreita, a
          sobra em volta é menor e o pedido é justamente "reduzir
          drasticamente" ali. */
-      var fator = window.innerWidth < 720 ? 0.5 : 1;
+      var eMobile = window.innerWidth < 720;
+      var fatorBase = eMobile ? 0.5 : 1;
+      /* TETO por camada no celular. Só o fator de 0.5 não bastava: as
+         amplitudes foram calibradas uma a uma em rodadas diferentes, e
+         as peças decorativas (.flo) e a foto do hero acabaram bem acima
+         do resto — medido, o pico ia a 29,5px enquanto as camadas de
+         comida ficavam entre 2,4 e 6,6px.
+         O teto é aplicado ESCALANDO a amplitude (não cortando o
+         movimento no meio): quem já estava abaixo de 8px continua
+         idêntico, e quem passava é reduzido proporcionalmente — o
+         movimento segue suave de ponta a ponta, sem "travar" no limite. */
+      var TETO_MOBILE = 8;
       for (var i = 0; i < camadas.length; i++){
         var el = camadas[i], rr = el.getBoundingClientRect();
         /* width 0 = display:none (as peças `--extra` somem no celular).
@@ -3166,6 +3209,11 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
         var amp  = parseFloat(el.getAttribute('data-par')) || 0;
         var ampX = parseFloat(el.getAttribute('data-par-x')) || 0;
         var rot  = parseFloat(el.getAttribute('data-par-rot')) || 0;
+        var fator = fatorBase;
+        if (eMobile){
+          var pico = Math.abs(amp) * vh * fatorBase;
+          if (pico > TETO_MOBILE) fator = fatorBase * (TETO_MOBILE / pico);
+        }
         var t = 'translate3d(' + (prog * ampX * vh * fator).toFixed(1) + 'px,'
                                + (prog * amp  * vh * fator).toFixed(1) + 'px,0)';
         if (rot) t += ' rotate(' + (prog * rot * fator).toFixed(2) + 'deg)';
