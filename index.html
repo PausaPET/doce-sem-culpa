@@ -205,6 +205,15 @@ ul{padding:0;list-style:none}
    navegador escolhe. Um respiro pequeno separa as duas linhas. */
 .pergunta-resposta > span{display:block}
 .pergunta-resposta > span + span{margin-top:.14em}
+/* ⚠️ O .hl (2º span, "amanhã eu começo?") precisa encolher ao próprio
+   texto, não ficar full-width do bloco: o marcador rosa abaixo dele
+   usa background-size:100% pra cobrir exatamente a palavra — herdando
+   o display:block genérico acima, a caixa vira tão larga quanto a
+   COLUNA inteira (h2 tem text-align:center, que só centra o texto por
+   dentro, não encolhe a caixa), e o marcador esticava bem além da
+   palavra. width:fit-content devolve a caixa ao tamanho do texto;
+   margin-inline:auto centra essa caixa menor dentro da coluna. */
+.pergunta-resposta > .hl{width:fit-content;margin-inline:auto}
 /* A 320px a largura natural de "amanhã eu começo?" (276px) empata
    exatamente com a coluna disponível (276px) — qualquer arredondamento
    de sub-pixel já quebra a linha, voltando a partir a resposta em duas
