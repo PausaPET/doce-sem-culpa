@@ -205,15 +205,6 @@ ul{padding:0;list-style:none}
    navegador escolhe. Um respiro pequeno separa as duas linhas. */
 .pergunta-resposta > span{display:block}
 .pergunta-resposta > span + span{margin-top:.14em}
-/* ⚠️ O .hl (2º span, "amanhã eu começo?") precisa encolher ao próprio
-   texto, não ficar full-width do bloco: o marcador rosa abaixo dele
-   usa background-size:100% pra cobrir exatamente a palavra — herdando
-   o display:block genérico acima, a caixa vira tão larga quanto a
-   COLUNA inteira (h2 tem text-align:center, que só centra o texto por
-   dentro, não encolhe a caixa), e o marcador esticava bem além da
-   palavra. width:fit-content devolve a caixa ao tamanho do texto;
-   margin-inline:auto centra essa caixa menor dentro da coluna. */
-.pergunta-resposta > .hl{width:fit-content;margin-inline:auto}
 /* A 320px a largura natural de "amanhã eu começo?" (276px) empata
    exatamente com a coluna disponível (276px) — qualquer arredondamento
    de sub-pixel já quebra a linha, voltando a partir a resposta em duas
@@ -748,19 +739,9 @@ footer{background-color:var(--blush);color:var(--ink-soft);padding:38px 0 28px;f
 @media (min-width:820px){
   .atos{grid-template-columns:repeat(3,1fr);max-width:none;gap:clamp(28px,3.2vw,46px)}
 }
-/* Marcador que se desenha sob a expressão-chave quando a headline
-   entra. É pintura de FUNDO (background-size), não layout: não empurra
-   nada e não causa reflow.
-   O texto é grande (mín. 28px), então rosa forte sobre rosa pálido
-   fica acima do piso de 3:1 exigido para texto grande. */
-.js-anim #identificacao .sec-head .hl{
-  background-image:linear-gradient(var(--rose-pale),var(--rose-pale));
-  background-repeat:no-repeat;
-  background-position:0 86%;
-  background-size:0% .40em;
-  transition:background-size .85s cubic-bezier(.22,.61,.36,1) .30s;
-}
-.js-anim #identificacao .sec-head.is-in .hl{background-size:100% .40em}
+/* O marcador rosa que se desenhava sob "amanhã eu começo?" foi
+   REMOVIDO a pedido. O destaque da expressão fica só na cor do texto
+   (.hl), como no resto da página. Não reintroduzir. */
 
 .ato{padding-top:18px;border-top:2px solid var(--rose-pale)}
 .ato__n{
