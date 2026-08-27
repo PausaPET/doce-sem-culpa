@@ -1320,7 +1320,13 @@ footer{background-color:var(--blush);color:var(--ink-soft);padding:38px 0 28px;f
   opacity:0;transform:scale(1.04);
   transition:opacity .9s ease,transform 1.5s var(--ease-out);
 }
-.js-anim .hero.is-live .hero__media img{opacity:1;transform:none}
+/* ⚠️ A foto tem gatilho PRÓPRIO (`.foto-ok`), não o `.is-live` do texto.
+   A cascata do texto é solta com teto de 900ms para a headline nunca ficar
+   refém da rede; presa ao mesmo gatilho, numa conexão 4G lenta a foto
+   "desvanecia" com a caixa ainda vazia, terminava a transição em 1,8s e a
+   imagem real aparecia depois, seca, sem fade nenhum. Separadas, o texto
+   entra na hora e a foto entra quando ela existe. */
+.js-anim .hero.foto-ok .hero__media img{opacity:1;transform:none}
 
 /* Text reveal por LINHA: cada linha da headline sobe de dentro da
    própria caixa. O clip aberto tem folga vertical (-18%) porque a
@@ -1539,6 +1545,28 @@ footer{background-color:var(--blush);color:var(--ink-soft);padding:38px 0 28px;f
   transition:clip-path .85s cubic-bezier(.22,.61,.36,1);
   transition-delay:calc(var(--i,0) * 90ms);
 }
+/* ⚠️ ÚLTIMO RECURSO — mesmo princípio do `.motion-pronto` do hero, que
+   faltava aqui. `is-in` apenas troca o valor-ALVO; quem leva a opacidade de
+   0 a 1 (e o clip de fechado a aberto) é a TRANSIÇÃO — e transição só avança
+   enquanto o navegador compõe quadros. Num webview que não compõe (o
+   embutido do WhatsApp já congelou esta página) o bloco recebe `is-in` e
+   mesmo assim fica invisível PARA SEMPRE, porque o estado inicial esconde.
+   Medido no painel de teste, que reproduz exatamente esse estado: 30 dos 39
+   blocos com `is-in` e opacidade 0.
+   O JS confere e, se a transição não andou, crava o estado final aqui.
+   Em navegador saudável isto nunca chega a aparecer: a checagem só corre
+   1,8s depois do `is-in`, e o pior caso da cascata termina em 1,21s
+   (atraso máximo de --i:4 = 360ms + 850ms do mask). */
+.js-anim .reveal.reveal-forcado{
+  opacity:1!important;transform:none!important;
+  clip-path:none!important;transition:none!important;
+}
+/* ⚠️ O mask recebe o clip ABERTO, não `none`. O alvo real da animação é
+   `inset(0 0 0 0)` — recorte exato na caixa —, enquanto `none` não recorta
+   nada: se a frase tiver qualquer transbordo (descida de letra, itálico do
+   serif), os dois não desenham igual e o forçado apareceria como um
+   pulinho. Aqui o estado forçado é o mesmo pixel do estado final. */
+.js-anim .reveal--mask.reveal-forcado{clip-path:inset(0 0 0 0)!important}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{animation:none!important;transition:none!important}
@@ -2477,27 +2505,78 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
   onScroll();
 
   /* 4. Animação de entrada dos blocos */
-  var reveals = $$('.reveal'), io = null, stuckSince = 0, auditTimer = 0;
+  var reveals = $$('.reveal'), io = null, auditTimer = 0;
   function revealAll(){ reveals.forEach(function(el){ el.classList.add('is-in'); }); }
 
-  /* Auditoria contínua: se um bloco está dentro da tela e continua invisível
-     por mais de 500ms, o observer não é confiável neste navegador (webview do
-     Facebook, aba em segundo plano, engine antiga). Desliga e mostra tudo. */
+  /* Auditoria contínua: se um bloco está dentro da tela e continua invisível,
+     o observer não é confiável neste navegador (webview do Facebook, aba em
+     segundo plano, engine antiga) e o bloco é revelado à mão.
+
+     ⚠️ A rede é LOCAL, por elemento — NUNCA global. A versão anterior usava
+     `some()` + um relógio único: bastava UM elemento ficar ~800ms na faixa
+     entre "o topo passou de 92% da tela" e "o observer atingiu o limiar de
+     8%" para ela chamar `revealAll()` e DESLIGAR o observer. Resultado: as 39
+     peças da página inteira ganhavam `is-in` de uma vez — inclusive as ~37
+     ainda muito abaixo da dobra — e a partir dali nenhuma seção voltava a
+     animar. Era exatamente o "os motions não entraram" relatado no celular.
+     Medido a 390x844: uma única rolagem de 250px com pausa de leitura de
+     900ms revelava as 39 (37 delas fora da tela) em menos de 1 segundo.
+     ⚠️ Não aparecia em teste de rolagem RÁPIDA: a rolagem rápida nunca fica
+     parada os dois ciclos de 400ms que a auditoria precisa para contar. Foi
+     por isso que duas medições anteriores deram o sistema como saudável.
+
+     Agora cada elemento tem o próprio relógio, que só corre enquanto ELE está
+     na tela, e o observer segue vivo para todo o resto. A garantia que
+     importa continua de pé: nada que esteja visível fica invisível. */
+  var pendenteDesde = new WeakMap(), reveladoEm = new WeakMap();
   function auditReveal(){
-    if (!io || reveals.every(function(el){ return el.classList.contains('is-in'); })){
-      clearInterval(auditTimer); return;
-    }
-    var vh = window.innerHeight;
-    var stuck = reveals.some(function(el){
-      if (el.classList.contains('is-in')) return false;
-      var r = el.getBoundingClientRect();
-      return r.top < vh * 0.92 && r.bottom > 0;
+    var vh = window.innerHeight, agora = Date.now(), restam = 0;
+    reveals.forEach(function(el){
+      if (!el.classList.contains('is-in')){
+        var r = el.getBoundingClientRect();
+        /* ⚠️ Largura 0 = não renderizado (a foto da aba de categoria que
+           está fechada). Não conta como pendente: contando, o intervalo
+           ficaria vivo PARA SEMPRE numa página que sempre tem uma aba
+           fechada, medindo 39 retângulos 2,5x por segundo sem motivo.
+           Quem rearma a auditoria quando esse painel abre é `mostrar()`,
+           na seção 06. */
+        if (!r.width){ pendenteDesde['delete'](el); return; }
+        /* (a) ainda escondido: revela se ELE estiver na tela e o observer
+               não tiver dado sinal. Relógio por elemento — ver nota acima. */
+        restam++;
+        if (!(r.top < vh * 0.92 && r.bottom > 0)){ pendenteDesde['delete'](el); return; }
+        var desde = pendenteDesde.get(el);
+        if (!desde){ pendenteDesde.set(el, agora); return; }
+        if (agora - desde > 700){
+          el.classList.add('is-in');
+          /* Já sabemos a hora — anotar aqui poupa um ciclo inteiro da
+             checagem (b) abaixo, que é o caminho lento do webview travado. */
+          reveladoEm.set(el, agora);
+        }
+        return;
+      }
+      if (el.classList.contains('reveal-forcado')) return;
+      /* (b) já recebeu `is-in`, mas a transição pode não estar andando:
+             num webview que não compõe quadros ela fica presa no valor
+             inicial e o bloco nunca aparece. 1,8s depois, crava o fim.
+             ⚠️ `getComputedStyle` custa recálculo de estilo, então só
+             pergunta uma vez por elemento e só depois da carência. */
+      var quando = reveladoEm.get(el);
+      if (!quando){ reveladoEm.set(el, agora); restam++; return; }
+      if (agora - quando < 1800){ restam++; return; }
+      if (parseFloat(getComputedStyle(el).opacity) < 0.9 ||
+          el.classList.contains('reveal--mask')){
+        el.classList.add('reveal-forcado');
+      }
     });
-    if (!stuck){ stuckSince = 0; return; }
-    var now = Date.now();
-    if (!stuckSince){ stuckSince = now; return; }
-    if (now - stuckSince > 500){
-      io.disconnect(); io = null; revealAll(); clearInterval(auditTimer);
+    if (!restam){ clearInterval(auditTimer); auditTimer = 0; }
+  }
+  /* Rearma a auditoria depois de ela ter se encerrado — usado quando um
+     painel de aba abre e traz consigo um `.reveal` que até então não
+     existia em tela. */
+  function garantirAudit(){
+    if (!auditTimer && document.documentElement.classList.contains('js-anim')){
+      auditTimer = setInterval(auditReveal, 400);
     }
   }
 
@@ -2587,9 +2666,16 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
   (function(){
     var hero = $('.hero'); if (!hero) return;
     if (!document.documentElement.classList.contains('js-anim')){
-      hero.classList.add('is-live'); return;
+      hero.classList.add('is-live','foto-ok'); return;
     }
     var img = $('.hero__media img', hero);
+    /* A foto entra pelo próprio gatilho, quando ela de fato existe — ver a
+       nota em `.hero.foto-ok` no CSS. `motion-pronto` continua cobrindo o
+       caso de a imagem nunca carregar. */
+    function fotoPronta(){ hero.classList.add('foto-ok'); }
+    if (img && img.complete) fotoPronta();
+    else if (img) img.addEventListener('load', fotoPronta);
+    else fotoPronta();
     var soltou = false;
     function soltar(){
       if (soltou) return; soltou = true;
@@ -2610,6 +2696,33 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
     setTimeout(soltar, 900);           /* teto de segurança */
   })();
 
+  /* ⚠️ REDE DE SEGURANÇA RELATIVA À TELA, nunca ao carregamento.
+     As redes da faixa e do card da oferta eram `setTimeout(…, 5000)` e
+     `setTimeout(…, 4000)` contados a partir do load, e forçavam
+     `is-in` + `motion-pronto` — que traz `transition:none!important` —
+     independentemente de onde o leitor estivesse. No celular a oferta é a
+     8ª seção, a umas nove telas de rolagem: ninguém chega lá em 4 segundos.
+     Ou seja, essas duas sequências NUNCA chegavam a rodar em visita real;
+     o leitor sempre encontrava a cena e o card já montados e parados.
+     Aqui o relógio só começa a correr quando o elemento está na tela, que é
+     o único momento em que "ainda invisível" significa alguma coisa. */
+  /* ⚠️ Quem desarma a rede é o OBSERVER, explicitamente, e NÃO a presença de
+     `is-in`. Estes dois elementos também são `.reveal`, então a auditoria da
+     seção 4 pode pôr `is-in` neles por conta própria — e, se a rede saísse
+     por causa disso, `motion-pronto` nunca chegaria e os filhos (selo, lista,
+     preço, CTA) ficariam presos em opacity:0 num webview que não compõe
+     quadros, que é justamente o caso que a rede existe para cobrir. */
+  function redeAoAparecer(el, ms, aoVencer){
+    var desde = 0;
+    var vigia = setInterval(function(){
+      var r = el.getBoundingClientRect();
+      if (r.top > window.innerHeight || r.bottom < 0){ desde = 0; return; }
+      if (!desde){ desde = Date.now(); return; }
+      if (Date.now() - desde > ms){ clearInterval(vigia); aoVencer(); }
+    }, 300);
+    return function(){ clearInterval(vigia); };
+  }
+
   /* 6b2. Cena da oferta: fundo → objetos → água, antes do card. */
   (function(){
     var faixa = $('.band'); if (!faixa) return;
@@ -2617,16 +2730,18 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
         !document.documentElement.classList.contains('js-anim')){
       faixa.classList.add('is-in'); return;
     }
+    var desarmar = null;
     var ob = new IntersectionObserver(function(es){
       es.forEach(function(e){
         if (e.isIntersecting){
+          if (desarmar) desarmar();      /* o observer respondeu: rede fora */
           faixa.classList.add('is-in'); ob.disconnect();
           setTimeout(function(){ faixa.classList.add('motion-pronto'); }, 1600);
         }
       });
     }, {threshold:0.08});
     ob.observe(faixa);
-    setTimeout(function(){ faixa.classList.add('is-in','motion-pronto'); }, 5000);
+    desarmar = redeAoAparecer(faixa, 900, function(){ faixa.classList.add('is-in','motion-pronto'); });
   })();
 
   /* 6c. Card da oferta: sequência própria (selo → lista → preço → CTA),
@@ -2637,9 +2752,11 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
         !document.documentElement.classList.contains('js-anim')){
       card.classList.add('is-in'); return;
     }
+    var desarmar = null;
     var ob = new IntersectionObserver(function(es){
       es.forEach(function(e){
         if (e.isIntersecting){
+          if (desarmar) desarmar();      /* o observer respondeu: rede fora */
           card.classList.add('is-in'); ob.disconnect();
           setTimeout(function(){ card.classList.add('motion-pronto'); }, 1400);
         }
@@ -2647,7 +2764,7 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
     }, {threshold:0.16});
     ob.observe(card);
     /* rede de segurança: se o observer não disparar, mostra assim mesmo */
-    setTimeout(function(){ card.classList.add('is-in','motion-pronto'); }, 4000);
+    desarmar = redeAoAparecer(card, 900, function(){ card.classList.add('is-in','motion-pronto'); });
   })();
 
 
@@ -2746,6 +2863,9 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
         li.style.animation = 'none'; void li.offsetWidth; li.style.animation = '';
       });
       setTimeout(function(){ p.classList.remove('is-entrando'); }, 520);
+      /* O painel que abre traz um `.reveal` (a foto da categoria) que até
+         agora tinha largura 0 e por isso estava fora da auditoria. */
+      garantirAudit();
     }
     function abrir(t){
       if (trocando) return;
@@ -3171,21 +3291,27 @@ a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visi
          scroll absoluto): assim é sempre limitado, inverte ao subir e
          vale igual em qualquer altura de página. Só escreve em quem
          está por perto da viewport — fora dela não há o que pintar. */
-      /* No celular o movimento cai pela metade: a faixa é estreita, a
-         sobra em volta é menor e o pedido é justamente "reduzir
-         drasticamente" ali. */
+      /* No celular o movimento é mais contido: a faixa é estreita e a
+         sobra em volta de cada camada é menor. */
       var eMobile = window.innerWidth < 720;
-      var fatorBase = eMobile ? 0.5 : 1;
-      /* TETO por camada no celular. Só o fator de 0.5 não bastava: as
-         amplitudes foram calibradas uma a uma em rodadas diferentes, e
-         as peças decorativas (.flo) e a foto do hero acabaram bem acima
-         do resto — medido, o pico ia a 29,5px enquanto as camadas de
-         comida ficavam entre 2,4 e 6,6px.
-         O teto é aplicado ESCALANDO a amplitude (não cortando o
-         movimento no meio): quem já estava abaixo de 8px continua
-         idêntico, e quem passava é reduzido proporcionalmente — o
-         movimento segue suave de ponta a ponta, sem "travar" no limite. */
-      var TETO_MOBILE = 8;
+      /* ⚠️ O fator era 0.5 e o teto 8px, e juntos DESLIGAVAM o parallax no
+         celular: medido, toda camada ficava entre 2,4 e 7px de pico — menos
+         de 1% da altura da tela, abaixo do que o olho registra como
+         movimento. "Reduzir drasticamente" tinha virado "reduzir a zero", e
+         isso é parte do "os motions não entraram" relatado pelo cliente.
+         0.85 mantém a leitura discreta e devolve deslocamento perceptível. */
+      var fatorBase = eMobile ? 0.85 : 1;
+      /* TETO por camada no celular. Ele existe porque as amplitudes foram
+         calibradas uma a uma em rodadas diferentes e desandaram: as peças
+         decorativas (.flo) e a foto do hero chegavam a 29,5px de pico
+         enquanto as camadas de comida ficavam entre 2,4 e 6,6px — o
+         problema ali era a DISPERSÃO, não a amplitude.
+         O teto é aplicado ESCALANDO a amplitude (não cortando o movimento
+         no meio): quem já está abaixo dele continua idêntico, quem passa é
+         reduzido proporcionalmente e segue suave de ponta a ponta.
+         20px cabe na sobra de todas as camadas: 55px no <picture> do hero e
+         ~8% da altura da faixa nas camadas da cena da oferta. */
+      var TETO_MOBILE = 20;
       for (var i = 0; i < camadas.length; i++){
         var el = camadas[i], rr = el.getBoundingClientRect();
         /* width 0 = display:none (as peças `--extra` somem no celular).
